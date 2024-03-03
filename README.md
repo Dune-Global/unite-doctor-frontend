@@ -12,8 +12,8 @@
 git clone https://github.com/Dune-Global/unite-doctor-frontend.git
 ```
 
-## Contributors
+2. Start the server
 
-<a href="https://github.com/Dune-Global/unite-doctor-frontend/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Dune-Global/unite-doctor-frontend" />
-</a>
+```bash
+yarn dev
+```
