@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "prepare": "husky install"
+    "lint": "npx tsc --noEmit && next lint",
+    "postinstall": "yarn husky install && npm install -g @commitlint/cli @commitlint/config-conventional && chmod u+x ./.husky/commit-msg",
+    "commitlint": "commitlint --edit"
   },
   "dependencies": {
     "next": "14.1.1",
