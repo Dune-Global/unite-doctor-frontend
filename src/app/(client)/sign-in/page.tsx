@@ -48,8 +48,8 @@ export default function SignIn() {
     setShowPassword(!showPassword);
   };
   return (
-    <div className="flex flex-row gap-24 ">
-      <div className="flex ">
+    <div className="flex flex-row  lg:justify-between justify-center   ">
+      <div className="flex lg:px-20 items-center justify-center">
         <Container>
           <div>
             <div className="flex flex-col gap-4 items-end justify-center md:py- py-">
@@ -62,8 +62,8 @@ export default function SignIn() {
                     height={100}
                   ></Image>{" "}
                 </div>
-                <div className="flex flex-col gap-1  items-center">
-                  <h2 className="font-semibold text-4xl ">Welcome Back!</h2>
+                <div className="flex flex-col gap-1  items-center text-center">
+                  <h2 className="font-semibold text-4xl  ">Welcome Back!</h2>
                 </div>
                 <Form {...form}>
                   <form className="space-y-3 w-full  px-2 mb-2 ">
@@ -136,11 +136,16 @@ export default function SignIn() {
                           <div className="text-sm flex">Remember me</div>
                         </div>
                         <div className="flex">
-                          <Link href={""} className="text-sm hover:underline text-u">Forgot Password? </Link>
+                          <Link
+                            href={""}
+                            className="text-sm underline text-ublue-100"
+                          >
+                            Forgot Password?{" "}
+                          </Link>
                         </div>
                       </div>
                       <div className="">
-                        <Button className="w-full" variant={"default"}>
+                        <Button className="w-full bg-ublue-100 text-ugray-0">
                           Login
                         </Button>
                       </div>
@@ -149,7 +154,7 @@ export default function SignIn() {
                           Don&apos;t have an account?{" "}
                           <a
                             href="/signup"
-                            className="text-hgray-900 underline"
+                            className="text-ublue-100 underline"
                           >
                             Sign up
                           </a>
@@ -164,8 +169,14 @@ export default function SignIn() {
         </Container>
       </div>
 
-      <div className="flex ">
-        <Image src={"/auth-png/hospital.png"} alt="" height={500} width={500} />
+      <div className="lg:flex hidden ">
+        <Image
+          src={"/auth-png/hospital.png"}
+          alt=""
+          height={100}
+          width={500}
+          className=""
+        />
       </div>
     </div>
   );
