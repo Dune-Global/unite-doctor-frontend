@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import React, { useState } from "react";
 import { sideMenuItems } from "@/data/side_menu.tsx/menu_item";
-import Container from "../common/container";
+import Container from "../container";
 type Props = {};
 
 const SideMenu = (props: Props) => {
@@ -42,7 +42,7 @@ const SideMenu = (props: Props) => {
             <div className="fixed flex flex-col py-10 border-2 bg-gray-0 shadow-lg rounded-lg items-center justify-center top-0 left-0 right-0 z-10">
               <div className="flex flex-col gap-9 py-3">
                 {sideMenuItems.map((item) => (
-                  <div key={item.id} >
+                  <div key={item.id}>
                     <Link
                       href={item.path}
                       className={`flex gap-2 items-center p-1  ${
@@ -55,7 +55,6 @@ const SideMenu = (props: Props) => {
                     </Link>
                   </div>
                 ))}
-               
               </div>
             </div>
           )}
