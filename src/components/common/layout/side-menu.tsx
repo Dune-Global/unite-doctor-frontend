@@ -15,7 +15,7 @@ const SideMenu = (props: Props) => {
     setIsOpen(!isOpen);
   };
   return (
-    <Container>
+    
       <div>
         <div className="w-full relative lg:hidden">
           <button
@@ -77,7 +77,7 @@ const SideMenu = (props: Props) => {
           </div>
         </div>
       </div>
-    </Container>
+   
   );
 };
 export default SideMenu;

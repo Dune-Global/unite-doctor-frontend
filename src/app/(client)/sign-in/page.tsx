@@ -11,7 +11,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import Container from "@/components/common/ui/container";
+import Container from "@/components/common/container";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -136,7 +136,12 @@ export default function SignIn() {
                           <div className="text-sm flex">Remember me</div>
                         </div>
                         <div className="flex">
-                          <Link href={""} className="text-sm hover:underline text-u">Forgot Password? </Link>
+                          <Link
+                            href={""}
+                            className="text-sm hover:underline text-u"
+                          >
+                            Forgot Password?{" "}
+                          </Link>
                         </div>
                       </div>
                       <div className="">
