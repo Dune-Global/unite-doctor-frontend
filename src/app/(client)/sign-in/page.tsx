@@ -48,8 +48,8 @@ export default function SignIn() {
     setShowPassword(!showPassword);
   };
   return (
-    <div className="flex flex-row  lg:justify-between justify-center   ">
-      <div className="flex lg:px-20 items-center justify-center">
+    <div className="flex flex-row justify-center  lg:justify-between ">
+      <div className="flex lg:px-28 items-center justify-center">
         <Container>
           <div>
             <div className="flex flex-col gap-4 items-end justify-center md:py- py-">
@@ -168,7 +168,7 @@ export default function SignIn() {
           </div>
         </Container>
       </div>
-
+      {/*  */}
       <div className="lg:flex hidden ">
         <Image
           src={"/auth-png/hospital.png"}
