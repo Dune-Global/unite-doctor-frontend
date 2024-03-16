@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import React, { useState } from "react";
 import { sideMenuItems } from "@/data/side_menu.tsx/menu_item";
-import Container from "../ui/container";
+import Container from "../common/container";
 type Props = {};
 
 const SideMenu = (props: Props) => {
@@ -23,17 +23,17 @@ const SideMenu = (props: Props) => {
             onClick={handleClick}
           >
             <span
-              className={`bg-gray-900 block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
+              className={`bg-ugray-900 block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
                 isOpen ? "rotate-45 translate-y-1" : "-translate-y-0.5"
               }`}
             ></span>
             <span
-              className={`bg-gray-900 block h-0.5 w-6 rounded-sm my-0.5 ${
+              className={`bg-ugray-900 block h-0.5 w-6 rounded-sm my-0.5 ${
                 isOpen ? "opacity-0" : "opacity-100"
               }`}
             ></span>
             <span
-              className={`bg-gray-900 block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
+              className={`bg-ugray-900 block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
                 isOpen ? "-rotate-45 -translate-y-1" : "translate-y-0.5"
               }`}
             ></span>
@@ -47,7 +47,7 @@ const SideMenu = (props: Props) => {
                       href={item.path}
                       className={`flex gap-2 items-center p-1  ${
                         pathName === item.path &&
-                        "bg-gray-950 text-gray-50 border rounded-md p- "
+                        "bg-ugray-900 text-ugray-50 border rounded-md p- "
                       }`}
                     >
                       <item.icon size={22} strokeWidth={2} className=" " />
@@ -60,14 +60,14 @@ const SideMenu = (props: Props) => {
             </div>
           )}
         </div>
-        <div className="hidden lg:flex flex-col border-2 border-gray-50 rounded-lg md:w-[18rem] sm:max-w-full">
+        <div className="hidden lg:flex flex-col border-2 border-ugray-50 rounded-lg md:w-[18rem] sm:max-w-full">
           <div className="flex flex-col ">
             {sideMenuItems.map((item) => (
               <Link key={item.id} href={item.path} className="py-[1px] ">
                 <div
                   className={`p-6 w-64  flex items-center gap-3      ${
                     pathName === item.path &&
-                    "bg-gray-950 text-gray-50 border rounded-xl "
+                    "bg-ugray-900 text-ugray-50 border rounded-xl "
                   }`}
                 >
                   <item.icon size={22} strokeWidth={2} className="  " />
