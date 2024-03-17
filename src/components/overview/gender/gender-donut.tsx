@@ -23,7 +23,7 @@ export default function GenderDonut() {
       height: "200", 
       width: "200",  
     },
-    labels: ["Male", "Female", "Children", "Attact Helicoptor", "Non-Binary"], 
+    labels: ["Male", "Female", "Children", "Attack Helicoptor", "Non-Binary"], 
   });
   const [series, setSeries] = useState([44, 55, 41, 17, 15]);
 
