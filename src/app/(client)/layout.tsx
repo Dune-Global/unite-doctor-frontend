@@ -21,11 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ReduxProvider>
-          <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-            <div className="w-full flex-none md:w-64">
+          <div className="flex h-screen flex-col md:flex-row md:overflow-hidden bg-ugray-0">
+            <div className="w-full flex-none md:w-64 shadow-xl">
               <SideMenu />
             </div>
-            <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
+            <div className="flex-grow p-4 md:overflow-y-auto md:p-5 bg-ugray-50">
               <div className="hidden md:flex">
                 <TopBar />
               </div>
