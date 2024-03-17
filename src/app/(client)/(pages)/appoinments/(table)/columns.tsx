@@ -7,13 +7,38 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown } from "lucide-react"
 import StatusLabel from "@/components/labels/status-label"
+import { useState } from "react"
+
+const StatusCell = ({ row }: any) => {
+    const rowData = row.original
+    const [status, setStatus] = useState(rowData.status)
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 p-0">
+                    <StatusLabel status={status} />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="flex flex-col gap-4 py-4 items-center">
+                <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Completed") }} >
+                    <StatusLabel status="Completed" />
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Ongoing") }} >
+                    <StatusLabel status="Ongoing" />
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Waiting") }} >
+                    <StatusLabel status="Waiting" />
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
 
 export const columns: ColumnDef<AppointmentList>[] = [
     {
@@ -130,23 +155,6 @@ export const columns: ColumnDef<AppointmentList>[] = [
         id: "actions",
         accessorKey: "status",
         header: "Status",
-        cell: ({ row }) => {
-            const rowData = row.original
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <StatusLabel status={rowData.status} />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem >Completed</DropdownMenuItem>
-                        <DropdownMenuItem>Ongoing</DropdownMenuItem>
-                        <DropdownMenuItem>Waiting</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            )
-        },
+        cell: StatusCell
     },
 ]

@@ -24,7 +24,7 @@ export const sideMenuItems: ISideMenuItems[] = [
     id: 3,
     path: "/patients",
     icon: User,
-    description: "Patient",
+    description: "Patients",
   },
   {
     id: 4,
