@@ -19,8 +19,15 @@ export default function Appointments() {
   }, [])
 
   return (
-    <div className="py-10">
-      <DataTable columns={columns} data={data} />
-    </div>
+    <>
+      <div>
+        <h1 className="text-3xl font-medium">
+          All Appointments
+        </h1>
+      </div>
+      <div className="pb-10">
+        <DataTable columns={columns} data={data} />
+      </div>
+    </>
   );
 }
