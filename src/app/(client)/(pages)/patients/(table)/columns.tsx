@@ -3,6 +3,7 @@
 import { PatientList } from "@/types/patients"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreVertical } from "lucide-react"
+import { toast } from "@/components/ui/use-toast"
 
 export const columns: ColumnDef<PatientList>[] = [
     {
@@ -139,7 +140,16 @@ export const columns: ColumnDef<PatientList>[] = [
             const rowData = row.original
 
             return (
-                <button onClick={() => { console.log(rowData) }} className="flex justify-center items-center">
+                <button onClick={() => {
+                    toast({
+                        title: "You submitted the following values:",
+                        description: (
+                            <pre className="mt-2 w-[340px] rounded-md bg-ublue-900 p-4">
+                                <code className="text-ugray-0">{JSON.stringify(rowData, null, 2)}</code>
+                            </pre>
+                        ),
+                    })
+                }} className="flex justify-center items-center">
                     <MoreVertical size={18} />
                 </button>
             )

@@ -66,10 +66,10 @@ export function DataTable<TData, TValue>({
         <>
             <div className="flex items-center py-4 gap-3">
                 <Input
-                    placeholder="Filter patients by ID..."
-                    value={(table.getColumn("patientId")?.getFilterValue() as string) ?? ""}
+                    placeholder="Filter patient names..."
+                    value={(table.getColumn("patientName")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("patientId")?.setFilterValue(event.target.value)
+                        table.getColumn("patientName")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm border-ugray-200"
                 />
@@ -128,7 +128,7 @@ export function DataTable<TData, TValue>({
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
-                                    className="border-ugray-50"
+                                    className="bg-ugray-0 border-ugray-50 border-y-8"
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
