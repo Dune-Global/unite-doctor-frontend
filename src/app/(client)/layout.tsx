@@ -4,6 +4,7 @@ import "@/styles/globals.css";
 import SideMenu from "@/components/common/layout/side-menu";
 import TopBar from "@/components/common/layout/top-bar";
 import { ReduxProvider } from "@/store/provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,6 +34,7 @@ export default function RootLayout({
             </div>
           </div>
         </ReduxProvider>
+        <Toaster />
       </body>
     </html>
   );

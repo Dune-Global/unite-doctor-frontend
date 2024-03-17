@@ -1,11 +1,21 @@
 "use client"
 
-import { PatientList } from "@/types/patients"
+import { AppointmentList } from "@/types/appointments"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreVertical } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
 
-export const columns: ColumnDef<PatientList>[] = [
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import { Button } from "@/components/ui/button"
+import { ArrowUpDown } from "lucide-react"
+import StatusLabel from "@/components/labels/status-label"
+
+export const columns: ColumnDef<AppointmentList>[] = [
     {
         accessorKey: "patientName",
         header: "Patient Name",
@@ -25,24 +35,6 @@ export const columns: ColumnDef<PatientList>[] = [
     {
         accessorKey: "patientId",
         header: "Patient ID",
-    },
-    {
-        accessorKey: "date",
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center">
-                    <div>
-                        Date
-                    </div>
-                    <button
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                        className="flex items-start"
-                    >
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </button>
-                </div>
-            )
-        },
     },
     {
         accessorKey: "gender",
@@ -81,12 +73,12 @@ export const columns: ColumnDef<PatientList>[] = [
         },
     },
     {
-        accessorKey: "disease",
+        accessorKey: "email",
         header: ({ column }) => {
             return (
                 <div className="flex items-center">
                     <div>
-                        Disease
+                        Email
                     </div>
                     <button
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -99,12 +91,12 @@ export const columns: ColumnDef<PatientList>[] = [
         },
     },
     {
-        accessorKey: "allergies",
+        accessorKey: "date",
         header: ({ column }) => {
             return (
                 <div className="flex items-center">
                     <div>
-                        Allergies
+                        Date
                     </div>
                     <button
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -117,12 +109,12 @@ export const columns: ColumnDef<PatientList>[] = [
         },
     },
     {
-        accessorKey: "status",
+        accessorKey: "time",
         header: ({ column }) => {
             return (
                 <div className="flex items-center">
                     <div>
-                        Status
+                        Time
                     </div>
                     <button
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -136,22 +128,24 @@ export const columns: ColumnDef<PatientList>[] = [
     },
     {
         id: "actions",
+        accessorKey: "status",
+        header: "Status",
         cell: ({ row }) => {
             const rowData = row.original
-
             return (
-                <button onClick={() => {
-                    toast({
-                        title: "You submitted the following values:",
-                        description: (
-                            <pre className="mt-2 w-[340px] rounded-md bg-ublue-900 p-4">
-                                <code className="text-ugray-0">{JSON.stringify(rowData, null, 2)}</code>
-                            </pre>
-                        ),
-                    })
-                }} className="flex justify-center items-center">
-                    <MoreVertical size={18} />
-                </button>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <StatusLabel status={rowData.status} />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem >Completed</DropdownMenuItem>
+                        <DropdownMenuItem>Ongoing</DropdownMenuItem>
+                        <DropdownMenuItem>Waiting</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             )
         },
     },

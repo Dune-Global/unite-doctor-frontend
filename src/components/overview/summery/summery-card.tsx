@@ -21,7 +21,7 @@ export default function SummeryCard({
             {Icon && <Icon size={20} className="text-ugray-0" />}
           </div>
           <div>
-            <h3 className="text-white text-lg font-medium">{description}</h3>
+            <h3 className="text-white text-lg font-medium line-clamp-1">{description}</h3>
             <p className="text-white text-xl font-bold">{value}</p>
           </div>
         </div>
