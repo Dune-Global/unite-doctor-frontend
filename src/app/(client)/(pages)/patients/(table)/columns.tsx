@@ -11,7 +11,7 @@ export const columns: ColumnDef<PatientList>[] = [
         header: "Patient Name",
         cell: ({ row }) => {
             return (
-                <div className="flex flex-col lg:flex-row justify-start gap-2 items-center">
+                <div className="flex flex-col justify-center lg:flex-row lg:justify-start gap-2 items-center">
                     <div>
                         <img src={`https://ui-avatars.com/api/?name=${row.original.patientName}`} alt="patient" className="w-8 h-8 rounded-full" />
                     </div>
@@ -142,7 +142,7 @@ export const columns: ColumnDef<PatientList>[] = [
             return (
                 <button onClick={() => {
                     toast({
-                        title: "You submitted the following values:",
+                        title: "This row contains",
                         description: (
                             <pre className="mt-2 w-[340px] rounded-md bg-ublue-900 p-4">
                                 <code className="text-ugray-0">{JSON.stringify(rowData, null, 2)}</code>
