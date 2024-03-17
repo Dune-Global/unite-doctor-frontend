@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
   DropdownMenu,
@@ -31,62 +32,18 @@ type Props = {};
 const SideMenu = (props: Props) => {
   const dispatch = useDispatch();
 
-
   const [isOpen, setIsOpen] = useState(false);
   const pathName = usePathname();
 
-  const handlePageName = () => {
-    dispatch(setPageName(pathName));
+  const handlePageName = (pathname: string) => {
+    dispatch(setPageName(pathname));
   };
-
 
   const handleClick = () => {
     setIsOpen(!isOpen);
   };
   return (
     <div>
-      {/* <div className="w-full relative lg:hidden">
-          <button
-            className="flex flex-col absolute right-0 top-10 items-center justify-center z-20 lg:hidden"
-            onClick={handleClick}
-          >
-            <span
-              className={`bg-ugray-900 block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
-                isOpen ? "rotate-45 translate-y-1" : "-translate-y-0.5"
-              }`}
-            ></span>
-            <span
-              className={`bg-ugray-900 block h-0.5 w-6 rounded-sm my-0.5 ${
-                isOpen ? "opacity-0" : "opacity-100"
-              }`}
-            ></span>
-            <span
-              className={`bg-ugray-900 block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
-                isOpen ? "-rotate-45 -translate-y-1" : "translate-y-0.5"
-              }`}
-            ></span>
-          </button>
-          {isOpen && (
-            <div className="fixed flex flex-col py-10 border-2 bg-gray-0 shadow-lg rounded-lg items-center justify-center top-0 left-0 right-0 z-10">
-              <div className="flex flex-col gap-9 py-3">
-                {sideMenuItems.map((item) => (
-                  <div key={item.id}>
-                    <Link
-                      href={item.path}
-                      className={`flex gap-2 items-center p-1  ${
-                        pathName === item.path &&
-                        "bg-ugray-900 text-ugray-50 border rounded-md p- "
-                      }`}
-                    >
-                      <item.icon size={22} strokeWidth={2} className=" " />
-                      <h2>{item.description}</h2>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div> */}
       <Container>
         <div className="flex flex-row justify-between md:hidden mt-4">
           <div>
@@ -99,16 +56,23 @@ const SideMenu = (props: Props) => {
               className="pl-3"
             />
           </div>
-          <div className="flex md:hidden">
+          <div className="flex flex-row gap-3 md:hidden">
             <DropdownMenu>
-              <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuTrigger className="text-sm">
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="mr-4">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
+
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
+                {sideMenuItems.map((item) => (
+                  <Link href={item.path} key={item.id}>
+                    <DropdownMenuItem>{item.description}</DropdownMenuItem>
+                  </Link>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -127,11 +91,16 @@ const SideMenu = (props: Props) => {
         </div>
         <div className="flex flex-col mt-7">
           {sideMenuItems.map((item) => (
-            <Link onClick={handlePageName} key={item.id} href={item.path} className="py-[1px]">
+            <Link
+              onClick={() => handlePageName(pathName)}
+              key={item.id}
+              href={item.path}
+              className="py-[1px]"
+            >
               <div
-                className={`p-4 flex items-center gap-3      ${
+                className={`p-4 flex items-center gap-3 rounded-xl hover:text-ugray-400 hover:bg-ugray-100 ${
                   pathName === item.path &&
-                  "bg-ugray-900 text-ugray-50 border rounded-xl "
+                  "bg-ugray-900 text-ugray-50 border rounded-xl hover:text-ugray-0 hover:bg-ugray-900"
                 }`}
               >
                 <item.icon size={22} strokeWidth={2} className="  " />
