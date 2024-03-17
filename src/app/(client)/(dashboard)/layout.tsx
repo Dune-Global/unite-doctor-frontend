@@ -7,13 +7,13 @@ export default function PageLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Container>
-      <section>
-        <div className="flex ">
+    <div className="bg-ugray-50 h-[100%]">
+      <Container>
+        <div className="flex flex-col lg:flex-row ">
           <SideMenu />
           {children}
         </div>
-      </section>
-    </Container>
+      </Container>
+    </div>
   );
 }
