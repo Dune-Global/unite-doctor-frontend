@@ -20,8 +20,13 @@ export default function Patient() {
   }, [])
 
   return (
-    <div className="py-10">
-      <DataTable columns={columns} data={data} />
-    </div>
+    <>
+      <div className="text-3xl font-medium">
+        <h1>Patient List</h1>
+      </div>
+      <div className="pb-10">
+        <DataTable columns={columns} data={data} />
+      </div>
+    </>
   )
 }
