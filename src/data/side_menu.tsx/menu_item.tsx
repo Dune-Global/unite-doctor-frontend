@@ -1,26 +1,23 @@
 import { ISideMenuItems } from "@/types/sidemenu";
 import {
-  LogOut,
-  CreditCard,
-  Home,
   User,
-  ShoppingCart,
-  RefreshCw,
   Settings,
-  MessageCircle,
+  LayoutGridIcon,
+  Calendar,
+  MessageSquareMore
 } from "lucide-react";
 
 export const sideMenuItems: ISideMenuItems[] = [
   {
     id: 1,
     path: "/overview",
-    icon: User,
+    icon: LayoutGridIcon,
     description: "Overview",
   },
   {
     id: 2,
     path: "/appoinments",
-    icon: CreditCard,
+    icon: Calendar,
     description: "Appoinments",
   },
   {
@@ -32,7 +29,7 @@ export const sideMenuItems: ISideMenuItems[] = [
   {
     id: 4,
     path: "/messages",
-    icon: MessageCircle,
+    icon: MessageSquareMore,
     description: "Messages",
   },
   {
