@@ -1,8 +1,12 @@
+"use client";
+
 import HistoryAccordion from "@/components/patient-details/HistoryAccordion";
 import PatientCard from "@/components/patient-details/PatientCard";
 import Progress from "@/components/patient-details/PatientProgress";
 import ReportCard from "@/components/patient-details/ReportCard";
-import React from "react";
+import { getPatientHistory } from "@/data/mock/patient-history";
+import { PatientHistoryList } from "@/types/patient-history";
+import React, { useEffect, useState } from "react";
 
 const PatientDetails = () => {
   const reports = [
@@ -10,6 +14,23 @@ const PatientDetails = () => {
     { id: "2", name: "Report 2", date: "2024-03-18" },
     { id: "3", name: "Report 3", date: "2024-03-19" },
   ];
+
+  const [patientHistory, setPatientHistory] = useState<PatientHistoryList[]>(
+    []
+  );
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const historyData = await getPatientHistory();
+        setPatientHistory(historyData);
+      } catch (error) {
+        console.error("Error fetching patient history:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <div className="">
@@ -48,8 +69,10 @@ const PatientDetails = () => {
       </div>
 
       {/* Accordion */}
-      <div>
-        <HistoryAccordion />
+      <div className="my-16">
+        {patientHistory.map((historyItem) => (
+          <HistoryAccordion key={historyItem.id} {...historyItem} />
+        ))}
       </div>
     </div>
   );
