@@ -10,31 +10,31 @@ import {
 export const sideMenuItems: ISideMenuItems[] = [
   {
     id: 1,
-    path: "/overview",
+    path: "/dashboard/overview",
     icon: LayoutGridIcon,
     description: "Overview",
   },
   {
     id: 2,
-    path: "/appoinments",
+    path: "/dashboard/appoinments",
     icon: Calendar,
     description: "Appoinments",
   },
   {
     id: 3,
-    path: "/patients",
+    path: "/dashboard/patients",
     icon: User,
     description: "Patients",
   },
   {
     id: 4,
-    path: "/messages",
+    path: "/dashboard/messages",
     icon: MessageSquareMore,
     description: "Messages",
   },
   {
     id: 5,
-    path: "/settings",
+    path: "/dashboard/settings",
     icon: Settings,
     description: "Settings",
   },

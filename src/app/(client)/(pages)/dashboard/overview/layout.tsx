@@ -1,3 +1,10 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Unite | Overview",
+  description: "Doctor Overview Page",
+};
+
 export default function Layout({
   children,
   appoinmentsApprove,
