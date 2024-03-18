@@ -48,7 +48,6 @@ const formSchema = z.object({
     .min(1, { message: "should have at least one character" })
     .max(50, { message: "can't contain more than 50 characters" }),
 
-
   nic: z
     .string()
     .min(8, { message: "NIC must contain at least 12 characters" })
@@ -145,7 +144,6 @@ export default function SignIn() {
   };
 
   return (
-
     <div className=" ">
       <div className="flex justify-center ">
         <div className="flex flex-col gap-2 md:px-8  w-80  items-center justify-center sm:w-[500px] py-5   ">
@@ -170,7 +168,7 @@ export default function SignIn() {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-2 w-full  px-2 mb-2 "
             >
-              <div className="space-y-2   ">
+              <div className="space-y-2 ">
                 <div className="snap-end ">
                   <div className="text-base">First Name</div>
                   <FormField
@@ -495,29 +493,28 @@ export default function SignIn() {
                     )}
                   />
                 </div>
-                <div className="py-2">
+              </div>
+              <div className="py-2">
+                <Button
+                  type="submit"
+                  className="w-full bg-ublue-100 text-ugray-0"
+                >
+                  Sign Up
+                </Button>
 
-                  <Button
-                    type="submit"
-                    className="w-full bg-ublue-100 text-ugray-0"
-                  >
-                    Sign Up
-                  </Button>
-
-                  <div className="text-sm text-center ">
-                    <p className="text-black">
-                      Already have an account?{" "}
-                      <a href="/sign-in" className="text-ublue-100 underline">
-                        Sign in
-                      </a>
-                    </p>
-                  </div>
+                <div className="text-sm text-center ">
+                  <p className="text-black">
+                    Already have an account?{" "}
+                    <a href="/sign-in" className="text-ublue-100 underline">
+                      Sign in
+                    </a>
+                  </p>
                 </div>
-              </form>
-            </Form>
-          </div>
+              </div>
+            </form>
+          </Form>
         </div>
-
+      </div>
     </div>
   );
 }
