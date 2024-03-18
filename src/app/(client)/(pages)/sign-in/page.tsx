@@ -83,7 +83,7 @@ export default function SignIn() {
               <div className="flex flex-col gap-2 px-8 py- w-[320px]  md:py- h-svh items-center justify-center   sm:w-[500px]  ">
                 <div>
                   <Image
-                    src={"/logo/log.png"}
+                    src={"/logo/logo.png"}
                     alt=""
                     width={100}
                     height={100}
