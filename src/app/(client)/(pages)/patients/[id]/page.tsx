@@ -1,8 +1,10 @@
+import HistoryAccordion from "@/components/patient-details/HistoryAccordion";
 import PatientCard from "@/components/patient-details/PatientCard";
+import Progress from "@/components/patient-details/PatientProgress";
 import ReportCard from "@/components/patient-details/ReportCard";
 import React from "react";
 
-const Patients = () => {
+const PatientDetails = () => {
   const reports = [
     { id: "1", name: "Report 1", date: "2024-03-17" },
     { id: "2", name: "Report 2", date: "2024-03-18" },
@@ -36,11 +38,21 @@ const Patients = () => {
       </div>
 
       {/* Progress */}
+      <div className="flex flex-col items-center">
+        <h1 className="font-semibold text-2xl text-ugray-600 self-start">
+          Patient Details
+        </h1>
+        <div className="max-w-[960px] w-full px-10 xl:px-2">
+          <Progress currentStep={2} />
+        </div>
+      </div>
+
+      {/* Accordion */}
       <div>
-        <h1 className="font-medium text-ugray-600">Patient Details</h1>
+        <HistoryAccordion />
       </div>
     </div>
   );
 };
 
-export default Patients;
+export default PatientDetails;
