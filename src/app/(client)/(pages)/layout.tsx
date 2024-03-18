@@ -1,5 +1,5 @@
 import SideMenu from "@/components/common/layout/side-menu";
-import Container from "@/components/common/ui/container";
+import Container from "@/components/common/container";
 
 export default function PageLayout({
   children,

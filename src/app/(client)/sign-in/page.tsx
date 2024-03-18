@@ -17,6 +17,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
+import { toast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { loginAccount } from "@/api/auth/authAPI";
 const formSchema = z.object({
   email: z
     .string()
@@ -47,6 +50,30 @@ export default function SignIn() {
   const handleEyeClick = () => {
     setShowPassword(!showPassword);
   };
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const { email, password } = values;
+      const res = await loginAccount(email,);
+      localStorage.setItem("jwtToken", res.token);
+      toast({
+        variant: "default",
+        title: "Welcome back!",
+        description: "You have successfully logged in.",
+        action: <ToastAction altText="Try again">Go to home</ToastAction>,
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Email or Password is incorrect.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+      console.error(error);
+    }
+    console.log(values);
+  }
+
   return (
     <div className="flex flex-row justify-center  lg:justify-between ">
       <div className="flex lg:px-28 items-center justify-center">
@@ -66,7 +93,10 @@ export default function SignIn() {
                   <h2 className="font-semibold text-4xl  ">Welcome Back!</h2>
                 </div>
                 <Form {...form}>
-                  <form className="space-y-3 w-full  px-2 mb-2 ">
+                  <form
+                    className="space-y-3 w-full  px-2 mb-2 "
+                    onSubmit={form.handleSubmit(onSubmit)}
+                  >
                     <div className="space-y-5 ">
                       <div>
                         <div className="text-base">User ID </div>
@@ -136,12 +166,6 @@ export default function SignIn() {
                           <div className="text-sm flex">Remember me</div>
                         </div>
                         <div className="flex">
-                          <Link
-                            href={""}
-                            className="text-sm hover:underline text-u"
-                          >
-                            Forgot Password?{" "}
-                          </Link>
                           <Link
                             href={""}
                             className="text-sm underline text-ublue-100"
