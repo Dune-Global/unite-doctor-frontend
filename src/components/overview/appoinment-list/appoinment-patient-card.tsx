@@ -31,7 +31,7 @@ export default function AppoinmentPatientCard({
     displayText = `Starts at ${appoinmentStartTime}`;
   } else {
     displayText = "Ongoing";
-    displayTextColorClass = "bg-[#EBFAEF] rounded-md py-2 px-4 text-ugreen-600"; 
+    displayTextColorClass = "bg-[#EBFAEF] rounded-md py-2 px-4 text-ugreen-600";
   }
 
   const handleCancel = () => {
@@ -50,7 +50,7 @@ export default function AppoinmentPatientCard({
           <AvatarFallback>{firstLetter}</AvatarFallback>
         </Avatar>
         <div>
-          <h3 className="text-sm font-medium line-clamp-1">{name}</h3>
+          <h3 className="text-sm font-medium line-clamp-1" title={name}>{name}</h3>
           <p className="text-xs text-ugray-400">
             Appoinment No: {appoinmentNo}
           </p>

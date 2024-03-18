@@ -1,17 +1,52 @@
 "use client"
 
-import { PatientList } from "@/types/patients"
+import { AppointmentList } from "@/types/appointments"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreVertical } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
 
-export const columns: ColumnDef<PatientList>[] = [
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import { Button } from "@/components/ui/button"
+import { ArrowUpDown } from "lucide-react"
+import StatusLabel from "@/components/labels/status-label"
+import { useState } from "react"
+
+const StatusCell = ({ row }: any) => {
+    const rowData = row.original
+    const [status, setStatus] = useState(rowData.status)
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 p-0">
+                    <StatusLabel status={status} />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="flex flex-col gap-4 py-4 items-center">
+                <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Completed") }} >
+                    <StatusLabel status="Completed" />
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Ongoing") }} >
+                    <StatusLabel status="Ongoing" />
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Waiting") }} >
+                    <StatusLabel status="Waiting" />
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
+
+export const columns: ColumnDef<AppointmentList>[] = [
     {
         accessorKey: "patientName",
         header: "Patient Name",
         cell: ({ row }) => {
             return (
-                <div className="flex flex-col justify-center lg:flex-row lg:justify-start gap-2 items-center">
+                <div className="flex flex-col lg:flex-row justify-start gap-2 items-center">
                     <div>
                         <img src={`https://ui-avatars.com/api/?name=${row.original.patientName}`} alt="patient" className="w-8 h-8 rounded-full" />
                     </div>
@@ -25,24 +60,6 @@ export const columns: ColumnDef<PatientList>[] = [
     {
         accessorKey: "patientId",
         header: "Patient ID",
-    },
-    {
-        accessorKey: "date",
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center">
-                    <div>
-                        Date
-                    </div>
-                    <button
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                        className="flex items-start"
-                    >
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </button>
-                </div>
-            )
-        },
     },
     {
         accessorKey: "gender",
@@ -81,12 +98,12 @@ export const columns: ColumnDef<PatientList>[] = [
         },
     },
     {
-        accessorKey: "disease",
+        accessorKey: "email",
         header: ({ column }) => {
             return (
                 <div className="flex items-center">
                     <div>
-                        Disease
+                        Email
                     </div>
                     <button
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -99,12 +116,12 @@ export const columns: ColumnDef<PatientList>[] = [
         },
     },
     {
-        accessorKey: "allergies",
+        accessorKey: "date",
         header: ({ column }) => {
             return (
                 <div className="flex items-center">
                     <div>
-                        Allergies
+                        Date
                     </div>
                     <button
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -117,12 +134,12 @@ export const columns: ColumnDef<PatientList>[] = [
         },
     },
     {
-        accessorKey: "status",
+        accessorKey: "time",
         header: ({ column }) => {
             return (
                 <div className="flex items-center">
                     <div>
-                        Status
+                        Time
                     </div>
                     <button
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -136,23 +153,8 @@ export const columns: ColumnDef<PatientList>[] = [
     },
     {
         id: "actions",
-        cell: ({ row }) => {
-            const rowData = row.original
-
-            return (
-                <button onClick={() => {
-                    toast({
-                        title: "This row contains",
-                        description: (
-                            <pre className="mt-2 w-[340px] rounded-md bg-ublue-900 p-4">
-                                <code className="text-ugray-0">{JSON.stringify(rowData, null, 2)}</code>
-                            </pre>
-                        ),
-                    })
-                }} className="flex justify-center items-center">
-                    <MoreVertical size={18} />
-                </button>
-            )
-        },
+        accessorKey: "status",
+        header: "Status",
+        cell: StatusCell
     },
 ]
