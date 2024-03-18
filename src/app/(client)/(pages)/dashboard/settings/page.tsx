@@ -35,13 +35,23 @@ export default function Settings() {
         </div>
         <div>
           <Tabs defaultValue="availability" className="w-[400px]">
-            <TabsList>
-              <TabsTrigger value="availability">Availability</TabsTrigger>
-              <TabsTrigger value="edit-profile">Edit Profile</TabsTrigger>
-              <TabsTrigger value="change-password">Change Password</TabsTrigger>
+            <TabsList className="bg-ugray-0 py-6 mb-3">
+              <div className="flex gap-6 px-6">
+                <div>
+                  <TabsTrigger value="availability ">Availability</TabsTrigger>
+                </div>
+                <div>
+                  <TabsTrigger value="edit-profile">Edit Profile</TabsTrigger>
+                </div>
+                <div>
+                  <TabsTrigger value="change-password">
+                    Change Password
+                  </TabsTrigger>
+                </div>
+              </div>
             </TabsList>
             <TabsContent value="availability">
-              Make changes to your account here.
+              hi
             </TabsContent>
             <TabsContent value="edit-profile">
               Change your password here.
