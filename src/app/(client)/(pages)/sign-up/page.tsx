@@ -20,7 +20,16 @@ import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { loginAccount } from "@/api/auth/authAPI";
+
 const formSchema = z.object({
+  firstName: z
+    .string()
+    .min(1, { message: "should have at least one character" })
+    .max(50, { message: "can't contain more than 50 characters" }),
+  lastName: z
+    .string()
+    .min(1, { message: "should have at least one character" })
+    .max(50, { message: "can't contain more than 50 characters" }),
   email: z
     .string()
     .email({ message: "invalid email" })
@@ -38,6 +47,7 @@ const formSchema = z.object({
     .string()
     .min(1, { message: "should have at least one character" })
     .max(50, { message: "can't contain more than 50 characters" }),
+
 
   nic: z
     .string()
@@ -73,6 +83,7 @@ const formSchema = z.object({
     .max(50, {
       message: "Currunt hospital can't contain more than 15 characters",
     }),
+
   password: z
     .string()
     .min(8, { message: "password must contain at least 8 characters" })
@@ -94,20 +105,37 @@ export default function SignIn() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      firstName: "",
+      lastName: "",
       email: "",
       slmcNumber: "",
       contactNo: "",
       userId: "",
+
       nic: "",
       curruntuni: "",
       currunthospital: "",
       personalclinic: "",
       clinicname: "",
       clinicaddress: "",
+
       password: "",
       confirmpassword: "",
     },
   });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    toast({
+      title: "Sign up Successful",
+      description: (
+        <pre className="bg-ugray-900 mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className=" text-ugray-0">
+            {JSON.stringify(values, null, 2)}
+          </code>
+        </pre>
+      ),
+    });
+  }
 
   const handleEyeClick = () => {
     setShowPassword(!showPassword);
@@ -117,6 +145,7 @@ export default function SignIn() {
   };
 
   return (
+
     <div className=" ">
       <div className="flex justify-center ">
         <div className="flex flex-col gap-2 md:px-8  w-80  items-center justify-center sm:w-[500px] py-5   ">
@@ -467,26 +496,28 @@ export default function SignIn() {
                   />
                 </div>
                 <div className="py-2">
+
                   <Button
                     type="submit"
                     className="w-full bg-ublue-100 text-ugray-0"
                   >
                     Sign Up
                   </Button>
+
+                  <div className="text-sm text-center ">
+                    <p className="text-black">
+                      Already have an account?{" "}
+                      <a href="/sign-in" className="text-ublue-100 underline">
+                        Sign in
+                      </a>
+                    </p>
+                  </div>
                 </div>
-                <div className="text-sm text-center ">
-                  <p className="text-black">
-                    Already have an account?{" "}
-                    <a href="/sign-in" className="text-ublue-100 underline">
-                      Sign in
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </form>
-          </Form>
+              </form>
+            </Form>
+          </div>
         </div>
-      </div>
+
     </div>
   );
 }
