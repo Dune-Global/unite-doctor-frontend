@@ -1,4 +1,7 @@
 "use client";
+
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import * as z from "zod";
@@ -20,6 +23,11 @@ import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { loginAccount } from "@/api/auth/authAPI";
+import {
+  setAccessToken,
+  setIsAuth,
+  setRefreshToken,
+} from "@/store/reducers/auth-reducer";
 const formSchema = z.object({
   email: z
     .string()
@@ -37,13 +45,15 @@ const formBaseStyles = {
 };
 
 export default function SignIn() {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "wasath.vt@gmail.com",
+      password: "Wasath123",
     },
   });
 
@@ -53,15 +63,29 @@ export default function SignIn() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const { email, password } = values;
-      const res = await loginAccount(email);
+      const res = await loginAccount(values);
+      console.log(res);
+      if (res.status === !200) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "Email or Password is incorrect.",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+      }
+
+      dispatch(setIsAuth(true));
+      dispatch(setRefreshToken(res.data.refreshToken));
+      dispatch(setAccessToken(res.data.accessToken));
+
       localStorage.setItem("jwtToken", res.token);
       toast({
         variant: "default",
         title: "Welcome back!",
-        description: "You have successfully logged in.",
+        description: "Welcome back",
         action: <ToastAction altText="Try again">Go to home</ToastAction>,
       });
+      router.push("/dashboard/overview");
     } catch (error) {
       toast({
         variant: "destructive",
@@ -84,10 +108,11 @@ export default function SignIn() {
               alt=""
               width={100}
               height={100}
+              className="mb-4"
             ></Image>{" "}
           </div>
           <div className="flex flex-col gap-1  items-center text-center">
-            <h2 className="font-semibold text-4xl  ">Welcome Back!</h2>
+            <h2 className="font-semibold text-4xl  mb-8">Welcome Back!</h2>
           </div>
           <Form {...form}>
             <form
@@ -96,17 +121,14 @@ export default function SignIn() {
             >
               <div className="space-y-5 ">
                 <div>
-                  <div className="text-base">User ID </div>
+                  <div className="text-base">Email</div>
                   <FormField
                     control={form.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Input
-                            placeholder="Enter your SLMC number"
-                            {...field}
-                          />
+                          <Input placeholder="Enter your email" {...field} />
                         </FormControl>
                         <FormMessage
                           className={`${formBaseStyles.errorMessages}`}
