@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import classNames from "classnames";
 import { Check } from "lucide-react";
@@ -23,7 +25,7 @@ const ProgressStep: React.FC<ProgressStepProps> = ({
       {/* Circle */}
       <div
         className={classNames(
-          "flex items-center justify-center w-10 h-10 rounded-full relative",
+          "flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full relative",
           {
             "bg-uindigo-400 text-ugray-0": isCompleted,
             "bg-uindigo-200 text-ugray-400": !isCompleted,
