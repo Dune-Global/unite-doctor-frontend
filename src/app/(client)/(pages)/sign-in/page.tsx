@@ -54,7 +54,7 @@ export default function SignIn() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const { email, password } = values;
-      const res = await loginAccount(email,);
+      const res = await loginAccount(email);
       localStorage.setItem("jwtToken", res.token);
       toast({
         variant: "default",
@@ -75,138 +75,119 @@ export default function SignIn() {
   }
 
   return (
-    <div className="flex flex-row justify-center  lg:justify-between ">
-      <div className="flex lg:px-28 items-center justify-center">
-        <Container>
+    <div className="flex flex-row justify-center">
+      <div className="flex flex-col gap-4 items-center justify-center md:py- py-">
+        <div className="flex flex-col gap-2 px-8 py- w-[320px]  md:py- h-svh items-center justify-center sm:w-[500px]  ">
           <div>
-            <div className="flex flex-col gap-4 items-end justify-center md:py- py-">
-              <div className="flex flex-col gap-2 px-8 py- w-[320px]  md:py- h-svh items-center justify-center   sm:w-[500px]  ">
-                <div>
-                  <Image
-                    src={"/logo/log.png"}
-                    alt=""
-                    width={100}
-                    height={100}
-                  ></Image>{" "}
-                </div>
-                <div className="flex flex-col gap-1  items-center text-center">
-                  <h2 className="font-semibold text-4xl  ">Welcome Back!</h2>
-                </div>
-                <Form {...form}>
-                  <form
-                    className="space-y-3 w-full  px-2 mb-2 "
-                    onSubmit={form.handleSubmit(onSubmit)}
-                  >
-                    <div className="space-y-5 ">
-                      <div>
-                        <div className="text-base">User ID </div>
-                        <FormField
-                          control={form.control}
-                          name="email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  placeholder="Enter your SLMC number"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage
-                                className={`${formBaseStyles.errorMessages}`}
-                              />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <div>
-                        <div className="text-base">Password</div>
-                        <FormField
-                          control={form.control}
-                          name="password"
-                          render={({ field }) => (
-                            <FormItem>
-                              <div className="relative">
-                                <FormControl>
-                                  <Input
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder="Enter your Password"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <button
-                                  className="absolute right-2 top-[0.65rem] text-xl"
-                                  type="button"
-                                  onClick={handleEyeClick}
-                                >
-                                  {showPassword ? (
-                                    <EyeOff
-                                      size={25}
-                                      strokeWidth={1}
-                                      className="text-black"
-                                    />
-                                  ) : (
-                                    <Eye
-                                      size={25}
-                                      strokeWidth={1}
-                                      className="text-black"
-                                    />
-                                  )}
-                                </button>
-                              </div>
-                              <FormMessage
-                                className={`${formBaseStyles.errorMessages}`}
-                              />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <div className="flex justify-between">
-                        <div className="flex flex-row gap-2">
-                          <Checkbox />
-                          <div className="text-sm flex">Remember me</div>
-                        </div>
-                        <div className="flex">
-                          <Link
-                            href={""}
-                            className="text-sm underline text-ublue-100"
-                          >
-                            Forgot Password?{" "}
-                          </Link>
-                        </div>
-                      </div>
-                      <div className="">
-                        <Button className="w-full bg-ublue-100 text-ugray-0">
-                          Login
-                        </Button>
-                      </div>
-                      <div className="text-sm text-center ">
-                        <p className="text-black">
-                          Don&apos;t have an account?{" "}
-                          <a
-                            href="/signup"
-                            className="text-ublue-100 underline"
-                          >
-                            Sign up
-                          </a>
-                        </p>
-                      </div>
-                    </div>
-                  </form>
-                </Form>
-              </div>
-            </div>
+            <Image
+              src={"/logo/logo.png"}
+              alt=""
+              width={100}
+              height={100}
+            ></Image>{" "}
           </div>
-        </Container>
-      </div>
-      {/*  */}
-      <div className="lg:flex hidden ">
-        <Image
-          src={"/auth-png/hospital.png"}
-          alt=""
-          height={100}
-          width={500}
-          className=""
-        />
+          <div className="flex flex-col gap-1  items-center text-center">
+            <h2 className="font-semibold text-4xl  ">Welcome Back!</h2>
+          </div>
+          <Form {...form}>
+            <form
+              className="space-y-3 w-full  px-2 mb-2 "
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
+              <div className="space-y-5 ">
+                <div>
+                  <div className="text-base">User ID </div>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter your SLMC number"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage
+                          className={`${formBaseStyles.errorMessages}`}
+                        />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div>
+                  <div className="text-base">Password</div>
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="relative">
+                          <FormControl>
+                            <Input
+                              type={showPassword ? "text" : "password"}
+                              placeholder="Enter your Password"
+                              {...field}
+                            />
+                          </FormControl>
+                          <button
+                            className="absolute right-2 top-[0.65rem] text-xl"
+                            type="button"
+                            onClick={handleEyeClick}
+                          >
+                            {showPassword ? (
+                              <EyeOff
+                                size={25}
+                                strokeWidth={1}
+                                className="text-black"
+                              />
+                            ) : (
+                              <Eye
+                                size={25}
+                                strokeWidth={1}
+                                className="text-black"
+                              />
+                            )}
+                          </button>
+                        </div>
+                        <FormMessage
+                          className={`${formBaseStyles.errorMessages}`}
+                        />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <div className="flex flex-row gap-2">
+                    <Checkbox />
+                    <div className="text-sm flex">Remember me</div>
+                  </div>
+                  <div className="flex">
+                    <Link
+                      href={"/forget-password"}
+                      className="text-sm underline text-ublue-100"
+                    >
+                      Forgot Password?
+                    </Link>
+                  </div>
+                </div>
+                <div className="">
+                  <Button className="w-full bg-ublue-100 text-ugray-0">
+                    Login
+                  </Button>
+                </div>
+                <div className="text-sm text-center ">
+                  <p className="text-black">
+                    Don&apos;t have an account?{" "}
+                    <a href="/signup" className="text-ublue-100 underline">
+                      Sign up
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </form>
+          </Form>
+        </div>
       </div>
     </div>
   );
