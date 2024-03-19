@@ -409,6 +409,7 @@ export default function SignIn() {
                     )}
                   />
                 </div>
+                
                 <div className="snap-end">
                   <div className="text-base">Password</div>
                   <FormField
@@ -451,6 +452,7 @@ export default function SignIn() {
                     )}
                   />
                 </div>
+
                 <div className="snap-end">
                   <div className="text-base">Confirm Password</div>
                   <FormField
@@ -493,6 +495,7 @@ export default function SignIn() {
                     )}
                   />
                 </div>
+
               </div>
               <div className="py-2">
                 <Button
