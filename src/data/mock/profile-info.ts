@@ -1,7 +1,8 @@
 export const ProfileInfo = [
   {
     id: 1,
-    name: "Wasath Theekshana",
+    fName: "Wasath",
+    lName: "Theekshana",
     image: "https://avatar.iran.liara.run/public/boy?username=Wasath",
     gender: "Male",
     email: "wasaththeekshana@gmail.com",
