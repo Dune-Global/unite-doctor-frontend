@@ -37,7 +37,7 @@ export default function FogoetPassword() {
      
       toast({
         variant: "default",
-        title: "Welcome back!",
+        title: "Please check your email.",
         description: "You have recieved an email.",
         action: <ToastAction altText="Try again">Go to home</ToastAction>,
       });
