@@ -3,6 +3,8 @@
 import DoctorCard from "@/components/profile/DoctorCard";
 import { ProfileInfo } from "@/data/mock/profile-info";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React from "react";
+import AvailabilityCard from "@/components/profile/AvailabilityCard";
 
 export default function Settings() {
   return (
@@ -50,13 +52,16 @@ export default function Settings() {
                 </div>
               </div>
             </TabsList>
-            <TabsContent value="availability">
-              hi
+            <TabsContent
+              value="availability"
+              className="bg-ugray-0 p-4 rounded-lg shadow-sm"
+            >
+             <AvailabilityCard /> 
             </TabsContent>
-            <TabsContent value="edit-profile">
+            <TabsContent value="edit-profile" className="bg-ugray-0 p-4 rounded-lg shadow-sm">
               Change your password here.
             </TabsContent>
-            <TabsContent value="change-password">
+            <TabsContent value="change-password" className="bg-ugray-0 p-4 rounded-lg shadow-sm">
               Change your password.
             </TabsContent>
           </Tabs>
