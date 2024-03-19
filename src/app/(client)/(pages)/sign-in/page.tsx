@@ -164,10 +164,10 @@ export default function SignIn() {
                   </div>
                   <div className="flex">
                     <Link
-                      href={""}
+                      href={"/forget-password"}
                       className="text-sm underline text-ublue-100"
                     >
-                      Forgot Password?{" "}
+                      Forgot Password?
                     </Link>
                   </div>
                 </div>
