@@ -70,8 +70,12 @@ const PatientDetails = () => {
 
       {/* Accordion */}
       <div className="my-16">
-        {patientHistory.map((historyItem) => (
-          <HistoryAccordion key={historyItem.id} {...historyItem} />
+        {patientHistory.map((historyItem, index) => (
+          <HistoryAccordion
+            key={historyItem.id}
+            {...historyItem}
+            isLastItem={index === patientHistory.length - 1} // Pass true for the last item
+          />
         ))}
       </div>
     </div>
@@ -79,3 +83,4 @@ const PatientDetails = () => {
 };
 
 export default PatientDetails;
+
