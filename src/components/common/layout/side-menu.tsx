@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
 
 import {
   DropdownMenu,
@@ -26,22 +27,28 @@ import React, { useState } from "react";
 import { sideMenuItems } from "@/data/side_menu.tsx/menu_item";
 import Image from "next/image";
 import Container from "../container";
-import { setPageName } from "@/store/reducers/page-reducer";
+import { RootState } from "@/store";
 type Props = {};
 
 const SideMenu = (props: Props) => {
+  const router = useRouter();
   const dispatch = useDispatch();
+
+  const imageUrl = useSelector((state: RootState) => state.auth.imageUrl);
 
   const [isOpen, setIsOpen] = useState(false);
   const pathName = usePathname();
 
-  const handlePageName = (pathname: string) => {
-    dispatch(setPageName(pathname));
-  };
-
   const handleClick = () => {
     setIsOpen(!isOpen);
   };
+
+  const handleLogOut = () => {
+    localStorage.removeItem("REFRESHTOKEN");
+    sessionStorage.removeItem("ACCESSTOKEN");
+    router.push("/sign-in");
+  };
+
   return (
     <div>
       <Container>
@@ -60,8 +67,7 @@ const SideMenu = (props: Props) => {
             <DropdownMenu>
               <DropdownMenuTrigger className="text-sm">
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarImage src={imageUrl}/>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="mr-4">
@@ -73,6 +79,9 @@ const SideMenu = (props: Props) => {
                     <DropdownMenuItem>{item.description}</DropdownMenuItem>
                   </Link>
                 ))}
+
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogOut}>Log out</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -91,12 +100,7 @@ const SideMenu = (props: Props) => {
         </div>
         <div className="flex flex-col mt-7">
           {sideMenuItems.map((item) => (
-            <Link
-              onClick={() => handlePageName(pathName)}
-              key={item.id}
-              href={item.path}
-              className="py-[1px]"
-            >
+            <Link key={item.id} href={item.path} className="py-[1px]">
               <div
                 className={`p-4 flex items-center gap-3 rounded-xl hover:text-ugray-400 hover:bg-ugray-100 ${
                   pathName === item.path &&
