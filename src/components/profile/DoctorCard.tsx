@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "../common/Button";
 
-interface PatientCardProps {
+interface DoctorCardProps {
   image: string;
   name: string;
   designation: string;
@@ -18,7 +18,7 @@ interface PatientCardProps {
   clinicAddress: string;
 }
 
-const PatientCard: React.FC<PatientCardProps> = ({
+const DoctorCard: React.FC<DoctorCardProps> = ({
   image,
   name,
   designation,
@@ -118,4 +118,4 @@ const PatientCard: React.FC<PatientCardProps> = ({
   );
 };
 
-export default PatientCard;
+export default DoctorCard;
