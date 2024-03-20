@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button"
 import { ArrowUpDown } from "lucide-react"
 import StatusLabel from "@/components/labels/status-label"
 import { useState } from "react"
+import { toast } from "@/components/ui/use-toast"
+import Prescription from "@/components/appointments/modals/Prescription"
 
 const StatusCell = ({ row }: any) => {
     const rowData = row.original
@@ -40,26 +42,34 @@ const StatusCell = ({ row }: any) => {
     )
 }
 
+
 export const columns: ColumnDef<AppointmentList>[] = [
     {
         accessorKey: "patientName",
         header: "Patient Name",
         cell: ({ row }) => {
+            const rowData = row.original
             return (
-                <div className="flex flex-col lg:flex-row justify-start gap-2 items-center">
+                <div className="flex flex-col lg:flex-row justify-start gap-2 items-center w-full">
                     <div>
-                        <img src={`https://ui-avatars.com/api/?name=${row.original.patientName}`} alt="patient" className="w-8 h-8 rounded-full" />
+                        <img src={`https://ui-avatars.com/api/?name=${rowData.patientName}`} alt="patient" className="w-8 h-8 rounded-full" />
                     </div>
                     <div>
-                        {row.original.patientName}
+                        <Prescription cellContent={rowData.patientName} />
                     </div>
                 </div>
             )
         }
     },
     {
-        accessorKey: "patientId",
-        header: "Patient ID",
+        accessorKey: "appointmentId",
+        header: "Appointment ID",
+        cell: ({ row }) => {
+            const rowData = row.original
+            return (
+                <Prescription cellContent={rowData.appointmentId} />
+            )
+        }
     },
     {
         accessorKey: "gender",
@@ -78,6 +88,12 @@ export const columns: ColumnDef<AppointmentList>[] = [
                 </div>
             )
         },
+        cell: ({ row }) => {
+            const rowData = row.original
+            return (
+                <Prescription cellContent={rowData.gender} />
+            )
+        }
     },
     {
         accessorKey: "age",
@@ -96,14 +112,20 @@ export const columns: ColumnDef<AppointmentList>[] = [
                 </div>
             )
         },
+        cell: ({ row }) => {
+            const rowData = row.original
+            return (
+                <Prescription cellContent={rowData.age} />
+            )
+        }
     },
     {
-        accessorKey: "email",
+        accessorKey: "location",
         header: ({ column }) => {
             return (
                 <div className="flex items-center">
                     <div>
-                        Email
+                        Location
                     </div>
                     <button
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -114,6 +136,12 @@ export const columns: ColumnDef<AppointmentList>[] = [
                 </div>
             )
         },
+        cell: ({ row }) => {
+            const rowData = row.original
+            return (
+                <Prescription cellContent={rowData.location} />
+            )
+        }
     },
     {
         accessorKey: "date",
@@ -132,6 +160,12 @@ export const columns: ColumnDef<AppointmentList>[] = [
                 </div>
             )
         },
+        cell: ({ row }) => {
+            const rowData = row.original
+            return (
+                <Prescription cellContent={rowData.date} />
+            )
+        }
     },
     {
         accessorKey: "time",
@@ -150,6 +184,12 @@ export const columns: ColumnDef<AppointmentList>[] = [
                 </div>
             )
         },
+        cell: ({ row }) => {
+            const rowData = row.original
+            return (
+                <Prescription cellContent={rowData.time} />
+            )
+        }
     },
     {
         id: "actions",
