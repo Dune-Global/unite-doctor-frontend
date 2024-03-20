@@ -1,10 +1,10 @@
 export type AppointmentList = {
   id: string;
   patientName: string;
-  patientId: string;
+  appointmentId: string;
   gender: string;
   age: string;
-  email: string;
+  location: string;
   date: string;
   time: string;
   status: string;
