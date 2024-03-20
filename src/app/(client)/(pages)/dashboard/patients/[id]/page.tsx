@@ -36,26 +36,25 @@ const PatientDetails = () => {
   }, []);
 
   return (
-    <div className="flex flex-col-reverse lg:flex-row lg:gap-4 justify-center items-center lg:items-start">
-      {loading ? (
-        <div className="h-[100vh] w-full flex justify-center items-center">
-          Loading...
-        </div>
-      ) : (
-        <>
-          <div className="mt-10 lg:mt-0">
-            {/* Progress */}
-            <div className="flex flex-col items-center">
+
+    <div className="">
+      {/* <> */}
+      {/* <div className="mt-10 lg:mt-0"> */}
+      {/* Progress */}
+      {/* <div className="flex flex-col items-center">
+
               <h1 className="md:mt-8 font-semibold text-2xl text-ugray-600 self-center lg:self-start ">
                 Patient Details
               </h1>
               <div className="mb-14 mt-6 max-w-[960px] w-full px-10 xl:px-2">
                 <Progress currentStep={2} />
               </div>
-            </div>
 
-            {/* Accordion */}
-            <div className="my-16">
+            </div> */}
+
+      {/* Accordion */}
+      {/* <div className="my-16">
+
               {patientHistory.map((historyItem, index) => (
                 <HistoryAccordion
                   key={historyItem.id}
@@ -63,12 +62,14 @@ const PatientDetails = () => {
                   isLastItem={index === patientHistory.length - 1} // Pass true for the last item
                 />
               ))}
-            </div>
-          </div>
 
-          <div className="min-w-96 mt-4 lg:mt-20 space-y-10">
-            {/* Patient card */}
-            <div>
+            </div> */}
+      {/* </div> */}
+
+      {/* <div className="min-w-96 mt-4 lg:mt-20 space-y-10"> */}
+      {/* Patient card */}
+      {/* <div>
+
               <PatientCard
                 image="https://randomuser.me/api/portraits/men/59.jpg"
                 name="Patient Name"
@@ -83,16 +84,17 @@ const PatientDetails = () => {
                 allergies="None"
                 hereditaryDiseases="None"
               />
-            </div>
 
-            {/* Reports */}
-            <div className="my-6 flex flex-col gap-3">
+            </div> */}
+
+      {/* Reports */}
+      {/* <div className="my-6 flex flex-col gap-3">
               <h1 className="font-medium text-ugray-600">Reports</h1>
               <ReportCard reports={reports} />
-            </div>
-          </div>
-        </>
-      )}
+            </div> */}
+      {/* </div> */}
+      {/* </> */}
+
     </div>
   );
 };
