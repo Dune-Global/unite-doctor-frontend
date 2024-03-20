@@ -15,7 +15,7 @@ export const ProfileInfo = [
     dateOfBirth: "1990-12-12",
     currentHospital: "National Hospital",
     currentUniversity: "-",
-    isPersonalClinic: false,
+    PersonalClinic: "No",
     clinicName: "-",
     clinicAddress: "-",
   },
