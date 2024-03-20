@@ -10,7 +10,9 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/common/Button";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -20,8 +22,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import React from "react";
 import { z } from "zod";
+import { CalendarIcon } from "lucide-react";
 
 const formSchema = z.object({
   date: z.string().nonempty({ message: "Date is required" }),
@@ -78,24 +86,38 @@ export default function AvailabilityCard() {
                   name="date"
                   render={({ field }) => (
                     <FormItem>
-                      <FormControl>
-                        <Select>
-                          <SelectTrigger className="">
-                            <SelectValue placeholder="Select a date" />
-                          </SelectTrigger>
-                          <SelectContent>
+                      <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-full border-ugray-100 pl-3 text-left font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
-                              selected={date}
-                              onSelect={setDate}
-                              className="rounded-md border"
+                              selected={new Date(field.value)}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date > new Date() ||
+                                date < new Date("1900-01-01")
+                              }
+                              initialFocus
                             />
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage
-                        className={`${formBaseStyles.errorMessages}`}
-                      />
+                          </PopoverContent>
+                        </Popover>
                     </FormItem>
                   )}
                 />

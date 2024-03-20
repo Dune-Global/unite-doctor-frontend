@@ -11,15 +11,11 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import Container from "@/components/common/container";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
-import { loginAccount, registerAccount } from "@/api/auth/authAPI";
+import { registerAccount } from "@/api/auth/authAPI";
 import {
   Select,
   SelectContent,
