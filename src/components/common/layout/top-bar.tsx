@@ -54,6 +54,9 @@ export default function TopBar() {
     }
 
     const user: any = getUser();
+    if (!user) {
+      return router.push("/sign-in");
+    }
     console.log(user);
     dispatch(setIsAuth(true));
     dispatch(setDesignation(user.designation));
