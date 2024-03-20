@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
   isAuth: boolean;
+  isEmailVerified: boolean;
   firstName: string;
   lastName: string;
   email: string;
@@ -13,6 +14,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   isAuth: false,
+  isEmailVerified: false,
   firstName: "",
   lastName: "",
   email: "",
@@ -28,6 +30,9 @@ const authStateSlice = createSlice({
   reducers: {
     setIsAuth(state, action: PayloadAction<boolean>) {
       state.isAuth = action.payload;
+    },
+    setIsEmailVerified(state, action: PayloadAction<boolean>) {
+      state.isEmailVerified = action.payload;
     },
     setFirstName(state, action: PayloadAction<string>) {
       state.firstName = action.payload;
@@ -55,6 +60,7 @@ const authStateSlice = createSlice({
 
 export const {
   setIsAuth,
+  setIsEmailVerified,
   setAccessToken,
   setDesignation,
   setImageUrl,
