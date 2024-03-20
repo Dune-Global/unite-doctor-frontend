@@ -88,13 +88,10 @@ export default function AvailabilityCard() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-3 w-full  px-2 mb-2 "
+          className="space-y-3 px-2 mb-2 "
         >
           {ProfileInfo.map((profile) => (
-            <div
-              className="space-y-5 snap-y flex flex-col w-full"
-              key={profile.id}
-            >
+            <div className="space-y-5 snap-y flex flex-col" key={profile.id}>
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="snap-end w-full">
                   <div className="text-sm pb-2 text-ugray-400">First Name</div>
@@ -360,7 +357,7 @@ export default function AvailabilityCard() {
                   />
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row gap-4 w-full">
+              <div className="flex flex-col lg:flex-row gap-4">
                 <div className="snap-end w-full">
                   <div className="text-sm pb-2 text-ugray-400">
                     Personal Clinic
@@ -435,13 +432,18 @@ export default function AvailabilityCard() {
                   />
                 </div>
               </div>
-              <Button
-                type="submit"
-                className="bg-ublue-100 text-ugray-0"
-                size="lg"
-              >
-                Save Changes
-              </Button>
+              <div className="flex gap-4">
+                <div>
+                  <Button type="submit" size="lg">
+                    Save Changes
+                  </Button>
+                </div>
+                <div>
+                  <Button type="reset" variant="outline" size="lg">
+                    Reset Changes
+                  </Button>
+                </div>
+              </div>
             </div>
           ))}
         </form>
