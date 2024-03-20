@@ -1,6 +1,38 @@
 import axios from "axios";
-import { BACKEND_BASE_URL, LOGIN_URL, REFRESH_URL } from "@/api/_url/auth/url";
+import {
+  BACKEND_BASE_URL,
+  LOGIN_URL,
+  REGISTER_URL,
+  REFRESH_URL,
+} from "@/api/_url/auth/url";
 import { handleLoginResponse } from "@/helpers/auth/authHelper";
+
+export const registerAccount = async (values: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  slmcNumber: string;
+  mobile: string;
+  password: string;
+  designation: string;
+  dateOfBirth: Date;
+  gender: string;
+  nicNumber: string;
+  currentHospital: string;
+  currentUniversity: string;
+}) => {
+  try {
+    const response = await axios({
+      method: "POST",
+      baseURL: BACKEND_BASE_URL,
+      url: REGISTER_URL,
+      data: values,
+    });
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+};
 
 export const loginAccount = async (values: {
   email: string;
