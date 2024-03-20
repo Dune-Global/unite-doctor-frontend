@@ -16,12 +16,57 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RootState } from "@/store";
+import { getUser } from "@/utils/getUser";
 import { Bell, Info, Search } from "lucide-react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { accessToken } from "@/api/auth/authAPI";
+import {
+  setDesignation,
+  setEmail,
+  setFirstName,
+  setImageUrl,
+  setIsAuth,
+  setLastName,
+} from "@/store/reducers/auth-reducer";
 
 export default function TopBar() {
-  const pageName = useSelector((state: RootState) => state.pageState.pageName);
-  
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { isAuth, designation, email, firstName, lastName, imageUrl } =
+    useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    const myRefreshToken = localStorage.getItem("REFRESHTOKEN") as string;
+    const myAccessToken = sessionStorage.getItem("ACCESSTOKEN");
+
+    if (!myRefreshToken) {
+      router.push("/sign-in");
+    }
+
+    if (!myAccessToken) {
+      accessToken(myRefreshToken).then((response) => {
+        const { accessToken } = response.data;
+        sessionStorage.setItem("ACCESSTOKEN", `Bearer ${accessToken}`);
+      });
+    }
+
+    const user: any = getUser();
+    console.log(user);
+    dispatch(setIsAuth(true));
+    dispatch(setDesignation(user.designation));
+    dispatch(setFirstName(user.firstName));
+    dispatch(setLastName(user.lastName));
+    dispatch(setEmail(user.email));
+    dispatch(setImageUrl(user.imgUrl));
+  }, []);
+
+  const handleLogOut = () => {
+    localStorage.removeItem("REFRESHTOKEN");
+    sessionStorage.removeItem("ACCESSTOKEN");
+    router.push("/sign-in");
+  };
 
   return (
     <div className="w-full flex flex-row justify-between items-center mb-5">
@@ -37,15 +82,15 @@ export default function TopBar() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarImage src={imageUrl}/>
+              
             </Avatar>
           </div>
           <div className="flex flex-col items-start justify-start">
-            <h3 className="text-sm font-medium">Wasath Theekshana</h3>
+            <h3 className="text-sm font-medium">{firstName} {lastName}</h3>
             <DropdownMenu>
-              <DropdownMenuTrigger className="text-sm opacity-70">
-                Physician
+              <DropdownMenuTrigger className="text-sm opacity-70 line-clamp-1">
+                {designation}
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -54,6 +99,8 @@ export default function TopBar() {
                 <DropdownMenuItem>Billing</DropdownMenuItem>
                 <DropdownMenuItem>Team</DropdownMenuItem>
                 <DropdownMenuItem>Subscription</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogOut}>Log out</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

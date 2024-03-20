@@ -47,7 +47,7 @@ CustomAxios.interceptors.response.use(
     } else if (status === 403) {
       sessionStorage.clear();
       localStorage.clear();
-      window.location.replace("/auth");
+      window.location.replace("/sign-in");
     }
     return Promise.resolve(err);
   }

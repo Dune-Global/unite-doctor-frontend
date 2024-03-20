@@ -7,8 +7,24 @@ import React from "react";
 import AvailabilityCard from "@/components/profile/AvailabilityCard";
 import EditProfileCard from "@/components/profile/EditProfileCard";
 import ChangePasswordCard from "@/components/profile/ChangePasswordCard";
+import { columns } from "./(table)/columns";
+import { DataTable } from "./(table)/data-table";
+import { useEffect, useState } from "react";
+import { AvailableAppointmentsList } from "@/types/available-appointments";
+import { Appointments } from "@/data/mock/profile-info";
 
 export default function Settings() {
+  const [data, setData] = useState<AvailableAppointmentsList[]>([]);
+
+  useEffect(() => {
+    const appointmentsActionHandler = async () => {
+      const data = await Appointments();
+      setData(data);
+    };
+
+    appointmentsActionHandler();
+  }, []);
+
   return (
     <div className="flex flex-col">
       <div>
@@ -54,16 +70,29 @@ export default function Settings() {
                 </div>
               </div>
             </TabsList>
+            <TabsContent value="availability" className="w-full">
+              <div className="bg-ugray-0 p-4 rounded-lg shadow-sm">
+                <AvailabilityCard />
+              </div>
+              <div className="py-12">
+                <div className="text-2xl font-medium pb-4">
+                    Appointment Schedule
+                </div>
+                <div className="pb-10">
+                  <DataTable columns={columns} data={data} />
+                </div>
+              </div>
+            </TabsContent>
             <TabsContent
-              value="availability"
-              className="bg-ugray-0 p-4 rounded-lg shadow-sm w-full"
+              value="edit-profile"
+              className="bg-ugray-0 p-4 rounded-lg shadow-sm"
             >
-             <AvailabilityCard /> 
+              <EditProfileCard />
             </TabsContent>
-            <TabsContent value="edit-profile" className="bg-ugray-0 p-4 rounded-lg shadow-sm">
-             <EditProfileCard /> 
-            </TabsContent>
-            <TabsContent value="change-password" className="bg-ugray-0 p-4 rounded-lg shadow-sm">
+            <TabsContent
+              value="change-password"
+              className="bg-ugray-0 p-4 rounded-lg shadow-sm"
+            >
               <ChangePasswordCard />
             </TabsContent>
           </Tabs>

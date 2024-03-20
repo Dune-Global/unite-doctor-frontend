@@ -1,4 +1,4 @@
-import { ISideMenuItems } from "@/types/sidemenu";
+import { SideMenuItems } from "@/types/side-menu";
 import {
   User,
   Settings,
@@ -7,7 +7,7 @@ import {
   MessageSquareMore
 } from "lucide-react";
 
-export const sideMenuItems: ISideMenuItems[] = [
+export const sideMenuItems: SideMenuItems[] = [
   {
     id: 1,
     path: "/dashboard/overview",
@@ -18,7 +18,7 @@ export const sideMenuItems: ISideMenuItems[] = [
     id: 2,
     path: "/dashboard/appoinments",
     icon: Calendar,
-    description: "Appoinments",
+    description: "Appointments",
   },
   {
     id: 3,

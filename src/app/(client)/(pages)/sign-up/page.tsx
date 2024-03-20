@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { CalendarIcon, Eye, EyeOff } from "lucide-react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,7 +19,28 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { loginAccount } from "@/api/auth/authAPI";
+import { loginAccount, registerAccount } from "@/api/auth/authAPI";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import {
+  getDesignationList,
+  getGenderList,
+  getHospitalList,
+  getUniversityList,
+} from "@/api/enums/enumsAPI";
 
 const formSchema = z.object({
   firstName: z
@@ -39,58 +60,33 @@ const formSchema = z.object({
     .string()
     .min(1, { message: "should have at least one character" })
     .max(50, { message: "can't contain more than 50 characters" }),
-  contactNo: z
+  mobile: z
     .string()
     .min(1, { message: "should have at least one character" })
     .max(50, { message: "can't contain more than 50 characters" }),
-  userId: z
-    .string()
-    .min(1, { message: "should have at least one character" })
-    .max(50, { message: "can't contain more than 50 characters" }),
-
-  nic: z
+  nicNumber: z
     .string()
     .min(8, { message: "NIC must contain at least 12 characters" })
     .max(50, { message: "NIC can't contain more than 15 characters" }),
-  curruntuni: z
-    .string()
-    .min(8, { message: "University name must contain at least 3 characters" })
-    .max(50, {
-      message: "University name can't contain more than 25 characters",
-    }),
-  currunthospital: z
-    .string()
-    .min(8, { message: "Currunt hospital must contain at least 12 characters" })
-    .max(50, {
-      message: "Currunt hospital can't contain more than 15 characters",
-    }),
-  personalclinic: z
-    .string()
-    .min(8, { message: "Currunt hospital must contain at least 12 characters" })
-    .max(50, {
-      message: "Currunt hospital can't contain more than 15 characters",
-    }),
-  clinicname: z
-    .string()
-    .min(8, { message: "Currunt hospital must contain at least 12 characters" })
-    .max(50, {
-      message: "Currunt hospital can't contain more than 15 characters",
-    }),
-  clinicaddress: z
-    .string()
-    .min(8, { message: "Currunt hospital must contain at least 12 characters" })
-    .max(50, {
-      message: "Currunt hospital can't contain more than 15 characters",
-    }),
-
+  currentUniversity: z.string({
+    required_error: "A university name is required",
+  }),
+  currentHospital: z.string({
+    required_error: "A hospital name is required",
+  }),
   password: z
     .string()
     .min(8, { message: "password must contain at least 8 characters" })
     .max(50, { message: "password can't contain more than 50 characters" }),
-  confirmpassword: z
-    .string()
-    .min(8, { message: "password must contain at least 8 characters" })
-    .max(50, { message: "password can't contain more than 50 characters" }),
+  designation: z.string({
+    required_error: "A designation is required",
+  }),
+  dateOfBirth: z.date({
+    required_error: "A date of birth is required",
+  }),
+  gender: z.string({
+    required_error: "Gender is required",
+  }),
 });
 
 const formBaseStyles = {
@@ -100,6 +96,28 @@ const formBaseStyles = {
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [universityList, setUniversityList] = useState([]);
+  const [genderList, setGenderList] = useState([]);
+  const [hospitalList, setHospitalList] = useState([]);
+  const [designationList, setDesignationList] = useState([]);
+
+  useEffect(() => {
+    getUniversityList().then((res) => {
+      setUniversityList(res.data);
+    });
+
+    getGenderList().then((res) => {
+      setGenderList(res.data);
+    });
+
+    getHospitalList().then((res) => {
+      setHospitalList(res.data);
+    });
+
+    getDesignationList().then((res) => {
+      setDesignationList(res.data);
+    });
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -108,32 +126,49 @@ export default function SignIn() {
       lastName: "",
       email: "",
       slmcNumber: "",
-      contactNo: "",
-      userId: "",
-
-      nic: "",
-      curruntuni: "",
-      currunthospital: "",
-      personalclinic: "",
-      clinicname: "",
-      clinicaddress: "",
-
+      mobile: "",
       password: "",
-      confirmpassword: "",
+      nicNumber: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    toast({
-      title: "Sign up Successful",
-      description: (
-        <pre className="bg-ugray-900 mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className=" text-ugray-0">
-            {JSON.stringify(values, null, 2)}
-          </code>
-        </pre>
-      ),
-    });
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const res = await registerAccount(values);
+      console.log(res);
+
+      if (res.status === 200) {
+        toast({
+          title: "Sign up Successful",
+          description: (
+            <pre className="bg-ugray-900 mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className=" text-ugray-0">
+                {JSON.stringify(values, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
+      } else if (res.status === 409) {
+        toast({
+          title: "Sign up failed",
+          description: res.data.errors[0].messages[0],
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Sign up failed",
+          description: "Please try again",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Sign up failed",
+        description: "Please try again",
+        variant: "destructive",
+      });
+    }
   }
 
   const handleEyeClick = () => {
@@ -253,7 +288,7 @@ export default function SignIn() {
                   <div className="text-base">Contact Number</div>
                   <FormField
                     control={form.control}
-                    name="contactNo"
+                    name="mobile"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
@@ -270,18 +305,44 @@ export default function SignIn() {
                   />
                 </div>
                 <div>
-                  <div className="text-base">User ID </div>
+                  <div className="text-base">Date of Birth</div>
                   <FormField
                     control={form.control}
-                    name="userId"
+                    name="dateOfBirth"
                     render={({ field }) => (
                       <FormItem>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your SLMC number"
-                            {...field}
-                          />
-                        </FormControl>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-full border-ugray-100 pl-3 text-left font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date > new Date() ||
+                                date < new Date("1900-01-01")
+                              }
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
                         <FormMessage
                           className={`${formBaseStyles.errorMessages}`}
                         />
@@ -293,7 +354,7 @@ export default function SignIn() {
                   <div className="text-base">NIC Number </div>
                   <FormField
                     control={form.control}
-                    name="nic"
+                    name="nicNumber"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
@@ -310,17 +371,27 @@ export default function SignIn() {
                   />
                 </div>
                 <div>
-                  <div className="text-base">Currunt Hospital </div>
+                  <div className="text-base">Currunt Hospital</div>
                   <FormField
                     control={form.control}
-                    name="currunthospital"
+                    name="currentHospital"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Input
-                            placeholder="Enter your Currunt Hospital"
-                            {...field}
-                          />
+                          <Select onValueChange={field.onChange}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a Hospital" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {hospitalList.map((hospital: any, index) => {
+                                return (
+                                  <SelectItem key={index} value={hospital}>
+                                    {hospital}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage
                           className={`${formBaseStyles.errorMessages}`}
@@ -333,14 +404,24 @@ export default function SignIn() {
                   <div className="text-base">Current University </div>
                   <FormField
                     control={form.control}
-                    name="curruntuni"
+                    name="currentUniversity"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Input
-                            placeholder="Enter your Currunt University"
-                            {...field}
-                          />
+                          <Select onValueChange={field.onChange}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a University" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {universityList.map((university: any, index) => {
+                                return (
+                                  <SelectItem key={index} value={university}>
+                                    {university}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage
                           className={`${formBaseStyles.errorMessages}`}
@@ -349,18 +430,30 @@ export default function SignIn() {
                     )}
                   />
                 </div>
-                <div>
-                  <div className="text-base">Personal Clinic </div>
+                <div className="snap-end">
+                  <div className="text-base">Designation</div>
                   <FormField
                     control={form.control}
-                    name="personalclinic"
+                    name="designation"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Input
-                            placeholder="Enter your Personal Clinic Name"
-                            {...field}
-                          />
+                          <Select onValueChange={field.onChange}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a Designation" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {designationList.map(
+                                (designation: any, index) => {
+                                  return (
+                                    <SelectItem key={index} value={designation}>
+                                      {designation}
+                                    </SelectItem>
+                                  );
+                                }
+                              )}
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage
                           className={`${formBaseStyles.errorMessages}`}
@@ -369,18 +462,28 @@ export default function SignIn() {
                     )}
                   />
                 </div>
-                <div>
-                  <div className="text-base">Clinic Name </div>
+                <div className="snap-end">
+                  <div className="text-base">Gender</div>
                   <FormField
                     control={form.control}
-                    name="clinicname"
+                    name="gender"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Input
-                            placeholder="Enter your Clinic Name"
-                            {...field}
-                          />
+                          <Select onValueChange={field.onChange}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a Gender" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {genderList.map((gender: any, index) => {
+                                return (
+                                  <SelectItem key={index} value={gender}>
+                                    {gender}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage
                           className={`${formBaseStyles.errorMessages}`}
@@ -389,27 +492,6 @@ export default function SignIn() {
                     )}
                   />
                 </div>
-                <div>
-                  <div className="text-base">Clinic Address </div>
-                  <FormField
-                    control={form.control}
-                    name="clinicaddress"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your Clinic Address"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage
-                          className={`${formBaseStyles.errorMessages}`}
-                        />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
                 <div className="snap-end">
                   <div className="text-base">Password</div>
                   <FormField
@@ -452,56 +534,9 @@ export default function SignIn() {
                     )}
                   />
                 </div>
-
-                <div className="snap-end">
-                  <div className="text-base">Confirm Password</div>
-                  <FormField
-                    control={form.control}
-                    name="confirmpassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <div className="relative">
-                          <FormControl>
-                            <Input
-                              type={showConfirmPassword ? "text" : "password"}
-                              placeholder="Re-enter your Password"
-                              {...field}
-                            />
-                          </FormControl>
-                          <button
-                            className="absolute right-2 top-[0.65rem] text-xl"
-                            type="button"
-                            onClick={handleEyeClick2}
-                          >
-                            {showConfirmPassword ? (
-                              <EyeOff
-                                size={25}
-                                strokeWidth={1}
-                                className="text-black"
-                              />
-                            ) : (
-                              <Eye
-                                size={25}
-                                strokeWidth={1}
-                                className="text-black"
-                              />
-                            )}
-                          </button>
-                        </div>
-                        <FormMessage
-                          className={`${formBaseStyles.errorMessages}`}
-                        />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
               </div>
               <div className="py-2">
-                <Button
-                  type="submit"
-                  className="w-full bg-ublue-100 text-ugray-0"
-                >
+                <Button className="w-full bg-ublue-100 text-ugray-0">
                   Sign Up
                 </Button>
 
