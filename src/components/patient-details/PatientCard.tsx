@@ -1,5 +1,10 @@
+"use client";
+
 import React from "react";
 import { Button } from "../common/Button";
+import { setMedicalHistoryPage } from "@/store/reducers/patient-detail-reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 interface PatientCardProps {
   image: string;
@@ -30,6 +35,16 @@ const PatientCard: React.FC<PatientCardProps> = ({
   allergies,
   hereditaryDiseases,
 }) => {
+  const dispatch = useDispatch();
+  const medicalHistoryPage = useSelector(
+    (state: RootState) => state.patientDetailState.medicalHistoryPage
+  );
+
+  const handleViewMedicalHistoryPage = () => {
+    dispatch(setMedicalHistoryPage(!medicalHistoryPage));
+    console.log(medicalHistoryPage);
+  };
+
   return (
     <div className="max-w-md mx-auto bg-ugray-0 py-4 shadow-md rounded-lg overflow-hidden">
       <div className="px-6 py-4 mb-2">
@@ -47,8 +62,14 @@ const PatientCard: React.FC<PatientCardProps> = ({
               <span className="ml-2">{age} years</span>
             </div>
           </div>
-          <Button variant="default" size="sm">
-            View Medical History
+          <Button
+            variant="default"
+            size="sm"
+            onClick={handleViewMedicalHistoryPage}
+          >
+            {medicalHistoryPage
+              ? "View Patient Details"
+              : "View Medical History"}
           </Button>
         </div>
       </div>
