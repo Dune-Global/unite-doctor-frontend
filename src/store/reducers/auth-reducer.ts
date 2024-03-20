@@ -59,5 +59,8 @@ export const {
   setDesignation,
   setImageUrl,
   setRefreshToken,
+  setEmail,
+  setFirstName,
+  setLastName
 } = authStateSlice.actions;
-export default authStateSlice.actions;
+export default authStateSlice.reducer;
