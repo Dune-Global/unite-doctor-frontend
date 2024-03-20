@@ -73,7 +73,7 @@ const Progress: React.FC<ProgressProps> = ({ currentStep }) => {
   ];
 
   return (
-    <div className="my-14 flex items-center justify-between w-full">
+    <div className=" flex items-center justify-between w-full">
       {steps.map((step, index) => (
         <ProgressStep
           key={step}
