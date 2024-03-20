@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function TopBar() {
   const pageName = useSelector((state: RootState) => state.pageState.pageName);
+  
 
   return (
     <div className="w-full flex flex-row justify-between items-center mb-5">

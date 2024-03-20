@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Accordion,
   AccordionContent,
@@ -5,7 +7,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ChevronDown } from "lucide-react";
-
 import React from "react";
 import { Button } from "../common/Button";
 
@@ -15,6 +16,7 @@ interface AccordionData {
   date: string;
   symptoms: string;
   status: string;
+  isLastItem?: boolean; // New optional prop to indicate if it's the last item
 }
 
 const HistoryAccordion: React.FC<AccordionData> = ({
@@ -23,10 +25,21 @@ const HistoryAccordion: React.FC<AccordionData> = ({
   date,
   symptoms,
   status,
+  isLastItem = false, // Default to false if not provided
 }) => {
   return (
-    <div className="border-l-2 border-dashed border-ugray-200 relative pb-10 pl-4">
-      <div className="w-4 h-4 rounded-full border-4 border-uindigo-400 bg-ugray-0 absolute -left-2 " />
+    // <div className="border-l-2 border-dashed border-ugray-200 relative pb-10 pl-4">
+
+    <div
+      className={` relative pl-4 ${
+        !isLastItem && "border-l-2 border-dashed border-ugray-200  pb-10 "
+      }`}
+    >
+      <div
+        className={`w-4 h-4 rounded-full border-4 absolute border-uindigo-400 bg-ugray-0   ${
+          !isLastItem ? "-left-2" : " -left-[6px] "
+        } `}
+      />
       <div className="mb-3 pl-4 ">{date}</div>
       <Accordion type="multiple" className="flex flex-col gap-4 mx-4">
         <AccordionItem
@@ -55,7 +68,7 @@ const HistoryAccordion: React.FC<AccordionData> = ({
                 <span className="text-ugray-200">Status</span>
                 <span>{status}</span>
               </div>
-              <div className=" mt-4 sm:ml-0 sm:mt-0 ">
+              <div className="mt-4 sm:ml-0 sm:mt-0">
                 <Button variant="default" size="sm">
                   View Prescription
                 </Button>

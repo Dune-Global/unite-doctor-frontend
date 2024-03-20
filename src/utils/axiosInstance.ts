@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BACKEND_BASE_URL, REFRESH_URL } from "@/api/_url/url";
+import { BACKEND_BASE_URL, REFRESH_URL } from "@/api/_url/auth/url";
 const CustomAxios = axios.create({});
 CustomAxios.interceptors.request.use(
   (req) => {

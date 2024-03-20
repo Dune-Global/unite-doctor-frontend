@@ -409,6 +409,7 @@ export default function SignIn() {
                     )}
                   />
                 </div>
+                
                 <div className="snap-end">
                   <div className="text-base">Password</div>
                   <FormField
@@ -451,6 +452,7 @@ export default function SignIn() {
                     )}
                   />
                 </div>
+
                 <div className="snap-end">
                   <div className="text-base">Confirm Password</div>
                   <FormField
@@ -493,6 +495,7 @@ export default function SignIn() {
                     )}
                   />
                 </div>
+
               </div>
               <div className="py-2">
                 <Button
@@ -502,7 +505,7 @@ export default function SignIn() {
                   Sign Up
                 </Button>
 
-                <div className="text-sm text-center ">
+                <div className="text-sm text-center pt-2">
                   <p className="text-black">
                     Already have an account?{" "}
                     <a href="/sign-in" className="text-ublue-100 underline">

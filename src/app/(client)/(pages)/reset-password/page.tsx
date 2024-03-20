@@ -1,12 +1,5 @@
 "use client";
-
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import React, { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -14,83 +7,68 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import Container from "@/components/common/container";
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
-import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { loginAccount } from "@/api/auth/authAPI";
-import {
-  setAccessToken,
-  setIsAuth,
-  setRefreshToken,
-} from "@/store/reducers/auth-reducer";
+import { toast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 const formSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "invalid email" })
-    .min(1, { message: "should have at least one character" })
-    .max(50, { message: "can't contain more than 50 characters" }),
   password: z
     .string()
     .min(8, { message: "password must contain at least 8 characters" })
     .max(50, { message: "password can't contain more than 50 characters" }),
+  confirmpassword: z
+    .string()
+    .min(8, { message: "password must contain at least 8 characters" })
+    .max(50, { message: "password can't contain more than 50 characters" }),
 });
-
 const formBaseStyles = {
-  errorMessages: "text-red-400 font-medium text-sm",
+  errorMessages: "text-ured-400 font-medium text-sm",
 };
-
-export default function SignIn() {
-  const router = useRouter();
-  const dispatch = useDispatch();
+export default function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "wasath.vt@gmail.com",
-      password: "Wasath123",
+      password: "",
+      confirmpassword: "",
     },
   });
-
   const handleEyeClick = () => {
     setShowPassword(!showPassword);
   };
-
+  const handleEyeClick2 = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (values.password !== values.confirmpassword) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Passwords do not match.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+      return;
+    }
+
     try {
-      const res = await loginAccount(values);
-      console.log(res);
-      if (res.status === !200) {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: "Email or Password is incorrect.",
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-      }
-
-      dispatch(setIsAuth(true));
-      dispatch(setRefreshToken(res.data.refreshToken));
-      dispatch(setAccessToken(res.data.accessToken));
-
-      localStorage.setItem("jwtToken", res.token);
       toast({
         variant: "default",
         title: "Welcome back!",
-        description: "Welcome back",
+        description: "You have successfully change the password.",
         action: <ToastAction altText="Try again">Go to home</ToastAction>,
       });
-      router.push("/dashboard/overview");
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "Email or Password is incorrect.",
+        description: "Password is incorrect.",
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
       console.error(error);
@@ -108,11 +86,10 @@ export default function SignIn() {
               alt=""
               width={100}
               height={100}
-              className="mb-4"
             ></Image>{" "}
           </div>
           <div className="flex flex-col gap-1  items-center text-center">
-            <h2 className="font-semibold text-4xl  mb-8">Welcome Back!</h2>
+            <h2 className="font-semibold text-4xl  ">Reset Password</h2>
           </div>
           <Form {...form}>
             <form
@@ -120,24 +97,7 @@ export default function SignIn() {
               onSubmit={form.handleSubmit(onSubmit)}
             >
               <div className="space-y-5 ">
-                <div>
-                  <div className="text-base">Email</div>
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input placeholder="Enter your email" {...field} />
-                        </FormControl>
-                        <FormMessage
-                          className={`${formBaseStyles.errorMessages}`}
-                        />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div>
+                <div className="snap-end">
                   <div className="text-base">Password</div>
                   <FormField
                     control={form.control}
@@ -179,32 +139,54 @@ export default function SignIn() {
                     )}
                   />
                 </div>
-                <div className="flex justify-between">
-                  <div className="flex flex-row gap-2">
-                    <Checkbox />
-                    <div className="text-sm flex">Remember me</div>
-                  </div>
-                  <div className="flex">
-                    <Link
-                      href={"/forget-password"}
-                      className="text-sm underline text-ublue-100"
-                    >
-                      Forgot Password?
-                    </Link>
-                  </div>
+
+                <div className="snap-end">
+                  <div className="text-base">Confirm Password</div>
+                  <FormField
+                    control={form.control}
+                    name="confirmpassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="relative">
+                          <FormControl>
+                            <Input
+                              type={showConfirmPassword ? "text" : "password"}
+                              placeholder="Re-enter your Password"
+                              {...field}
+                            />
+                          </FormControl>
+                          <button
+                            className="absolute right-2 top-[0.65rem] text-xl"
+                            type="button"
+                            onClick={handleEyeClick2}
+                          >
+                            {showConfirmPassword ? (
+                              <EyeOff
+                                size={25}
+                                strokeWidth={1}
+                                className="text-black"
+                              />
+                            ) : (
+                              <Eye
+                                size={25}
+                                strokeWidth={1}
+                                className="text-black"
+                              />
+                            )}
+                          </button>
+                        </div>
+                        <FormMessage
+                          className={`${formBaseStyles.errorMessages}`}
+                        />
+                      </FormItem>
+                    )}
+                  />
                 </div>
+
                 <div className="">
                   <Button className="w-full bg-ublue-100 text-ugray-0">
-                    Login
+                    Continue
                   </Button>
-                </div>
-                <div className="text-sm text-center ">
-                  <p className="text-black">
-                    Don&apos;t have an account?{" "}
-                    <a href="/signup" className="text-ublue-100 underline">
-                      Sign up
-                    </a>
-                  </p>
                 </div>
               </div>
             </form>

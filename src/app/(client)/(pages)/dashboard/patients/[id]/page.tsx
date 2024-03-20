@@ -33,49 +33,56 @@ const PatientDetails = () => {
   }, []);
 
   return (
-    <div className="">
-      {/* Patient card */}
-      <div>
-        <PatientCard
-          image="https://randomuser.me/api/portraits/men/59.jpg"
-          name="Patient Name"
-          gender="Female"
-          age={40}
-          email="patient@example.com"
-          contactNumber="+94 72 1089721"
-          weight="70 kg"
-          height="170 cm"
-          bloodType="O+"
-          bloodPressure="120/80 mmHg"
-          allergies="None"
-          hereditaryDiseases="None"
-        />
-      </div>
-
-      {/* Reports */}
-      <div className="my-6 flex flex-col gap-3">
-        <h1 className="font-medium text-ugray-600">Reports</h1>
-        <ReportCard reports={reports} />
-      </div>
-
-      {/* Progress */}
-      <div className="flex flex-col items-center">
-        <h1 className="font-semibold text-2xl text-ugray-600 self-start">
-          Patient Details
-        </h1>
-        <div className="max-w-[960px] w-full px-10 xl:px-2">
-          <Progress currentStep={2} />
+    <div className="flex flex-col-reverse lg:flex-row lg:gap-4 justify-center items-center lg:items-start">
+      <div className="mt-10 lg:mt-0">
+        {/* Progress */}
+        <div className="flex flex-col items-center">
+          <h1 className="md:mt-8 font-semibold text-2xl text-ugray-600 self-center lg:self-start ">
+            Patient Details
+          </h1>
+          <div className="mb-14 mt-6 max-w-[960px] w-full px-10 xl:px-2">
+            <Progress currentStep={2} />
+          </div>
+        </div>
+        {/* Accordion */}
+        <div className="my-16">
+          {patientHistory.map((historyItem, index) => (
+            <HistoryAccordion
+              key={historyItem.id}
+              {...historyItem}
+              isLastItem={index === patientHistory.length - 1} // Pass true for the last item
+            />
+          ))}
         </div>
       </div>
 
-      {/* Accordion */}
-      <div className="my-16">
-        {patientHistory.map((historyItem) => (
-          <HistoryAccordion key={historyItem.id} {...historyItem} />
-        ))}
+      <div className="min-w-96 mt-4 lg:mt-20 space-y-10">
+        {/* Patient card */}
+        <div>
+          <PatientCard
+            image="https://randomuser.me/api/portraits/men/59.jpg"
+            name="Patient Name"
+            gender="Female"
+            age={40}
+            email="patient@example.com"
+            contactNumber="+94 72 1089721"
+            weight="70 kg"
+            height="170 cm"
+            bloodType="O+"
+            bloodPressure="120/80 mmHg"
+            allergies="None"
+            hereditaryDiseases="None"
+          />
+        </div>
+        {/* Reports */}
+        <div className="my-6 flex flex-col gap-3">
+          <h1 className="font-medium text-ugray-600">Reports</h1>
+          <ReportCard reports={reports} />
+        </div>
       </div>
     </div>
   );
 };
 
 export default PatientDetails;
+
