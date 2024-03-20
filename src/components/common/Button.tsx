@@ -12,7 +12,7 @@ const buttonVariants = cva(
       variant: {
         default: "bg-ublue-100 text-ugray-0 hover:opacity-80",
         outline:
-          "border border-ublue-200 hover:border-ublue-50 text-ublue-200 hover:opacity-80",
+          "border border-ublue-200 bg-ugray-0 hover:border-ublue-50 text-ublue-200 hover:opacity-80",
         icon: " text-ublue-200 hover:bg-ublue-100 hover:opacity-80",
       },
       size: {
