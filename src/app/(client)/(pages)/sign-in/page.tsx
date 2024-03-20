@@ -64,9 +64,10 @@ export default function SignIn() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const res = await loginAccount(values);
-      console.log(res);
-      if (res.status === !200) {
-        toast({
+      // console.warn(res.status);
+      console.warn(res.status === 401);
+      if (res.status === 401) {
+        return toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
           description: "Email or Password is incorrect.",

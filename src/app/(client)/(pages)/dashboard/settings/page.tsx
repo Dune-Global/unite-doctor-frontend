@@ -75,10 +75,8 @@ export default function Settings() {
                 <AvailabilityCard />
               </div>
               <div className="py-12">
-                <div className="text-3xl font-medium">
-                  <div className="text-2xl font-medium">
+                <div className="text-2xl font-medium pb-4">
                     Appointment Schedule
-                  </div>
                 </div>
                 <div className="pb-10">
                   <DataTable columns={columns} data={data} />
