@@ -81,9 +81,9 @@ export default function AvailabilityCard() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-3 w-full px-2 mb-2 "
+          className="space-y-3 px-2 mb-2 "
         >
-          <div className="space-y-5 snap-y flex flex-col w-full">
+          <div className="space-y-5 snap-y flex flex-col">
             <div className="flex flex-col lg:flex-row gap-4">
               <div className="snap-end w-full">
                 <div className="text-sm pb-2 text-ugray-400">
@@ -127,7 +127,7 @@ export default function AvailabilityCard() {
                 />
               </div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-4 w-full">
+            <div className="flex flex-col lg:flex-row gap-4">
               <div className="snap-end w-full">
                 <div className="text-sm pb-2 text-ugray-400">New Password</div>
                 <FormField
@@ -203,14 +203,11 @@ export default function AvailabilityCard() {
                 />
               </div>
             </div>
-
-            <Button
-              type="submit"
-              className="bg-ublue-100 text-ugray-0"
-              size="lg"
-            >
-              Change Password
-            </Button>
+            <div>
+              <Button type="submit" size="lg">
+                Change Password
+              </Button>
+            </div>
           </div>
         </form>
       </Form>
