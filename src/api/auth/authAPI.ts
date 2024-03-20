@@ -4,6 +4,7 @@ import {
   LOGIN_URL,
   REGISTER_URL,
   REFRESH_URL,
+  ACCOUNT_ACTIVATION_URL,
 } from "@/api/_url/auth/url";
 import { handleLoginResponse } from "@/helpers/auth/authHelper";
 
@@ -63,6 +64,22 @@ export const accessToken = async (token: any) => {
       url: REFRESH_URL,
       headers: {
         Authorization: token,
+      },
+    });
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+};
+
+export const accountActivation = async (token: any) => {
+  try {
+    const response = await axios({
+      method: "GET",
+      baseURL: BACKEND_BASE_URL,
+      url: ACCOUNT_ACTIVATION_URL,
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
     return response;

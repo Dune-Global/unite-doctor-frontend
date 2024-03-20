@@ -28,13 +28,14 @@ import {
   setFirstName,
   setImageUrl,
   setIsAuth,
+  setIsEmailVerified,
   setLastName,
 } from "@/store/reducers/auth-reducer";
 
 export default function TopBar() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { isAuth, designation, email, firstName, lastName, imageUrl } =
+  const { isEmailVerified,isAuth, designation, email, firstName, lastName, imageUrl } =
     useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
@@ -60,6 +61,7 @@ export default function TopBar() {
     dispatch(setLastName(user.lastName));
     dispatch(setEmail(user.email));
     dispatch(setImageUrl(user.imgUrl));
+    dispatch(setIsEmailVerified(user.isEmailVerified));
   }, []);
 
   const handleLogOut = () => {
