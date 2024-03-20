@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { accessToken } from "@/api/auth/authAPI";
 import {
   setDesignation,
+  setDoctorId,
   setEmail,
   setFirstName,
   setImageUrl,
@@ -65,6 +66,7 @@ export default function TopBar() {
     dispatch(setEmail(user.email));
     dispatch(setImageUrl(user.imgUrl));
     dispatch(setIsEmailVerified(user.isEmailVerified));
+    dispatch(setDoctorId(user.id));
   }, []);
 
   const handleLogOut = () => {
