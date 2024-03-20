@@ -49,11 +49,7 @@ const PatientCard: React.FC<PatientCardProps> = ({
     <div className="max-w-md mx-auto bg-ugray-0 py-4 shadow-md rounded-lg overflow-hidden">
       <div className="px-6 py-4 mb-2">
         <div className="flex flex-col gap-4 items-center">
-          <img
-            className="w-20 h-20 rounded-full mr-4"
-            src={image}
-            alt="Profile"
-          />
+          <img className="w-20 h-20 rounded-full" src={image} alt="Profile" />
           <div>
             <div className="font-medium text-xl mb-2">{name}</div>
             <div className="text-sm text-ugray-400 font-medium">
