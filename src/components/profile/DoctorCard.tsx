@@ -13,7 +13,7 @@ interface DoctorCardProps {
   dateOfBirth: string;
   currentHospital: string;
   currentUniversity: string;
-  isPersonalClinic: boolean;
+  PersonalClinic: string;
   clinicName: string;
   clinicAddress: string;
 }
@@ -30,7 +30,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
   dateOfBirth,
   currentHospital,
   currentUniversity,
-  isPersonalClinic,
+  PersonalClinic,
   clinicName,
   clinicAddress,
 }) => {
@@ -52,7 +52,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
         </div>
       </div>
       <div className="border-t border-ugray-100"></div>
-      <div className="py-4">
+      <div className="pt-6 pb-2">
         <div className="flex justify-between gap-6 mb-4">
           <div className="w-1/2 pr-2">
             <p className="text-sm flex flex-col gap-2">
@@ -60,7 +60,6 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
               <span>{email}</span>
             </p>
           </div>
-
           <div className="w-1/2 pl-2 text-right">
             <p className="text-sm flex flex-col gap-2">
               <span className="text-ugray-200">Contact Number</span>
@@ -103,7 +102,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
       <div className="py-4 w-full flex flex-col gap-6 justify-between">
         <p className="text-sm flex justify-between">
           <span className="text-ugray-200">Personal Clinic:</span>
-          <span>{isPersonalClinic ? "Yes" : "No"}</span>
+          <span>{PersonalClinic ? "Yes" : "No"}</span>
         </p>
         <p className="text-sm flex justify-between">
           <span className="text-ugray-200">Clinic Name:</span>

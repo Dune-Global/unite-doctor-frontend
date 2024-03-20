@@ -6,14 +6,14 @@ import { LucideLoaderCircle } from "lucide-react";
 
 // Define button variants
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
   {
     variants: {
       variant: {
-        default: "bg-ublue-100 text-ugray-0 hover:bg-ublue-50",
+        default: "bg-ublue-100 text-ugray-0 hover:opacity-80",
         outline:
-          "border border-ublue-200 hover:border-ublue-50 text-ublue-200 hover:text-ublue-50",
-        icon: " text-ublue-200 hover:bg-ublue-100 hover:text-ublue-100",
+          "border border-ublue-200 hover:border-ublue-50 text-ublue-200 hover:opacity-80",
+        icon: " text-ublue-200 hover:bg-ublue-100 hover:opacity-80",
       },
       size: {
         sm: "h-8 rounded-md px-3 text-xs",

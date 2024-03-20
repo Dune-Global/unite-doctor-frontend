@@ -46,7 +46,7 @@ export default function Settings() {
                 dateOfBirth={profile.dateOfBirth}
                 currentHospital={profile.currentHospital}
                 currentUniversity={profile.currentUniversity}
-                isPersonalClinic={profile.isPersonalClinic}
+                PersonalClinic={profile.PersonalClinic}
                 clinicName={profile.clinicName}
                 clinicAddress={profile.clinicAddress}
               />
