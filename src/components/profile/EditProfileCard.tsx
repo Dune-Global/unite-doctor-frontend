@@ -10,7 +10,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/common/Button";
+
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -23,6 +23,11 @@ import { Calendar } from "@/components/ui/calendar";
 import React from "react";
 import { z } from "zod";
 import { ProfileInfo } from "@/data/mock/profile-info";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Button } from "../ui/button";
 
 const formSchema = z.object({
   firstName: z.string().nonempty({ message: "First name is required" }),
@@ -70,7 +75,7 @@ export default function AvailabilityCard() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     toast({
-      title: "Availability added successfully!",
+      title: "Saved changes successfully!",
       description: (
         <pre className="bg-ugray-900 mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className=" text-ugray-0">
@@ -212,31 +217,44 @@ export default function AvailabilityCard() {
                     Date of Birth
                   </div>
                   <FormField
-                    control={form.control}
-                    name="dateOfBirth"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Select>
-                            <SelectTrigger className="">
-                              <SelectValue placeholder={profile.dateOfBirth} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <Calendar
-                                mode="single"
-                                selected={date}
-                                onSelect={setDate}
-                                className="rounded-md border"
-                              />
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage
-                          className={`${formBaseStyles.errorMessages}`}
-                        />
-                      </FormItem>
-                    )}
-                  />
+                  control={form.control}
+                  name="dateOfBirth"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full border-ugray-100 pl-3 h-12 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="end">
+                          <Calendar
+                            mode="single"
+                            selected={new Date(field.value)}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormItem>
+                  )}
+                />
                 </div>
                 <div className="snap-end w-full">
                   <div className="text-sm pb-2 text-ugray-400">Gender</div>
@@ -434,12 +452,12 @@ export default function AvailabilityCard() {
               </div>
               <div className="flex gap-4">
                 <div>
-                  <Button type="submit" size="lg">
+                  <Button type="submit" size="lg" className="text-ugray-0 bg-ublue-200">
                     Save Changes
                   </Button>
                 </div>
                 <div>
-                  <Button type="reset" variant="outline" size="lg">
+                  <Button type="reset" variant="outline" size="lg" className="text-ublue-200 outline-ublue-200">
                     Reset Changes
                   </Button>
                 </div>
