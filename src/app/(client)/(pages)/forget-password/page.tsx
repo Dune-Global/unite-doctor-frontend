@@ -7,6 +7,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
@@ -34,7 +35,7 @@ export default function FogoetPassword() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const { email } = values;
-     
+
       toast({
         variant: "default",
         title: "Please check your email.",
@@ -70,7 +71,7 @@ export default function FogoetPassword() {
           <Form {...form}>
             <form
               className="space-y-3 w-full  px-2 mb-2 "
-                onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={form.handleSubmit(onSubmit)}
             >
               <div className="space-y-5 ">
                 <div>
@@ -96,7 +97,7 @@ export default function FogoetPassword() {
                     Continue
                   </Button>
                 </div>
-               
+
               </div>
             </form>
           </Form>
