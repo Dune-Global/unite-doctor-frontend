@@ -22,11 +22,11 @@ export default function QRModal() {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline">
-            <QrCode size={24} />
-            <span className="ml-2">Connect with patient</span>
+          <QrCode size={24} />
+          <span className="ml-2">Connect with patient</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-ugray-0">
         <DialogHeader>
           <DialogTitle>Connect with patient 🙌</DialogTitle>
           <DialogDescription>
