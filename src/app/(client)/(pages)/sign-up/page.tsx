@@ -109,7 +109,6 @@ const formBaseStyles = {
 export default function SignIn() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [universityList, setUniversityList] = useState([]);
   const [genderList, setGenderList] = useState([]);
   const [hospitalList, setHospitalList] = useState([]);
