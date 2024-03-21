@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/form";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/common/Button";
+import { Button as NewButton } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { registerAccount } from "@/api/auth/authAPI";
 import {
@@ -114,6 +115,7 @@ export default function SignIn() {
   const [hospitalList, setHospitalList] = useState([]);
   const [designationList, setDesignationList] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getUniversityList().then((res) => {
@@ -147,13 +149,11 @@ export default function SignIn() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     try {
       const res = await registerAccount(values);
       console.log(res);
-
-      // open model to say "Account activation mail send to email"
       if (res.status === 200) {
-        // setShowModal(true);
         toast({
           title: "Sign up Successful",
           description: (
@@ -165,13 +165,16 @@ export default function SignIn() {
           ),
         });
         router.push("/sign-in");
+        setIsLoading(false);
       } else if (res.status === 409) {
+        setIsLoading(false);
         toast({
           title: "Sign up failed",
           description: res.data.errors[0].messages[0],
           variant: "destructive",
         });
       } else {
+        setIsLoading(false);
         toast({
           title: "Sign up failed",
           description: "Please try again",
@@ -179,6 +182,7 @@ export default function SignIn() {
         });
       }
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
       toast({
         title: "Sign up failed",
@@ -329,7 +333,7 @@ export default function SignIn() {
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
-                              <Button
+                              <NewButton
                                 variant={"outline"}
                                 className={cn(
                                   "w-full border-ugray-100 pl-3 text-left font-normal",
@@ -342,7 +346,7 @@ export default function SignIn() {
                                   <span>Pick a date</span>
                                 )}
                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
+                              </NewButton>
                             </FormControl>
                           </PopoverTrigger>
                           <PopoverContent className="w-auto p-0" align="start">
@@ -551,7 +555,11 @@ export default function SignIn() {
                 </div>
               </div>
               <div className="py-2">
-                <Button className="w-full bg-ublue-100 text-ugray-0">
+                <Button
+                  size={"lg"}
+                  loading={isLoading}
+                  className="w-full bg-ublue-100 text-ugray-0"
+                >
                   Sign Up
                 </Button>
 
