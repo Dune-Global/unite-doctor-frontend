@@ -67,6 +67,7 @@ export default function Prescription({
             symptoms: "",
             disease: "",
             medicineName: "",
+            bloodPressure: "",
             dose: "",
         },
     })
