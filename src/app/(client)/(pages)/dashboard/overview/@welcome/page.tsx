@@ -1,5 +1,6 @@
-'use client';
+"use client";
 
+import QRModal from "@/components/overview/welcome/qr-modal";
 import { RootState } from "@/store";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -22,17 +23,22 @@ export default function Welcome() {
   }
 
   return (
-    <div className="mb-6 pl-2">
-      <h1 className="text-3xl font-medium">
-        Welcome Dr.{" "}
-        <span>
-          {firstName} {lastName}
-        </span>
-        ,
-      </h1>
-      <h3 className="mt-1 text-ugray-400 text-sm font-medium">
-        {greetingMessage}
-      </h3>
+    <div className="mb-6 pl-2 flex justify-between items-center">
+      <div>
+        <h1 className="text-3xl font-medium">
+          Welcome Dr.{" "}
+          <span>
+            {firstName} {lastName}
+          </span>
+          ,
+        </h1>
+        <h3 className="mt-1 text-ugray-400 text-sm font-medium">
+          {greetingMessage}
+        </h3>
+      </div>
+      <div>
+        <QRModal />
+      </div>
     </div>
   );
 }

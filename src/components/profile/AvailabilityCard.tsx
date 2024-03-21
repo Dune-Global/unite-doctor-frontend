@@ -10,7 +10,9 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/common/Button";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -20,8 +22,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import React from "react";
 import { z } from "zod";
+import { CalendarIcon } from "lucide-react";
 
 const formSchema = z.object({
   date: z.string().nonempty({ message: "Date is required" }),
@@ -65,9 +73,9 @@ export default function AvailabilityCard() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-3 w-full px-2 mb-2 "
+          className="space-y-3 px-2 mb-2 "
         >
-          <div className="space-y-5 snap-y flex flex-col w-full">
+          <div className="space-y-5 snap-y flex flex-col">
             <div className="flex flex-col lg:flex-row gap-4">
               <div className="snap-end w-full">
                 <div className="text-sm pb-2 text-ugray-400">
@@ -78,24 +86,37 @@ export default function AvailabilityCard() {
                   name="date"
                   render={({ field }) => (
                     <FormItem>
-                      <FormControl>
-                        <Select>
-                          <SelectTrigger className="">
-                            <SelectValue placeholder="Select a date" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <Calendar
-                              mode="single"
-                              selected={date}
-                              onSelect={setDate}
-                              className="rounded-md border"
-                            />
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage
-                        className={`${formBaseStyles.errorMessages}`}
-                      />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full border-ugray-100 pl-3 h-12 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={new Date(field.value)}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
                     </FormItem>
                   )}
                 />
@@ -148,7 +169,7 @@ export default function AvailabilityCard() {
                 />
               </div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-4 w-full">
+            <div className="flex flex-col lg:flex-row gap-4">
               <div className="snap-end w-full">
                 <div className="text-sm pb-2 text-ugray-400">
                   Session Duration (mins)
@@ -194,14 +215,11 @@ export default function AvailabilityCard() {
                 />
               </div>
             </div>
-
-            <Button
-              type="submit"
-              className="bg-ublue-100 text-ugray-0"
-              size="lg"
-            >
-              Set Availability
-            </Button>
+            <div>
+              <Button type="submit" size="lg" className="text-ugray-0 bg-ublue-200">
+                Set Availability
+              </Button>
+            </div>
           </div>
         </form>
       </Form>

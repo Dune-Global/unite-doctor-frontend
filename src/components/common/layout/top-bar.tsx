@@ -24,17 +24,19 @@ import { useRouter } from "next/navigation";
 import { accessToken } from "@/api/auth/authAPI";
 import {
   setDesignation,
+  setDoctorId,
   setEmail,
   setFirstName,
   setImageUrl,
   setIsAuth,
+  setIsEmailVerified,
   setLastName,
 } from "@/store/reducers/auth-reducer";
 
 export default function TopBar() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { isAuth, designation, email, firstName, lastName, imageUrl } =
+  const { isEmailVerified,isAuth, designation, email, firstName, lastName, imageUrl } =
     useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
@@ -53,6 +55,9 @@ export default function TopBar() {
     }
 
     const user: any = getUser();
+    if (!user) {
+      return router.push("/sign-in");
+    }
     console.log(user);
     dispatch(setIsAuth(true));
     dispatch(setDesignation(user.designation));
@@ -60,6 +65,8 @@ export default function TopBar() {
     dispatch(setLastName(user.lastName));
     dispatch(setEmail(user.email));
     dispatch(setImageUrl(user.imgUrl));
+    dispatch(setIsEmailVerified(user.isEmailVerified));
+    dispatch(setDoctorId(user.id));
   }, []);
 
   const handleLogOut = () => {

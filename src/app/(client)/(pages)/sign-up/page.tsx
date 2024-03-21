@@ -1,5 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { use, useEffect, useState } from "react";
 import { CalendarIcon, Eye, EyeOff } from "lucide-react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,15 +13,11 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import Container from "@/components/common/container";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
-import { loginAccount, registerAccount } from "@/api/auth/authAPI";
+import { registerAccount } from "@/api/auth/authAPI";
 import {
   Select,
   SelectContent,
@@ -41,6 +39,21 @@ import {
   getHospitalList,
   getUniversityList,
 } from "@/api/enums/enumsAPI";
+
+const Modal = ({ onClose }: { onClose: any }) => {
+  return (
+    <div className="modal">
+      <div className="absolute bottom-0 modal-content h-screen w-full grid place-content-center bg-ugray-50/20 backdrop-blur-md z-20">
+        <div className="flex flex-col justify-center ">
+          <p className="text-2xl">Account activation mail sent to email.</p>
+          <Link href="/sign-in" className="z-20">
+            Go Back
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const formSchema = z.object({
   firstName: z
@@ -94,12 +107,13 @@ const formBaseStyles = {
 };
 
 export default function SignIn() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [universityList, setUniversityList] = useState([]);
   const [genderList, setGenderList] = useState([]);
   const [hospitalList, setHospitalList] = useState([]);
   const [designationList, setDesignationList] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     getUniversityList().then((res) => {
@@ -122,13 +136,13 @@ export default function SignIn() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      slmcNumber: "",
-      mobile: "",
-      password: "",
-      nicNumber: "",
+      firstName: "Wasath",
+      lastName: "Theekshana",
+      email: "wasath.vt@gmail.com",
+      slmcNumber: "SLMC200002",
+      mobile: "0766692190",
+      password: "Lithara@2002",
+      nicNumber: "200233801945",
     },
   });
 
@@ -137,7 +151,9 @@ export default function SignIn() {
       const res = await registerAccount(values);
       console.log(res);
 
+      // open model to say "Account activation mail send to email"
       if (res.status === 200) {
+        // setShowModal(true);
         toast({
           title: "Sign up Successful",
           description: (
@@ -148,6 +164,7 @@ export default function SignIn() {
             </pre>
           ),
         });
+        router.push("/sign-in");
       } else if (res.status === 409) {
         toast({
           title: "Sign up failed",
@@ -174,12 +191,10 @@ export default function SignIn() {
   const handleEyeClick = () => {
     setShowPassword(!showPassword);
   };
-  const handleEyeClick2 = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
 
   return (
     <div className=" ">
+      {showModal && <Modal onClose={() => setShowModal(false)} />}
       <div className="flex justify-center ">
         <div className="flex flex-col gap-2 md:px-8  w-80  items-center justify-center sm:w-[500px] py-5   ">
           <div>
