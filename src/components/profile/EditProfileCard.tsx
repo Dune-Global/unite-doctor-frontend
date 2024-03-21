@@ -156,7 +156,7 @@ export default function AvailabilityCard() {
                             {...field}
                           />
                         </FormControl>
-                        <Button size="sm" className="absolute top-0 right-2">
+                        <Button size="sm" className="absolute top-0 right-2 text-ugray-0 bg-ublue-200">
                           Verify
                         </Button>
                         <FormMessage
