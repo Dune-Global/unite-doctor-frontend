@@ -79,6 +79,24 @@ export const columns: ColumnDef<AvailableAppointmentsList>[] = [
         },
     },
     {
+        accessorKey: "location",
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center">
+                    <div>
+                        Location
+                    </div>
+                    <button
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        className="flex items-start"
+                    >
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </button>
+                </div>
+            )
+        },
+    },
+    {
         id: "actions",
         cell: ({ row }) => {
             const rowData = row.original
@@ -88,7 +106,7 @@ export const columns: ColumnDef<AvailableAppointmentsList>[] = [
                     toast({
                         title: "This row contains",
                         description: (
-                            <pre className="mt-2 w-[340px] rounded-md bg-ublue-900 p-4">
+                            <pre className="mt-2 w-[340px] rounded-md bg-ublue-900 pl-4">
                                 <code className="text-ugray-0">{JSON.stringify(rowData, null, 2)}</code>
                             </pre>
                         ),
