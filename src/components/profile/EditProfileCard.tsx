@@ -28,6 +28,14 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import { IAccessToken } from "@/types/jwt";
+import { getUser } from "@/utils/getUser";
+
+let user:IAccessToken;
+const tempUser = getUser();
+if (tempUser !== undefined && tempUser !== null) {
+  user = tempUser;
+}
 
 const formSchema = z.object({
   firstName: z.string().nonempty({ message: "First name is required" }),
@@ -48,11 +56,12 @@ const formSchema = z.object({
   clinicAddress: z.string(),
 });
 
+
 const formBaseStyles = {
   errorMessages: "text-red-400 font-medium text-sm",
 };
 
-export default function AvailabilityCard() {
+export default function EditProfileCard() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -72,6 +81,10 @@ export default function AvailabilityCard() {
       clinicAddress: "",
     },
   });
+
+  const handleVerifyEmail = () => {
+    // API integration for email verification
+  }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     toast({
@@ -156,9 +169,15 @@ export default function AvailabilityCard() {
                             {...field}
                           />
                         </FormControl>
-                        <Button size="sm" className="absolute top-0 right-2 text-ugray-0 bg-ublue-200">
-                          Verify
-                        </Button>
+                        {user.isEmailVerified ? null : (
+                          <Button
+                            size="sm"
+                            className="absolute top-0 right-2 text-ugray-0 bg-ublue-200"
+                            onClick={handleVerifyEmail}
+                          >
+                            Verify
+                          </Button>
+                        )}
                         <FormMessage
                           className={`${formBaseStyles.errorMessages}`}
                         />
@@ -454,11 +473,6 @@ export default function AvailabilityCard() {
                 <div>
                   <Button type="submit" size="lg" className="text-ugray-0 bg-ublue-200">
                     Save Changes
-                  </Button>
-                </div>
-                <div>
-                  <Button type="reset" variant="outline" size="lg" className="text-ublue-200 outline-ublue-200">
-                    Reset Changes
                   </Button>
                 </div>
               </div>
