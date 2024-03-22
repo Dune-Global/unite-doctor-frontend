@@ -11,7 +11,7 @@ import {
 import { handleLoginResponse } from "@/helpers/auth/authHelper";
 import CustomAxios from "@/utils/axiosInstance";
 
-export const updatePatient = async (values: {
+export const updateDoctor = async (values: {
   firstName: string;
   lastName: string;
   designation: string;
