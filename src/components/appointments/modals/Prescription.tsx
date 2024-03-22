@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useFieldArray } from "react-hook-form"
 import { z } from "zod"
 
 import { Button } from "@/components/common/Button"
@@ -34,13 +34,14 @@ import { Input } from "@/components/ui/input"
 import { getCurrentDateTime } from '@/utils/getCurrentDateTime'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { appointmentStage, medicineTime } from '@/data/mock/appointment-prescription'
-import { CalendarIcon, CirclePlus } from 'lucide-react'
+import { CalendarIcon, CirclePlus, CircleMinus } from 'lucide-react'
 import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 
 type Props = {
     cellContent: string
 }
+
 
 const formSchema = z.object({
     firstName: z.string({
@@ -87,27 +88,31 @@ const formSchema = z.object({
     stage: z.string({
         required_error: "The stage is required",
     }),
-    medicineName: z.string({
-        required_error: "The medicine name is required",
-    }).min(0).max(100, {
-        message: "The medicine name should contain atmost 100 characters"
-    }),
-    dose: z.string({
-        required_error: "The dose is required",
-    }).min(2).max(255, {
-        message: "The dose should contain atmost 255 characters"
-    }),
-    time: z.string({
-        required_error: "The time is required",
-    }),
+    medicine: z.array(z.object({
+        medicineName: z.string({
+            required_error: "The medicine name is required",
+        }).min(0).max(100, {
+            message: "The medicine name should contain atmost 100 characters"
+        }),
+        dose: z.string({
+            required_error: "The dose is required",
+        }).min(2).max(255, {
+            message: "The dose should contain atmost 255 characters"
+        }),
+        time: z.string({
+            required_error: "The time is required",
+        }),
+    })),
     bloodPressure: z.string().min(0).max(100),
     nextChannelDate: z.date().optional(),
     weight: z.string().min(1).max(100),
     height: z.string().min(1).max(100),
-    reportname: z.string().min(0).max(200, {
-        message: "The report name should contain atmost 200 characters"
-    }),
-    dateToBeTaken: z.date().optional(),
+    reports: z.array(z.object({
+        reportname: z.string().min(2).max(200, {
+            message: "The report name should contain atmost 200 characters"
+        }),
+        dateToBeTaken: z.date().optional(),
+    })),
     other: z.string().min(0).max(255, {
         message: "Only 255 characters are allowed for other field"
 
@@ -129,22 +134,43 @@ export default function Prescription({
             allergies: "",
             symptoms: "",
             disease: "",
-            medicineName: "",
+            medicine: [{ medicineName: "", dose: "", time: "" }],
             bloodPressure: "",
-            dose: "",
             weight: "",
             height: "",
-            reportname: "",
+            reports: [{ reportname: "", dateToBeTaken: undefined }],
             other: "",
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    const { fields: medicine, append: appendMedicine, remove: removeMedicine } = useFieldArray({
+        name: "medicine",
+        control: form.control,
+    })
+
+    const { fields: reports, append, remove } = useFieldArray({
+        name: "reports",
+        control: form.control,
+    })
+
+    const handleAddMedicineClick = () => {
+        appendMedicine({ medicineName: "", dose: "", time: "" });
+    }
+
+    const handleRemoveMedicineClick = (index: number) => {
+        removeMedicine(index);
+    }
+
+    const handleAddFieldClick = () => {
+        append({ reportname: "", dateToBeTaken: undefined });
     }
 
     const handleTriggerClick = () => {
         setCurrentDateTime(getCurrentDateTime())
+    }
+
+    function onSubmit(values: z.infer<typeof formSchema>) {
+        console.log(values)
     }
 
     return (
@@ -292,68 +318,81 @@ export default function Prescription({
                                     />
                                 </div>
 
-                                <div>
-                                    <FormField
-                                        control={form.control}
-                                        name='medicineName'
-                                        render={({ field }) => (
-                                            <FormItem className='w-full'>
-                                                <FormLabel className='flex flex-row gap-1 align-middle'>
-                                                    <div>Medicine Name</div>
-                                                    <button>
-                                                        <CirclePlus className='text-ugray-400' size={16} />
-                                                    </button>
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                                {
+                                    medicine.map((field, index) => (
+                                        <div key={field.id} className='flex flex-col gap-5'>
+                                            <FormField
+                                                control={form.control}
+                                                name={`medicine.${index}.medicineName`}
+                                                render={({ field }) => (
+                                                    <FormItem className='w-full'>
+                                                        <FormLabel className='flex flex-row gap-1 align-middle'>
+                                                            <div>Medicine Name</div>
+                                                            <button type='button' onClick={handleAddMedicineClick}>
+                                                                <CirclePlus className='text-ugray-400' size={16} />
+                                                            </button>
+                                                            {
+                                                                index > 0 && (
+                                                                    <button type='button' onClick={() => handleRemoveMedicineClick(index)}>
+                                                                        <CircleMinus className='text-ured-400' size={16} />
+                                                                    </button>
+                                                                )
+                                                            }
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input placeholder="" {...field} />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
 
-                                </div>
 
-                                <div className='flex flex-col md:flex-row justify-between gap-5'>
-                                    <FormField
-                                        control={form.control}
-                                        name='dose'
-                                        render={({ field }) => (
-                                            <FormItem className='w-72'>
-                                                <FormLabel>Dose</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                                            <div className='flex flex-col md:flex-row justify-between gap-5'>
+                                                <FormField
+                                                    control={form.control}
+                                                    name={`medicine.${index}.dose`}
+                                                    render={({ field }) => (
+                                                        <FormItem className='w-72'>
+                                                            <FormLabel>Dose</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
 
-                                    <FormField
-                                        control={form.control}
-                                        name="time"
-                                        render={({ field }) => (
-                                            <FormItem className='w-72'>
-                                                <FormLabel>Time</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select time" />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        {
-                                                            medicineTime.map((time) => (
-                                                                <SelectItem key={time.id} value={`${time.time}`}>{time.time}</SelectItem>
-                                                            ))
-                                                        }
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
+                                                <FormField
+                                                    control={form.control}
+                                                    name={`medicine.${index}.time`}
+                                                    render={({ field }) => (
+                                                        <FormItem className='w-72'>
+                                                            <FormLabel>Time</FormLabel>
+                                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                <FormControl>
+                                                                    <SelectTrigger>
+                                                                        <SelectValue placeholder="Select time" />
+                                                                    </SelectTrigger>
+                                                                </FormControl>
+                                                                <SelectContent>
+                                                                    {
+                                                                        medicineTime.map((time) => (
+                                                                            <SelectItem key={time.id} value={`${time.time}`}>{time.time}</SelectItem>
+                                                                        ))
+                                                                    }
+                                                                </SelectContent>
+                                                            </Select>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            </div>
+                                        </div>
+
+                                    ))
+                                }
+
 
                                 <div className='flex flex-col md:flex-row justify-between gap-5'>
                                     <FormField
@@ -445,70 +484,82 @@ export default function Prescription({
                                     />
                                 </div>
 
-                                <div className='flex flex-col md:flex-row justify-between gap-5'>
-                                    <FormField
-                                        control={form.control}
-                                        name='reportname'
-                                        render={({ field }) => (
-                                            <FormItem className='w-72'>
-                                                <FormLabel className='flex flex-row gap-1 align-middle'>
-                                                    <div>Report Name</div>
-                                                    <button>
-                                                        <CirclePlus className='text-ugray-400' size={16} />
-                                                    </button>
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                                <div className='flex flex-col gap-5'>
+                                    {reports.map((field, index) => (
+                                        <div className='flex flex-col md:flex-row justify-between gap-5' key={field.id}>
+                                            <div className='flex flex-col md:flex-row justify-between gap-5'>
+                                                <FormField
+                                                    control={form.control}
+                                                    name={`reports.${index}.reportname`}
+                                                    render={({ field }) => (
+                                                        <FormItem className='w-72'>
+                                                            <FormLabel className='flex flex-row gap-1 align-middle'>
+                                                                <div>Report Name</div>
+                                                                <button type='button' onClick={handleAddFieldClick}>
+                                                                    <CirclePlus className='text-ugray-400' size={16} />
+                                                                </button>
+                                                                {
+                                                                    index > 0 && (
+                                                                        <button type="button" onClick={() => remove(index)}>
+                                                                            <CircleMinus className='text-ured-400' size={16} />
+                                                                        </button>
+                                                                    )
+                                                                }
+                                                            </FormLabel>
+                                                            <FormControl>
+                                                                <Input {...field} />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={form.control}
+                                                    name={`reports.${index}.dateToBeTaken`}
+                                                    render={({ field }) => (
+                                                        <FormItem className='w-72'>
+                                                            <FormLabel className='flex flex-row align-middle'>Date to be Taken</FormLabel>
+                                                            <Popover>
+                                                                <PopoverTrigger asChild>
+                                                                    <FormControl>
+                                                                        <UButton
+                                                                            variant={"outline"}
+                                                                            className={cn(
+                                                                                "w-full border-ugray-100 pl-3 text-left font-normal py-[23px]",
+                                                                                !field.value && "text-muted-foreground"
+                                                                            )}
+                                                                        >
+                                                                            {field.value ? (
+                                                                                format(field.value, "PPP")
+                                                                            ) : (
+                                                                                <span className='text-ugray-400'>MM/DD/YYYY</span>
+                                                                            )}
+                                                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                                        </UButton>
+                                                                    </FormControl>
+                                                                </PopoverTrigger>
+                                                                <PopoverContent className="w-auto p-0" align="start">
+                                                                    <Calendar
+                                                                        mode="single"
+                                                                        selected={field.value}
+                                                                        onSelect={field.onChange}
+                                                                        disabled={(date) =>
+                                                                            date > new Date() ||
+                                                                            date < new Date("1900-01-01")
+                                                                        }
+                                                                        initialFocus
+                                                                    />
+                                                                </PopoverContent>
+                                                            </Popover>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            </div>
+                                        </div>
 
-                                    <FormField
-                                        control={form.control}
-                                        name="dateToBeTaken"
-                                        render={({ field }) => (
-                                            <FormItem className='w-72'>
-                                                <FormLabel>Date to be Taken</FormLabel>
-                                                <Popover>
-                                                    <PopoverTrigger asChild>
-                                                        <FormControl>
-                                                            <UButton
-                                                                variant={"outline"}
-                                                                className={cn(
-                                                                    "w-full border-ugray-100 pl-3 text-left font-normal py-[23px]",
-                                                                    !field.value && "text-muted-foreground"
-                                                                )}
-                                                            >
-                                                                {field.value ? (
-                                                                    format(field.value, "PPP")
-                                                                ) : (
-                                                                    <span className='text-ugray-400'>MM/DD/YYYY</span>
-                                                                )}
-                                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                            </UButton>
-                                                        </FormControl>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent className="w-auto p-0" align="start">
-                                                        <Calendar
-                                                            mode="single"
-                                                            selected={field.value}
-                                                            onSelect={field.onChange}
-                                                            disabled={(date) =>
-                                                                date > new Date() ||
-                                                                date < new Date("1900-01-01")
-                                                            }
-                                                            initialFocus
-                                                        />
-                                                    </PopoverContent>
-                                                </Popover>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                                    ))}
                                 </div>
-
                                 <FormField
                                     control={form.control}
                                     name="other"
