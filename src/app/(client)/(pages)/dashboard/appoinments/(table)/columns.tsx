@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button"
 import { ArrowUpDown } from "lucide-react"
 import StatusLabel from "@/components/labels/status-label"
 import { useState } from "react"
-import { toast } from "@/components/ui/use-toast"
 import Prescription from "@/components/appointments/modals/Prescription"
 
 const StatusCell = ({ row }: any) => {

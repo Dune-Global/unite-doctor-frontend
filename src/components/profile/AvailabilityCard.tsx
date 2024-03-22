@@ -92,7 +92,7 @@ export default function AvailabilityCard() {
                             <Button
                               variant={"outline"}
                               className={cn(
-                                "w-full border-ugray-100 pl-3 text-left font-normal",
+                                "w-full border-ugray-100 pl-3 h-12 text-left font-normal",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
