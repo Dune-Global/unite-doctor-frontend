@@ -37,7 +37,7 @@ export default function Layout({
             <div className="md:px-6">{medicalHistory}</div>
           ) : (
             <>
-              <div className="md:px-6">{progressBar}</div>
+              {/* <div className="md:px-6">{progressBar}</div> */}
               <div>{historyAccordion}</div>
             </>
           )}

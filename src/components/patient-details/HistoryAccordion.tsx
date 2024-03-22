@@ -9,17 +9,10 @@ import {
 import { ChevronDown } from "lucide-react";
 import React from "react";
 import { Button } from "../common/Button";
+import { IAccordionData } from "@/types/accordion-data";
+import Progress from "./PatientProgress";
 
-interface AccordionData {
-  diseaseName: string;
-  diseaseDescription: string;
-  date: string;
-  symptoms: string;
-  status: string;
-  isLastItem?: boolean; // New optional prop to indicate if it's the last item
-}
-
-const HistoryAccordion: React.FC<AccordionData> = ({
+const HistoryAccordion: React.FC<IAccordionData> = ({
   diseaseDescription,
   diseaseName,
   date,
@@ -51,9 +44,12 @@ const HistoryAccordion: React.FC<AccordionData> = ({
               <span className="text-ugray-900 text-left text-lg font-semibold">
                 {diseaseName}
               </span>
-              <span className="text-ugray-200 sm:text-left text-justify text-sm sm:text-base">
+              <span className="text-ugray-200 font-normal sm:text-left text-justify text-sm sm:text-base">
                 {diseaseDescription}
               </span>
+              <div className="md:mb-14 mt-6 max-w-[960px] w-full md:px-10 xl:px-16">
+                <Progress currentStep={2} />
+              </div>
             </div>
             <ChevronDown className="h-6 w-6 shrink-0 text-ugray-400 transition-transform duration-200" />
           </AccordionTrigger>
@@ -82,3 +78,4 @@ const HistoryAccordion: React.FC<AccordionData> = ({
 };
 
 export default HistoryAccordion;
+
