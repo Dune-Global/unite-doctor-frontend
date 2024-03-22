@@ -9,11 +9,13 @@ import {
 } from "@/components/ui/dialog";
 
 type UniteModalProps = Readonly<{
-  children: React.ReactNode;
+  children?: React.ReactNode;
   title?: string;
   description?: string;
   footer?: React.ReactNode;
   content?: React.ReactNode;
+  isOpen?: boolean;
+  onClose?: () => void;
 }>;
 
 export function UniteModal({
@@ -22,10 +24,12 @@ export function UniteModal({
   children,
   footer,
   content,
+  isOpen,
+  onClose,
 }: UniteModalProps) {
   return (
     <div className="">
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogTrigger asChild>{children}</DialogTrigger>
         <DialogContent className="sm:max-w-[425px] md:max-w-[600px] border-ugray-0">
           <DialogHeader>

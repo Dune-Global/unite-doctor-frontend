@@ -2,7 +2,7 @@
 
 import { PatientDoctorHistory } from "@/types/patient-doctor-history";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreVertical } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 
 export const columns: ColumnDef<PatientDoctorHistory>[] = [
   {

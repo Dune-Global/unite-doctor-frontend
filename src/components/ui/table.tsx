@@ -33,8 +33,8 @@ const TableBody = React.forwardRef<
     className={cn("[&_tr:last-child]:border-0", className)}
     {...props}
   />
-))
-TableBody.displayName = "TableBody"
+));
+TableBody.displayName = "TableBody";
 
 const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
@@ -48,8 +48,8 @@ const TableFooter = React.forwardRef<
     )}
     {...props}
   />
-))
-TableFooter.displayName = "TableFooter"
+));
+TableFooter.displayName = "TableFooter";
 
 const TableRow = React.forwardRef<
   HTMLTableRowElement,
@@ -63,7 +63,7 @@ const TableRow = React.forwardRef<
     )}
     {...props}
   />
-))
+));
 TableRow.displayName = "TableRow"
 
 const TableHead = React.forwardRef<

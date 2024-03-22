@@ -31,6 +31,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { UniteModal } from "@/components/common/UniteModal";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,6 +45,8 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<any>(null);
 
   const table = useReactTable({
     data,
@@ -61,6 +64,11 @@ export function DataTable<TData, TValue>({
       columnVisibility,
     },
   });
+
+  const handleRowClick = (rowData: any) => {
+    setSelectedRow(rowData);
+    setIsModalOpen(true);
+  };
 
   return (
     <>
@@ -129,6 +137,7 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="bg-ugray-0 border-ugray-50 border-y-8"
+                  onClick={() => handleRowClick(row.original)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -153,6 +162,13 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+
+      <UniteModal
+        title={selectedRow.doctorName}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
@@ -174,3 +190,4 @@ export function DataTable<TData, TValue>({
     </>
   );
 }
+

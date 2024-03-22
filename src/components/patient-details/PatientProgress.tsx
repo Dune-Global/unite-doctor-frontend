@@ -32,11 +32,11 @@ const ProgressStep: React.FC<ProgressStepProps> = ({
           }
         )}
       >
-        {isCompleted ? <Check size={24} /> : step}
+        {isCompleted ? <Check size={24} className="w-4 md:w-5" /> : step}
 
         <div
           className={classNames(
-            "absolute top-14 w-full min-w-[100px] xl:min-w-[200px] flex text-center justify-center items-center",
+            "absolute top-14 w-full min-w-[100px] xl:min-w-[200px] lg:flex text-center justify-center items-center hidden ",
             {
               "text-uindigo-400": isCompleted,
               " text-ugray-900": !isCompleted,
@@ -88,3 +88,4 @@ const Progress: React.FC<ProgressProps> = ({ currentStep }) => {
 };
 
 export default Progress;
+
