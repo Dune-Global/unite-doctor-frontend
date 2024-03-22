@@ -36,6 +36,7 @@ const formSchema = z.object({
   time: z.string().nonempty({ message: "Time is required" }),
   duration: z.string().nonempty({ message: "Duration is required" }),
   appointments: z.string().nonempty({ message: "Appointments is required" }),
+  location: z.string().nonempty({ message: "Location is required" }),
 });
 
 const formBaseStyles = {
@@ -50,6 +51,7 @@ export default function AvailabilityCard() {
       time: "",
       duration: "",
       appointments: "",
+      location: "",
     },
   });
 
@@ -65,8 +67,6 @@ export default function AvailabilityCard() {
       ),
     });
   }
-
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
 
   return (
     <div>
@@ -215,8 +215,36 @@ export default function AvailabilityCard() {
                 />
               </div>
             </div>
+            <div className="flex flex-col lg:flex-row gap-4">
+              <div className="snap-end w-full">
+                <div className="text-sm pb-2 text-ugray-400">
+                  Location
+                </div>
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter the location"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage
+                        className={`${formBaseStyles.errorMessages}`}
+                      />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
             <div>
-              <Button type="submit" size="lg" className="text-ugray-0 bg-ublue-200">
+              <Button
+                type="submit"
+                size="lg"
+                className="text-ugray-0 bg-ublue-200"
+              >
                 Set Availability
               </Button>
             </div>
