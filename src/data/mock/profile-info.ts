@@ -29,20 +29,23 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "10:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Central Hospital",
     },
     {
       id: 2,
       date: "2024-03-22",
       time: "11:00 AM",
       duration: 10,
-      appointments: 168,
+      appointments: 156,
+      location: "Lanka Hospital"
     },
     {
       id: 3,
       date: "2024-03-23",
       time: "12:00 PM",
       duration: 10,
-      appointments: 168,
+      appointments: 172,
+      location: "Durdans Hospital"
     },
     {
       id: 4,
@@ -50,6 +53,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "01:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Nawaloka Hospital"
     },
     {
       id: 5,
@@ -57,6 +61,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "02:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Hemas Hospital"
     },
     {
       id: 6,
@@ -64,6 +69,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "03:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Medical Hospital"
     },
     {
       id: 7,
@@ -71,6 +77,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "04:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Surgical Hospital"
     },
     {
       id: 8,
@@ -78,6 +85,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "05:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Ninewells Hospital"
     },
     {
       id: 9,
@@ -85,6 +93,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "06:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Kings Hospital"
     },
     {
       id: 10,
@@ -92,6 +101,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "07:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Medical Hospital"
     },
     {
       id: 11,
@@ -99,6 +109,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "08:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Surgical Hospital"
     },
     {
       id: 12,
@@ -106,6 +117,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "09:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Ninewells Hospital"
     },
     {
       id: 13,
@@ -113,6 +125,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "10:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Kings Hospital"
     },
     {
       id: 14,
@@ -120,6 +133,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "11:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Medical Hospital"
     },
     {
       id: 15,
@@ -127,6 +141,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "12:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Surgical Hospital"
     },
     {
       id: 16,
@@ -134,6 +149,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "01:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Nawaloka Hospital"
     },
     {
       id: 17,
@@ -141,6 +157,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "02:00 AM",
       duration: 10,
       appointments: 168,
+      location: "KDU Hospital"
     },
     {
       id: 18,
@@ -148,6 +165,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "03:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Durdans Hospital"
     },
     {
       id: 19,
@@ -155,6 +173,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "04:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Lanka Hospital"
     },
     {
       id: 20,
@@ -162,6 +181,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "05:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Central Hospital"
     },
     {
       id: 21,
@@ -169,6 +189,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "06:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Hemas Hospital"
     },
     {
       id: 22,
@@ -176,6 +197,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "07:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Medical Hospital"
     },
     {
       id: 23,
@@ -183,6 +205,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "08:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Surgical Hospital"
     },
     {
       id: 24,
@@ -190,6 +213,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "09:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Ninewells Hospital"
     },
     {
       id: 25,
@@ -197,6 +221,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "10:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Kings Hospital"
     },
     {
       id: 26,
@@ -204,6 +229,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "11:00 AM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Medical Hospital"
     },
     {
       id: 27,
@@ -211,6 +237,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "12:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Asiri Surgical Hospital"
     },
     {
       id: 28,
@@ -218,6 +245,7 @@ export const Appointments = async (): Promise<AvailableAppointmentsList[]> => {
       time: "01:00 PM",
       duration: 10,
       appointments: 168,
+      location: "Nawaloka Hospital"
     },
   ];
 }

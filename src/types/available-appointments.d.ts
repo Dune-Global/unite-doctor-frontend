@@ -4,4 +4,5 @@ export type AvailableAppointmentsList = {
   time: string;
   duration: number;
   appointments: number;
+  location: string;
 };

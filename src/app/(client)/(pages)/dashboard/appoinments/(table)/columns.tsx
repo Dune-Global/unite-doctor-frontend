@@ -30,11 +30,8 @@ const StatusCell = ({ row }: any) => {
                 <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Completed") }} >
                     <StatusLabel status="Completed" />
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Ongoing") }} >
-                    <StatusLabel status="Ongoing" />
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Waiting") }} >
-                    <StatusLabel status="Waiting" />
+                <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Pending") }} >
+                    <StatusLabel status="Pending" />
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
@@ -51,10 +48,10 @@ export const columns: ColumnDef<AppointmentList>[] = [
             return (
                 <div className="flex flex-col lg:flex-row justify-start gap-2 items-center w-full">
                     <div>
-                        <img src={`https://ui-avatars.com/api/?name=${rowData.patientName}`} alt="patient" className="w-8 h-8 rounded-full" />
+                        <img src={`${rowData.imgUrl}`} alt="patient" className="w-8 h-8 rounded-full" />
                     </div>
                     <div>
-                        <Prescription cellContent={rowData.patientName} />
+                        <Prescription cellContent={rowData.patientName} rowData={rowData} />
                     </div>
                 </div>
             )
@@ -66,7 +63,7 @@ export const columns: ColumnDef<AppointmentList>[] = [
         cell: ({ row }) => {
             const rowData = row.original
             return (
-                <Prescription cellContent={rowData.appointmentId} />
+                <Prescription cellContent={rowData.appointmentId} rowData={rowData} />
             )
         }
     },
@@ -90,7 +87,7 @@ export const columns: ColumnDef<AppointmentList>[] = [
         cell: ({ row }) => {
             const rowData = row.original
             return (
-                <Prescription cellContent={rowData.gender} />
+                <Prescription cellContent={rowData.gender} rowData={rowData} />
             )
         }
     },
@@ -114,7 +111,7 @@ export const columns: ColumnDef<AppointmentList>[] = [
         cell: ({ row }) => {
             const rowData = row.original
             return (
-                <Prescription cellContent={rowData.age} />
+                <Prescription cellContent={rowData.age} rowData={rowData} />
             )
         }
     },
@@ -138,7 +135,7 @@ export const columns: ColumnDef<AppointmentList>[] = [
         cell: ({ row }) => {
             const rowData = row.original
             return (
-                <Prescription cellContent={rowData.location} />
+                <Prescription cellContent={rowData.location} rowData={rowData} />
             )
         }
     },
@@ -162,7 +159,7 @@ export const columns: ColumnDef<AppointmentList>[] = [
         cell: ({ row }) => {
             const rowData = row.original
             return (
-                <Prescription cellContent={rowData.date} />
+                <Prescription cellContent={rowData.date} rowData={rowData} />
             )
         }
     },
@@ -186,7 +183,7 @@ export const columns: ColumnDef<AppointmentList>[] = [
         cell: ({ row }) => {
             const rowData = row.original
             return (
-                <Prescription cellContent={rowData.time} />
+                <Prescription cellContent={rowData.time} rowData={rowData} />
             )
         }
     },

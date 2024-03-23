@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
-import React from "react";
+import React, { useState } from "react";
 import { z } from "zod";
 import { ProfileInfo } from "@/data/mock/profile-info";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -28,6 +28,15 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import { IAccessToken } from "@/types/jwt";
+import { getUser } from "@/utils/getUser";
+import { updateDoctor, verifyEmail } from "@/api/profile/profileAPI";
+
+let user: IAccessToken | undefined;
+const tempUser = getUser();
+if (tempUser !== undefined && tempUser !== null) {
+  user = tempUser;
+}
 
 const formSchema = z.object({
   firstName: z.string().nonempty({ message: "First name is required" }),
@@ -48,11 +57,12 @@ const formSchema = z.object({
   clinicAddress: z.string(),
 });
 
+
 const formBaseStyles = {
   errorMessages: "text-red-400 font-medium text-sm",
 };
 
-export default function AvailabilityCard() {
+export default function EditProfileCard() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -73,26 +83,86 @@ export default function AvailabilityCard() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    toast({
-      title: "Saved changes successfully!",
-      description: (
-        <pre className="bg-ugray-900 mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className=" text-ugray-0">
-            {JSON.stringify(values, null, 2)}
-          </code>
-        </pre>
-      ),
-    });
-  }
+  const handleVerifyEmail = async () => {
+    try {
+      const res: any = await verifyEmail();
+      console.log(res);
 
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+      if (res.status === 200) {
+        toast({
+          title: "Verification Email Sent",
+          description: "Check your email for the verification link",
+        });
+      } else {
+        toast({
+          title: "Something went wrong!",
+          description: res.data.message,
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Email verify failed",
+        description: "Please try again",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleEditProfile = async (values: any) => {
+    try {
+      const res = await updateDoctor(values);
+      console.log(res);
+
+      if (res.status === 200) {
+        toast({
+          title: "Patient Updated Successfully",
+          description: "Your details updated successfully",
+        });
+      } else {
+        toast({
+          title: "Something went wrong!",
+          description: res.data.message,
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Patient update failed",
+        description: "Please try again",
+        variant: "destructive",
+      });
+    }
+  };
+
+ type DoctorType = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  dateOfBirth?: string;
+  gender: string;
+  imgUrl: string;
+  isEmailVerified: boolean;
+  mobile?: number;
+  slmcNumber: string; 
+  nicNumber?: string;
+  currentHospital?: string;  
+  currentUniversity?: string;
+  PersonalClinic?: string;
+  clinicName?: string;
+  clinicAddress?: string;
+};
+
+const [doctor, setDoctor] = useState<DoctorType | null>(null);
 
   return (
     <div>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={handleEditProfile}
           className="space-y-3 px-2 mb-2 "
         >
           {ProfileInfo.map((profile) => (
@@ -156,9 +226,15 @@ export default function AvailabilityCard() {
                             {...field}
                           />
                         </FormControl>
-                        <Button size="sm" className="absolute top-0 right-2 text-ugray-0 bg-ublue-200">
-                          Verify
-                        </Button>
+                        {doctor?.isEmailVerified ? null : (
+                          <Button
+                            size="sm"
+                            className="absolute top-0 right-2 text-ugray-0 bg-ublue-200"
+                            onClick={handleVerifyEmail}
+                          >
+                            Verify
+                          </Button>
+                        )}
                         <FormMessage
                           className={`${formBaseStyles.errorMessages}`}
                         />
@@ -454,11 +530,6 @@ export default function AvailabilityCard() {
                 <div>
                   <Button type="submit" size="lg" className="text-ugray-0 bg-ublue-200">
                     Save Changes
-                  </Button>
-                </div>
-                <div>
-                  <Button type="reset" variant="outline" size="lg" className="text-ublue-200 outline-ublue-200">
-                    Reset Changes
                   </Button>
                 </div>
               </div>
