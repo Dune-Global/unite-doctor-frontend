@@ -8,7 +8,6 @@ export const getConnectedPatients = async () => {
       baseURL: BACKEND_BASE_URL,
       url: CONNECTED_PATIENTS_URL,
     });
-    console.log("\n\nresponse from pateintList", response);
     return response;
   } catch (error: any) {
     return error.response;

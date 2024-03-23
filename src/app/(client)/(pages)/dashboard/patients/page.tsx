@@ -13,41 +13,46 @@ export default function Patient() {
 
   useEffect(() => {
     const fetchPatientList = async () => {
-      const response = await getConnectedPatientsActionHandler()
-      const patientsList: PatientData[] = response.data
+      try {
+        const response = await getConnectedPatientsActionHandler()
+        const patientsList: PatientData[] = response.data
 
-      const transformedData: PatientData[] = patientsList.map(item => {
-        return {
-          sessionId: item.sessionId,
-          patient: {
-            _id: item.patient._id,
-            firstName: item.patient.firstName,
-            lastName: item.patient.lastName,
-            email: item.patient.email,
-            dateOfBirth: item.patient.dateOfBirth,
-            gender: item.patient.gender,
-            imgUrl: item.patient.imgUrl,
-            password: item.patient.password,
-            allergies: item.patient.allergies,
-            isEmailVerified: item.patient.isEmailVerified,
-            createdAt: item.patient.createdAt,
-            updatedAt: item.patient.updatedAt,
-            __v: item.patient.__v,
-          },
-          status: item.status
-        };
-      });
+        const transformedData: PatientData[] = patientsList.map(item => {
+          return {
+            sessionId: item.sessionId,
+            patient: {
+              _id: item.patient._id,
+              firstName: item.patient.firstName,
+              lastName: item.patient.lastName,
+              email: item.patient.email,
+              dateOfBirth: item.patient.dateOfBirth,
+              gender: item.patient.gender,
+              imgUrl: item.patient.imgUrl,
+              password: item.patient.password,
+              allergies: item.patient.allergies,
+              isEmailVerified: item.patient.isEmailVerified,
+              createdAt: item.patient.createdAt,
+              updatedAt: item.patient.updatedAt,
+              __v: item.patient.__v,
+            },
+            status: item.status
+          };
+        });
 
-      const patientTableObjects = transformedData.map(item => ({
-        patientName: `${item.patient.firstName} ${item.patient.lastName}`,
-        email: item.patient.email,
-        gender: item.patient.gender,
-        age: calculateAge(item.patient.dateOfBirth),
-        allergies: item.patient.allergies ?? "N/A",
-        imgUrl: item.patient.imgUrl
-      }));
+        const patientTableObjects = transformedData.map(item => ({
+          patientName: `${item.patient.firstName} ${item.patient.lastName}`,
+          email: item.patient.email,
+          gender: item.patient.gender,
+          age: calculateAge(item.patient.dateOfBirth),
+          allergies: item.patient.allergies ?? "N/A",
+          imgUrl: item.patient.imgUrl
+        }));
 
-      setData(patientTableObjects)
+        setData(patientTableObjects)
+
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     fetchPatientList()
