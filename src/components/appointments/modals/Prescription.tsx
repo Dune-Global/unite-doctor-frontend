@@ -37,9 +37,11 @@ import { appointmentStage, medicineTime } from '@/data/mock/appointment-prescrip
 import { CalendarIcon, CirclePlus, CircleMinus } from 'lucide-react'
 import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
+import { AppointmentList } from '@/types/appointments'
 
 type Props = {
-    cellContent: string
+    cellContent: string,
+    rowData?: AppointmentList,
 }
 
 
@@ -120,17 +122,18 @@ const formSchema = z.object({
 })
 
 export default function Prescription({
-    cellContent
+    cellContent,
+    rowData
 }: Readonly<Props>) {
     const [currentDateTime, setCurrentDateTime] = useState<string>(getCurrentDateTime())
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            firstName: "",
-            lastName: "",
-            age: "",
-            gender: "",
+            firstName: rowData?.patientName.split(" ")[0],
+            lastName: rowData?.patientName.split(" ")[1],
+            age: rowData?.age,
+            gender: rowData?.gender,
             allergies: "",
             symptoms: "",
             disease: "",
