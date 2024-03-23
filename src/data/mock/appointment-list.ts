@@ -1,6 +1,6 @@
 import { AppointmentList } from "@/types/appointments";
 
-export const getAllAppointments = async (): Promise<AppointmentList[]> => {
+export const getAllAppointmentsMock = async (): Promise<AppointmentList[]> => {
   return [
     {
       id: "728ed52f",
@@ -22,7 +22,7 @@ export const getAllAppointments = async (): Promise<AppointmentList[]> => {
       location: "City Hospital",
       date: "2021-10-12",
       time: "2:30 PM",
-      status: "Waiting",
+      status: "Pending",
     },
     {
       id: "d5f4e3c2",
@@ -33,7 +33,7 @@ export const getAllAppointments = async (): Promise<AppointmentList[]> => {
       location: "General Clinic",
       date: "2021-10-15",
       time: "9:00 AM",
-      status: "Ongoing",
+      status: "Pending",
     },
     {
       id: "1a2b3c4d",
@@ -44,7 +44,7 @@ export const getAllAppointments = async (): Promise<AppointmentList[]> => {
       location: "Community Hospital",
       date: "2021-10-18",
       time: "4:00 PM",
-      status: "Waiting",
+      status: "Pending",
     },
     {
       id: "5e6f7g8h",
@@ -66,7 +66,7 @@ export const getAllAppointments = async (): Promise<AppointmentList[]> => {
       location: "City Hospital",
       date: "2021-10-22",
       time: "3:00 PM",
-      status: "Waiting",
+      status: "Pending",
     },
     {
       id: "1b2c3d4e",
@@ -77,7 +77,7 @@ export const getAllAppointments = async (): Promise<AppointmentList[]> => {
       location: "General Clinic",
       date: "2021-10-25",
       time: "10:30 AM",
-      status: "Ongoing",
+      status: "Pending",
     },
     {
       id: "5f6g7h8i",
@@ -88,7 +88,7 @@ export const getAllAppointments = async (): Promise<AppointmentList[]> => {
       location: "Community Hospital",
       date: "2021-10-28",
       time: "5:30 PM",
-      status: "Waiting",
+      status: "Pending",
     },
     {
       id: "9i8h7g6f",
@@ -110,7 +110,7 @@ export const getAllAppointments = async (): Promise<AppointmentList[]> => {
       location: "City Hospital",
       date: "2021-11-02",
       time: "1:00 PM",
-      status: "Waiting",
+      status: "Pending",
     },
     {
       id: "8h7g6f5e",
@@ -121,7 +121,7 @@ export const getAllAppointments = async (): Promise<AppointmentList[]> => {
       location: "General Clinic",
       date: "2021-11-05",
       time: "11:00 AM",
-      status: "Ongoing",
+      status: "Pending",
     },
     {
       id: "3c2b1a9i",
@@ -132,7 +132,7 @@ export const getAllAppointments = async (): Promise<AppointmentList[]> => {
       location: "Community Hospital",
       date: "2021-11-08",
       time: "3:30 PM",
-      status: "Waiting",
+      status: "Pending",
     },
     {
       id: "7g6f5e4d",
@@ -154,7 +154,7 @@ export const getAllAppointments = async (): Promise<AppointmentList[]> => {
       location: "City Hospital",
       date: "2021-11-13",
       time: "2:00 PM",
-      status: "Waiting",
+      status: "Pending",
     },
     {
       id: "6f5e4d3c",
@@ -165,7 +165,7 @@ export const getAllAppointments = async (): Promise<AppointmentList[]> => {
       location: "General Clinic",
       date: "2021-11-16",
       time: "9:30 AM",
-      status: "Ongoing",
+      status: "Pending",
     },
   ];
 };
