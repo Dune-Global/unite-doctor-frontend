@@ -31,6 +31,7 @@ export interface PatientData {
 }
 
 export interface PatientInfo {
+  sessionId: string;
   patientName: string;
   email: string;
   gender: string;
