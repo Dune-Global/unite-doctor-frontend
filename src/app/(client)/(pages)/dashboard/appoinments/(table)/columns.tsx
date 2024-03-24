@@ -15,10 +15,57 @@ import { ArrowUpDown } from "lucide-react"
 import StatusLabel from "@/components/labels/status-label"
 import { useState } from "react"
 import Prescription from "@/components/appointments/modals/Prescription"
+import { updatePatientAppointmentStatusActionHandler } from "@/actionLayer/appointments/appointmentsAction"
+import { toast } from "@/components/ui/use-toast"
 
 const StatusCell = ({ row }: any) => {
     const rowData = row.original
     const [status, setStatus] = useState(rowData.status)
+
+    const onCompletedClick = async () => {
+        setStatus("Completed")
+        console.log(rowData.id)
+
+        try {
+            const res = await updatePatientAppointmentStatusActionHandler("Done", rowData.id)
+
+            if (res.status === 200) {
+                toast({
+                    variant: "default",
+                    title: "Success!",
+                    description: "Status changed successfully",
+                });
+            }
+            if (res.status === 400) {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "Please try again later.",
+                });
+            }
+
+            if (res.status === 401) {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "Please try again later.",
+                });
+            }
+            window.location.reload()
+        } catch (error) {
+            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "Please try again later.",
+            });
+        }
+    }
+
+    const onPendingClick = async () => {
+        setStatus("Pending")
+    }
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -27,10 +74,10 @@ const StatusCell = ({ row }: any) => {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="flex flex-col gap-4 py-4 items-center border">
-                <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Completed") }} >
+                <DropdownMenuItem className="cursor-pointer" onClick={onCompletedClick} >
                     <StatusLabel status="Completed" />
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Pending") }} >
+                <DropdownMenuItem className="cursor-pointer" onClick={onPendingClick} >
                     <StatusLabel status="Pending" />
                 </DropdownMenuItem>
             </DropdownMenuContent>

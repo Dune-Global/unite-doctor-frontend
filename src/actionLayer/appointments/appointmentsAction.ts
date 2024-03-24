@@ -1,4 +1,7 @@
-import { getAllAppointments } from "@/api/appointments/appointmentsAPI";
+import {
+  getAllAppointments,
+  updatePatientAppointmentStatus,
+} from "@/api/appointments/appointmentsAPI";
 import { addPrescription } from "@/api/appointments/prescriptionAPI";
 import { prescriptionObject } from "@/types/appointments";
 
@@ -11,4 +14,11 @@ export const addPrescriptionActionHandler = async (
   patientId: string
 ) => {
   return await addPrescription(data, patientId);
+};
+
+export const updatePatientAppointmentStatusActionHandler = async (
+  data: string,
+  appointmentId: string
+) => {
+  return await updatePatientAppointmentStatus(data, appointmentId);
 };

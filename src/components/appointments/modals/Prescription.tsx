@@ -40,6 +40,7 @@ import { cn } from '@/lib/utils'
 import { AppointmentList, prescriptionObject } from '@/types/appointments'
 import { convertToObject } from '@/helpers/appointments/convertPrescriptionObject'
 import { addPrescriptionActionHandler } from '@/actionLayer/appointments/appointmentsAction'
+import { toast } from '@/components/ui/use-toast'
 
 type Props = {
     cellContent: string,
@@ -83,7 +84,7 @@ const formSchema = z.object({
         message: "The hereditary diseases should contain atmost 150 characters"
     }),
     disease: z.string().min(2, {
-        message: "Session description is required"
+        message: "Disease is required"
     }).max(150, {
         message: "The disease should contain atmost 150 characters"
     }),
@@ -127,6 +128,7 @@ export default function Prescription({
     rowData
 }: Readonly<Props>) {
     const [currentDateTime, setCurrentDateTime] = useState<string>(getCurrentDateTime())
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -176,16 +178,48 @@ export default function Prescription({
     }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        setIsLoading(true)
         console.log(values)
 
         const obj: prescriptionObject = convertToObject(values)
-
         console.log(rowData?.patientId)
 
         try {
-            await addPrescriptionActionHandler(obj, rowData?.patientId!)
+            const res = await addPrescriptionActionHandler(obj, rowData?.patientId!)
+
+            if (res.status === 200) {
+                toast({
+                    variant: "default",
+                    title: "Success!",
+                    description: "Prescription added successfully",
+                });
+            }
+
+            if (res.status === 400) {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "Please try again later.",
+                });
+            }
+
+            if (res.status === 401) {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "Please try again later.",
+                });
+            }
+
         } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "Please try again later.",
+            });
             console.log(error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -626,7 +660,7 @@ export default function Prescription({
                                             Cancel
                                         </Button>
                                     </DialogClose>
-                                    <Button type="submit" variant={"default"}>Submit</Button>
+                                    <Button type="submit" variant={"default"} loading={isLoading}>Submit</Button>
                                 </div>
                             </form>
                         </Form>
