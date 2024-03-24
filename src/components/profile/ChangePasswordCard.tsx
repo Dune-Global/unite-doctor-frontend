@@ -46,15 +46,17 @@ export default function AvailabilityCard() {
     },
   });
 
-  const handleChangePassword = async (values: any) => {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const res = await updatePassword(values);
-      console.log(res);
+      const res = await updatePassword({
+        oldPassword: values.currentPassword,
+        newPassword: values.newPassword,
+      });
 
       if (res.status === 200) {
         toast({
-          title: "Password Changed Successfully",
-          description: ("You can now login with your new password"),
+          title: "Password updated successfully!",
+          description: "Your password has been updated.",
         });
       } else {
         toast({
@@ -64,14 +66,17 @@ export default function AvailabilityCard() {
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error(
+        "There has been a problem with your fetch operation:",
+        error
+      );
       toast({
-        title: "Password change failed",
+        title: "Password must match!",
         description: "Please try again",
         variant: "destructive",
       });
     }
-  };
+  }
 
   const [date, setDate] = React.useState<Date | undefined>(new Date());
 
@@ -95,7 +100,7 @@ export default function AvailabilityCard() {
     <div>
       <Form {...form}>
         <form
-          onSubmit={handleChangePassword}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-3 px-2 mb-2 "
         >
           <div className="space-y-5 snap-y flex flex-col">
@@ -108,7 +113,7 @@ export default function AvailabilityCard() {
                   control={form.control}
                   name="currentPassword"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="relative">
                       <FormControl>
                         <Input
                           placeholder="Enter current password"
@@ -122,13 +127,13 @@ export default function AvailabilityCard() {
                       >
                         {showPassword ? (
                           <EyeOff
-                            size={25}
+                            size={22}
                             strokeWidth={1}
                             className="text-black"
                           />
                         ) : (
                           <Eye
-                            size={25}
+                            size={22}
                             strokeWidth={1}
                             className="text-black"
                           />
@@ -149,7 +154,7 @@ export default function AvailabilityCard() {
                   control={form.control}
                   name="newPassword"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="relative">
                       <FormControl>
                         <Input placeholder="Enter new password" {...field} />
                       </FormControl>
@@ -160,13 +165,13 @@ export default function AvailabilityCard() {
                       >
                         {showNewPassword ? (
                           <EyeOff
-                            size={25}
+                            size={22}
                             strokeWidth={1}
                             className="text-black"
                           />
                         ) : (
                           <Eye
-                            size={25}
+                            size={22}
                             strokeWidth={1}
                             className="text-black"
                           />
@@ -181,13 +186,13 @@ export default function AvailabilityCard() {
               </div>
               <div className="snap-end w-full">
                 <div className="text-sm pb-2 text-ugray-400">
-                  Number of Appointments
+                  Confirm Password
                 </div>
                 <FormField
                   control={form.control}
                   name="confirmPassword"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="relative">
                       <FormControl>
                         <Input placeholder="Re-enter new password" {...field} />
                       </FormControl>
@@ -198,13 +203,13 @@ export default function AvailabilityCard() {
                       >
                         {showConfirmPassword ? (
                           <EyeOff
-                            size={25}
+                            size={22}
                             strokeWidth={1}
                             className="text-black"
                           />
                         ) : (
                           <Eye
-                            size={25}
+                            size={22}
                             strokeWidth={1}
                             className="text-black"
                           />
