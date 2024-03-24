@@ -17,25 +17,28 @@ export const updateDoctor = async (values: {
     firstName: string;
     lastName: string;
     email: string;
-    phoneNumber: string;
-    speciality: string;
+    mobile: string;
+    designation: string;
     dateOfBirth: string;
     gender: string;
     slmcNumber: string;
     nicNumber: string;
     currentHospital: string;
     currentUniversity: string;
-    isPersonalClinic: string;
-    clinicName: string;
-    clinicAddress: string;
+    clinic?: {
+      isClinic: boolean;
+      clinicName: string;
+      clinicAddress: string;
+    };
   };
 }) => {
+  console.log("heyyy", values.editProfile);
   try {
     const response = await CustomAxios({
       method: "PUT",
       baseURL: BACKEND_BASE_URL,
       url: UPDATE_DOCTOR_URL,
-      data: values,
+      data: values.editProfile,
     });
     return response;
   } catch (error: any) {
