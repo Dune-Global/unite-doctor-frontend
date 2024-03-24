@@ -37,7 +37,9 @@ import { appointmentStage, medicineTime } from '@/data/mock/appointment-prescrip
 import { CalendarIcon, CirclePlus, CircleMinus } from 'lucide-react'
 import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
-import { AppointmentList } from '@/types/appointments'
+import { AppointmentList, prescriptionObject } from '@/types/appointments'
+import { convertToObject } from '@/helpers/appointments/convertPrescriptionObject'
+import { addPrescriptionActionHandler } from '@/actionLayer/appointments/appointmentsAction'
 
 type Props = {
     cellContent: string,
@@ -75,6 +77,17 @@ const formSchema = z.object({
         message: "The allergies should contain atmost 150 characters"
 
     }),
+    hereditaryDiseases: z.string().min(2, {
+        message: "The hereditary diseases should contain atleast 2 characters"
+    }).max(255, {
+        message: "The hereditary diseases should contain atmost 150 characters"
+    }),
+    disease: z.string().min(2, {
+        message: "Session description is required"
+    }).max(150, {
+        message: "The disease should contain atmost 150 characters"
+    }),
+    description: z.string().min(2, { message: "The description should contain atleast 2 characters" }).max(255, { message: "The description should contain atmost 255 characters" }),
     symptoms: z.string().min(2, {
         message: "The symptoms should contain atleast 2 characters"
 
@@ -82,43 +95,31 @@ const formSchema = z.object({
         message: "The symptoms should contain atmost 150 characters"
 
     }),
-    disease: z.string().min(2, {
-        message: "The disease should contain atleast 2 characters"
-    }).max(150, {
-        message: "The disease should contain atmost 150 characters"
-    }),
     stage: z.string({
         required_error: "The stage is required",
     }),
     medicine: z.array(z.object({
         medicineName: z.string({
             required_error: "The medicine name is required",
-        }).min(0).max(100, {
+        }).max(100, {
             message: "The medicine name should contain atmost 100 characters"
         }),
-        dose: z.string({
-            required_error: "The dose is required",
-        }).min(2).max(255, {
-            message: "The dose should contain atmost 255 characters"
-        }),
-        time: z.string({
-            required_error: "The time is required",
-        }),
-    })),
-    bloodPressure: z.string().min(0).max(100),
+        dose: z.string().optional(),
+        time: z.string().optional(),
+    })).optional(),
+    bloodPressure: z.string().max(100),
     nextChannelDate: z.date().optional(),
-    weight: z.string().min(1).max(100),
-    height: z.string().min(1).max(100),
+    weight: z.string().max(100).optional(),
+    height: z.string().max(100).optional(),
     reports: z.array(z.object({
-        reportname: z.string().min(2).max(200, {
+        reportname: z.string().max(200, {
             message: "The report name should contain atmost 200 characters"
         }),
         dateToBeTaken: z.date().optional(),
-    })),
-    other: z.string().min(0).max(255, {
+    })).optional().optional(),
+    other: z.string().max(255, {
         message: "Only 255 characters are allowed for other field"
-
-    }),
+    }).optional(),
 })
 
 export default function Prescription({
@@ -134,9 +135,11 @@ export default function Prescription({
             lastName: rowData?.patientName.split(" ")[1],
             age: rowData?.age,
             gender: rowData?.gender,
-            allergies: "",
-            symptoms: "",
+            allergies: rowData?.allergies,
+            hereditaryDiseases: rowData?.hereditaryDiseases,
             disease: "",
+            description: "",
+            symptoms: "",
             medicine: [{ medicineName: "", dose: "", time: "" }],
             bloodPressure: "",
             weight: "",
@@ -172,8 +175,18 @@ export default function Prescription({
         setCurrentDateTime(getCurrentDateTime())
     }
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values)
+
+        const obj: prescriptionObject = convertToObject(values)
+
+        console.log(rowData?.patientId)
+
+        try {
+            await addPrescriptionActionHandler(obj, rowData?.patientId!)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -269,10 +282,10 @@ export default function Prescription({
 
                                     <FormField
                                         control={form.control}
-                                        name='symptoms'
+                                        name="hereditaryDiseases"
                                         render={({ field }) => (
                                             <FormItem className='w-full'>
-                                                <FormLabel>Symptoms</FormLabel>
+                                                <FormLabel>Hereditary Diseases</FormLabel>
                                                 <FormControl>
                                                     <Input {...field} />
                                                 </FormControl>
@@ -294,6 +307,35 @@ export default function Prescription({
                                             </FormItem>
                                         )}
                                     />
+
+                                    <FormField
+                                        control={form.control}
+                                        name='description'
+                                        render={({ field }) => (
+                                            <FormItem className='w-full'>
+                                                <FormLabel>Description</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name='symptoms'
+                                        render={({ field }) => (
+                                            <FormItem className='w-full'>
+                                                <FormLabel>Symptoms</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
 
                                     <FormField
                                         control={form.control}
@@ -563,11 +605,12 @@ export default function Prescription({
 
                                     ))}
                                 </div>
+
                                 <FormField
                                     control={form.control}
                                     name="other"
                                     render={({ field }) => (
-                                        <FormItem className='w-72'>
+                                        <FormItem>
                                             <FormLabel>Other</FormLabel>
                                             <FormControl>
                                                 <Input {...field} />

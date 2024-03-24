@@ -16,7 +16,11 @@ export default function Appointments() {
         const response = await getAllAppointmentsActionHandler();
         const resData = response.data;
 
+        console.log("res Data from Appointment: ", resData)
+
         const transformedData = transformAppointments(resData);
+
+        console.log("transformed data: ", transformedData)
 
         setData(transformedData);
       } catch (error) {
@@ -41,10 +45,13 @@ export default function Appointments() {
     obj.appointments.forEach((appointment: any) => {
       const transformedAppointment: TransformedAppointment = {
         id: appointment._id,
+        patientId: appointment.patient._id,
         patientName: `${appointment.patient.firstName} ${appointment.patient.lastName}`,
         imgUrl: appointment.patient.imgUrl,
         appointmentId: appointment.appointmentNumber,
         gender: appointment.patient.gender,
+        allergies: appointment.patient.allergies ? appointment.patient.allergies : "None",
+        hereditaryDiseases: appointment.patient.hereditaryDiseases ? appointment.patient.hereditaryDiseases : "None",
         age: calculateAge(appointment.patient.dateOfBirth).toString(),
         location: obj.location,
         date: new Date(appointment.sessionTime).toLocaleDateString(),
