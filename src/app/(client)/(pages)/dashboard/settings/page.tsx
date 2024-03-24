@@ -1,6 +1,5 @@
 "use client";
 
-import DoctorCard from "@/components/profile/DoctorCard";
 import { ProfileInfo } from "@/data/mock/profile-info";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
@@ -31,28 +30,6 @@ export default function Settings() {
         <div className="text-2xl font-medium">Profile Settings</div>
       </div>
       <div className="my-8 flex flex-col lg:flex-row gap-4">
-        <div>
-          {ProfileInfo.map((profile) => (
-            <div key={profile.id}>
-              <DoctorCard
-                image={profile.image}
-                name={profile.fName + " " + profile.lName}
-                gender={profile.gender}
-                email={profile.email}
-                contactNumber={profile.contactNumber}
-                designation={profile.designation}
-                slmcNumber={profile.slmcNumber}
-                nicNumber={profile.nicNumber}
-                dateOfBirth={profile.dateOfBirth}
-                currentHospital={profile.currentHospital}
-                currentUniversity={profile.currentUniversity}
-                PersonalClinic={profile.PersonalClinic}
-                clinicName={profile.clinicName}
-                clinicAddress={profile.clinicAddress}
-              />
-            </div>
-          ))}
-        </div>
         <div className="w-full">
           <Tabs defaultValue="availability" className="w-full">
             <TabsList className="bg-ugray-0 py-6 mb-3">

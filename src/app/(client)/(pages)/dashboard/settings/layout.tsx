@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Unite | Settings",
+  title: "Unite | Doctor Settings",
   description: "Doctor Settings Page",
 };
 

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
+import { getDashboardData } from "@/api/dashboard/dashboardapi"
 
 export default function GenderDonut() {
-  const [options] = useState({
+  const [options, setOptions] = useState({
     legend: {
       show: true,
       position: "bottom" as "bottom" | "top" | "right" | "left" | undefined,
@@ -20,12 +21,28 @@ export default function GenderDonut() {
       },
     },
     chart: {
-      height: "200", 
-      width: "200",  
+      height: "200",
+      width: "200",
     },
-    labels: ["Male", "Female", "Children", "Attack Helicoptor", "Non-Binary"], 
+    labels: [],
   });
-  const [series, setSeries] = useState([44, 55, 41, 17, 15]);
+
+  const [series, setSeries] = useState([]);
+
+  useEffect(() => {
+    getDashboardData().then((res: any) => {
+      const genderData = res.data.data.gender;
+      const labels = genderData.map((item: any) => item.type);
+      const data = genderData.map((item: any) => item.count);
+
+      setOptions((prevOptions) => ({
+        ...prevOptions,
+        labels: labels,
+      }));
+
+      setSeries(data);
+    });
+  }, []);
 
   return (
     <div className="flex justify-center bg-ugray-0 rounded-md">

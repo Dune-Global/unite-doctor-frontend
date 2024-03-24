@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Unite | Overview",
+  title: "Unite | Doctor Overview",
   description: "Doctor Overview Page",
 };
 

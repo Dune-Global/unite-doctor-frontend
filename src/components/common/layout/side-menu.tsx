@@ -1,29 +1,22 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-import React, { useState } from "react";
+import React from "react";
 import { sideMenuItems } from "@/data/side_menu.tsx/menu_item";
 import Image from "next/image";
 import Container from "../container";
@@ -32,17 +25,8 @@ type Props = {};
 
 const SideMenu = (props: Props) => {
   const router = useRouter();
-  const dispatch = useDispatch();
-
   const imageUrl = useSelector((state: RootState) => state.auth.imageUrl);
-
-  const [isOpen, setIsOpen] = useState(false);
   const pathName = usePathname();
-
-  const handleClick = () => {
-    setIsOpen(!isOpen);
-  };
-
   const handleLogOut = () => {
     localStorage.removeItem("REFRESHTOKEN");
     sessionStorage.removeItem("ACCESSTOKEN");

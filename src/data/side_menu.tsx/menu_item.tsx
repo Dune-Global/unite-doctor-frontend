@@ -26,12 +26,12 @@ export const sideMenuItems: SideMenuItems[] = [
     icon: User,
     description: "Patients",
   },
-  {
-    id: 4,
-    path: "/dashboard/messages",
-    icon: MessageSquareMore,
-    description: "Messages",
-  },
+  // {
+  //   id: 4,
+  //   path: "/dashboard/messages",
+  //   icon: MessageSquareMore,
+  //   description: "Messages",
+  // },
   {
     id: 5,
     path: "/dashboard/settings",

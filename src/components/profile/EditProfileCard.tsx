@@ -30,7 +30,11 @@ import { CalendarIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { IAccessToken } from "@/types/jwt";
 import { getUser } from "@/utils/getUser";
-import { getUserDetails, updateDoctor, verifyEmail } from "@/api/profile/profileAPI";
+import {
+  getUserDetails,
+  updateDoctor,
+  verifyEmail,
+} from "@/api/profile/profileAPI";
 import { doctorProfileObject } from "@/types/profile";
 import { convertToObject } from "@/helpers/convertEditProfileObject";
 
@@ -44,15 +48,15 @@ const formSchema = z.object({
   firstName: z.string().optional(),
   lastName: z.string().optional(),
   email: z.string().nonempty({ message: "Email is required" }),
-  phoneNumber: z.string().optional(),
-  speciality: z.string().optional(),
+  mobile: z.string().optional(),
+  designation: z.string().optional(),
   dateOfBirth: z.date(),
   gender: z.string().optional(),
   slmcNumber: z.string().optional(),
   nicNumber: z.string().optional(),
   currentHospital: z.string(),
   currentUniversity: z.string(),
-  isPersonalClinic: z.string().optional(),
+  isClinic: z.string().optional(),
   clinicName: z.string(),
   clinicAddress: z.string(),
 });
@@ -72,14 +76,16 @@ export default function EditProfileCard() {
     imgUrl: string;
     isEmailVerified: boolean;
     mobile?: number;
-    speciality: string;
+    designation: string;
     slmcNumber: string;
     nicNumber?: string;
     currentHospital?: string;
     currentUniversity?: string;
-    PersonalClinic?: string;
-    clinicName?: string;
-    clinicAddress?: string;
+    clinic?: {
+      isClinic?: string;
+      clinicName?: string;
+      clinicAddress?: string;
+    };
   };
 
   const [doctor, setDoctor] = useState<DoctorType | null>(null);
@@ -90,7 +96,7 @@ export default function EditProfileCard() {
         console.log(user);
         const res: any = await getUserDetails(user?.id);
         if (res.status === 200) {
-          console.log("hoooo", res.data)
+          console.log("hoooo", res.data);
           setDoctor(res.data);
         } else if (res.data) {
           console.log(res.data.message);
@@ -108,15 +114,15 @@ export default function EditProfileCard() {
       firstName: doctor?.firstName,
       lastName: doctor?.lastName,
       email: doctor?.email,
-      phoneNumber: "",
-      speciality: "",
+      mobile: "",
+      designation: "",
       dateOfBirth: new Date() || null,
       gender: "",
       slmcNumber: "",
       nicNumber: "",
       currentHospital: "",
       currentUniversity: "",
-      isPersonalClinic: "",
+      isClinic: "",
       clinicName: "",
       clinicAddress: "",
     },
@@ -153,6 +159,7 @@ export default function EditProfileCard() {
     console.log(values);
 
     const obj: doctorProfileObject = convertToObject(values);
+    console.log("blaa", obj);
 
     try {
       const res = await updateDoctor(obj);
@@ -182,8 +189,6 @@ export default function EditProfileCard() {
       });
     }
   }
-
-
 
   return (
     <div>
@@ -275,7 +280,7 @@ export default function EditProfileCard() {
                   </div>
                   <FormField
                     control={form.control}
-                    name="phoneNumber"
+                    name="mobile"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
@@ -298,13 +303,13 @@ export default function EditProfileCard() {
                   <div className="text-sm pb-2 text-ugray-400">Speciality</div>
                   <FormField
                     control={form.control}
-                    name="speciality"
+                    name="designation"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <Input
                             placeholder="Enter speciality"
-                            defaultValue={doctor?.speciality}
+                            defaultValue={doctor?.designation}
                             {...field}
                           />
                         </FormControl>
@@ -346,7 +351,9 @@ export default function EditProfileCard() {
                           <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
-                              selected={field.value ? new Date(field.value) : new Date()}
+                              selected={
+                                field.value ? new Date(field.value) : new Date()
+                              }
                               onSelect={field.onChange}
                               disabled={(date) =>
                                 date > new Date() ||
@@ -367,7 +374,7 @@ export default function EditProfileCard() {
                   <div className="text-sm pb-2 text-ugray-400">Gender</div>
                   <FormField
                     control={form.control}
-                    name="phoneNumber"
+                    name="gender"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
@@ -489,15 +496,13 @@ export default function EditProfileCard() {
                   </div>
                   <FormField
                     control={form.control}
-                    name="isPersonalClinic"
+                    name="isClinic"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
                           <Select>
                             <SelectTrigger className="w-full">
-                              <SelectValue
-                                placeholder={doctor?.PersonalClinic}
-                              />
+                              <SelectValue placeholder={doctor?.clinic?.isClinic} />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="yes">Yes</SelectItem>
@@ -522,7 +527,7 @@ export default function EditProfileCard() {
                         <FormControl>
                           <Input
                             placeholder="Enter clinic name"
-                            defaultValue={doctor?.clinicName}
+                            defaultValue={doctor?.clinic?.clinicName}
                             {...field}
                           />
                         </FormControl>
@@ -545,7 +550,7 @@ export default function EditProfileCard() {
                         <FormControl>
                           <Input
                             placeholder="Enter clinic address"
-                            defaultValue={doctor?.clinicAddress}
+                            defaultValue={doctor?.clinic?.clinicAddress}
                             {...field}
                           />
                         </FormControl>
