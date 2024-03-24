@@ -24,12 +24,11 @@ const formSchema = z.object({
     .max(50, { message: "password can't contain more than 50 characters" }),
   newPassword: z
     .string()
-    .min(8, { message: "password must contain at least 8 characters" })
-    .max(50, { message: "password can't contain more than 50 characters" }),
-  confirmPassword: z
-    .string()
-    .min(8, { message: "password must contain at least 8 characters" })
-    .max(50, { message: "password can't contain more than 50 characters" }),
+    .min(8, { message: "Password must contain at least 8 characters" })
+    .max(50, { message: "Password can't contain more than 50 characters" })
+    .refine(value => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value), {
+      message: "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character. Spaces are not allowed."
+    }),
 });
 
 const formBaseStyles = {
@@ -42,7 +41,6 @@ export default function AvailabilityCard() {
     defaultValues: {
       currentPassword: "",
       newPassword: "",
-      confirmPassword: "",
     },
   });
 
@@ -80,7 +78,6 @@ export default function AvailabilityCard() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleEyeClick = () => {
     setShowPassword(!showPassword);
@@ -88,11 +85,6 @@ export default function AvailabilityCard() {
 
   const handleEyeClickNew = () => {
     setShowNewPassword(!showNewPassword);
-  }; 
-
-  const handleEyeClickConfirm = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-    
   }; 
 
   return (
@@ -121,7 +113,7 @@ export default function AvailabilityCard() {
                         />
                       </FormControl>
                       <button
-                        className="absolute right-2 top-[0.65rem] text-xl"
+                        className="absolute right-2 top-[0.5rem] text-xl"
                         type="button"
                         onClick={handleEyeClick}
                       >
@@ -146,8 +138,6 @@ export default function AvailabilityCard() {
                   )}
                 />
               </div>
-            </div>
-            <div className="flex flex-col lg:flex-row gap-4">
               <div className="snap-end w-full">
                 <div className="text-sm pb-2 text-ugray-400">New Password</div>
                 <FormField
@@ -163,53 +153,11 @@ export default function AvailabilityCard() {
                         />
                       </FormControl>
                       <button
-                        className="absolute right-2 top-[0.65rem] text-xl"
+                        className="absolute right-2 top-[0.5rem] text-xl"
                         type="button"
                         onClick={handleEyeClickNew}
                       >
                         {showNewPassword ? (
-                          <EyeOff
-                            size={22}
-                            strokeWidth={1}
-                            className="text-black"
-                          />
-                        ) : (
-                          <Eye
-                            size={22}
-                            strokeWidth={1}
-                            className="text-black"
-                          />
-                        )}
-                      </button>
-                      <FormMessage
-                        className={`${formBaseStyles.errorMessages}`}
-                      />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="snap-end w-full">
-                <div className="text-sm pb-2 text-ugray-400">
-                  Confirm Password
-                </div>
-                <FormField
-                  control={form.control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem className="relative">
-                      <FormControl>
-                        <Input
-                          type={showConfirmPassword ? "text" : "password"}
-                          placeholder="Re-enter new password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <button
-                        className="absolute right-2 top-[0.65rem] text-xl"
-                        type="button"
-                        onClick={handleEyeClickConfirm}
-                      >
-                        {showConfirmPassword ? (
                           <EyeOff
                             size={22}
                             strokeWidth={1}
