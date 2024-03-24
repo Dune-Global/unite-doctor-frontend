@@ -78,8 +78,6 @@ export default function AvailabilityCard() {
     }
   }
 
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
-
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -87,6 +85,15 @@ export default function AvailabilityCard() {
   const handleEyeClick = () => {
     setShowPassword(!showPassword);
   };
+
+  const handleEyeClickNew = () => {
+    setShowNewPassword(!showNewPassword);
+  }; 
+
+  const handleEyeClickConfirm = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+    
+  }; 
 
   return (
     <div>
@@ -158,7 +165,7 @@ export default function AvailabilityCard() {
                       <button
                         className="absolute right-2 top-[0.65rem] text-xl"
                         type="button"
-                        onClick={handleEyeClick}
+                        onClick={handleEyeClickNew}
                       >
                         {showNewPassword ? (
                           <EyeOff
@@ -200,7 +207,7 @@ export default function AvailabilityCard() {
                       <button
                         className="absolute right-2 top-[0.65rem] text-xl"
                         type="button"
-                        onClick={handleEyeClick}
+                        onClick={handleEyeClickConfirm}
                       >
                         {showConfirmPassword ? (
                           <EyeOff
