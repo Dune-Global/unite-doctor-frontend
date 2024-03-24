@@ -1,19 +1,19 @@
 export const appointmentStage = [
   {
     id: 1,
-    stage: "Pending",
-  },
-  {
-    id: 2,
     stage: "Medicine Started",
   },
   {
+    id: 2,
+    stage: "Maintenance Stage",
+  },
+  {
     id: 3,
-    stage: "Medicine Completed",
+    stage: "Recovery Stage",
   },
   {
     id: 4,
-    stage: "Appointment Completed",
+    stage: "Final Stage",
   },
 ];
 
