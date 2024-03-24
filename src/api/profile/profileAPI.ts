@@ -7,25 +7,28 @@ import {
   VERIFY_EMAIL_URL,
   UPDATE_DOCTOR_SCHEDULES_URL,
   UPDATE_SCHEDULE_STATUS_URL,
+  GET_DOCTOR_URL,
 } from "@/api/_url/profile/url";
 import { handleLoginResponse } from "@/helpers/auth/authHelper";
 import CustomAxios from "@/utils/axiosInstance";
 
 export const updateDoctor = async (values: {
-  firstName: string;
-  lastName: string;
-  designation: string;
-  email: string;
-  dateOfBirth: Date;
-  gender: string;
-  mobile: string;
-  slmcNumber: string;
-  nicNumber: string;
-  currentHospital: string;
-  currentUniversity: string;
-  personalClinic: string;
-  clinicName: string;
-  clinicAddress: string;
+  editProfile: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    speciality: string;
+    dateOfBirth: string;
+    gender: string;
+    slmcNumber: string;
+    nicNumber: string;
+    currentHospital: string;
+    currentUniversity: string;
+    isPersonalClinic: string;
+    clinicName: string;
+    clinicAddress: string;
+  };
 }) => {
   try {
     const response = await CustomAxios({
@@ -74,6 +77,19 @@ export const verifyEmail = async () => {
   }
 };
 
+export const getUserDetails = async (doctorId: string) => {
+  try {
+    const response = await CustomAxios({
+      method: "GET",
+      baseURL: BACKEND_BASE_URL,
+      url: `${GET_DOCTOR_URL}${doctorId}`,
+    });
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+};
+
 export const addAvailability = async (values: {
   date: string;
   startTime: string;
@@ -113,9 +129,7 @@ export const updateDoctorSchedules = async () => {
   }
 };
 
-export const updateScheduleStatus = async (values: {
-  status: string;
-}) => {
+export const updateScheduleStatus = async (values: { status: string }) => {
   try {
     const response = await CustomAxios({
       method: "PATCH",

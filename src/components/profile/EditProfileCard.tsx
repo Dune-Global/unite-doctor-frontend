@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { ProfileInfo } from "@/data/mock/profile-info";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -30,7 +30,9 @@ import { CalendarIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { IAccessToken } from "@/types/jwt";
 import { getUser } from "@/utils/getUser";
-import { updateDoctor, verifyEmail } from "@/api/profile/profileAPI";
+import { getUserDetails, updateDoctor, verifyEmail } from "@/api/profile/profileAPI";
+import { doctorProfileObject } from "@/types/profile";
+import { convertToObject } from "@/helpers/convertEditProfileObject";
 
 let user: IAccessToken | undefined;
 const tempUser = getUser();
@@ -39,39 +41,76 @@ if (tempUser !== undefined && tempUser !== null) {
 }
 
 const formSchema = z.object({
-  firstName: z.string().nonempty({ message: "First name is required" }),
-  lastName: z.string().nonempty({ message: "Last name is required" }),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
   email: z.string().nonempty({ message: "Email is required" }),
-  phoneNumber: z.string().nonempty({ message: "Contact number is required" }),
-  speciality: z.string().nonempty({ message: "Speciality is required" }),
-  dateOfBirth: z.string().nonempty({ message: "Date of birth is required" }),
-  gender: z.string().nonempty({ message: "Gender is required" }),
-  slmcNumber: z.string().nonempty({ message: "SLMC number is required" }),
-  nicNumber: z.string().nonempty({ message: "NIC number is required" }),
+  phoneNumber: z.string().optional(),
+  speciality: z.string().optional(),
+  dateOfBirth: z.date(),
+  gender: z.string().optional(),
+  slmcNumber: z.string().optional(),
+  nicNumber: z.string().optional(),
   currentHospital: z.string(),
   currentUniversity: z.string(),
-  isPersonalClinic: z
-    .string()
-    .nonempty({ message: "Personal clinic is required" }),
+  isPersonalClinic: z.string().optional(),
   clinicName: z.string(),
   clinicAddress: z.string(),
 });
-
 
 const formBaseStyles = {
   errorMessages: "text-red-400 font-medium text-sm",
 };
 
 export default function EditProfileCard() {
+  type DoctorType = {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    dateOfBirth?: string;
+    gender: string;
+    imgUrl: string;
+    isEmailVerified: boolean;
+    mobile?: number;
+    speciality: string;
+    slmcNumber: string;
+    nicNumber?: string;
+    currentHospital?: string;
+    currentUniversity?: string;
+    PersonalClinic?: string;
+    clinicName?: string;
+    clinicAddress?: string;
+  };
+
+  const [doctor, setDoctor] = useState<DoctorType | null>(null);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      if (user) {
+        console.log(user);
+        const res: any = await getUserDetails(user?.id);
+        if (res.status === 200) {
+          console.log("hoooo", res.data)
+          setDoctor(res.data);
+        } else if (res.data) {
+          console.log(res.data.message);
+        } else {
+          console.log("No message available");
+        }
+      }
+    };
+    checkUser();
+  }, []);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
+      firstName: doctor?.firstName,
+      lastName: doctor?.lastName,
+      email: doctor?.email,
       phoneNumber: "",
       speciality: "",
-      dateOfBirth: "",
+      dateOfBirth: new Date() || null,
       gender: "",
       slmcNumber: "",
       nicNumber: "",
@@ -110,15 +149,19 @@ export default function EditProfileCard() {
     }
   };
 
-  const handleEditProfile = async (values: any) => {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
+
+    const obj: doctorProfileObject = convertToObject(values);
+
     try {
-      const res = await updateDoctor(values);
-      console.log(res);
+      const res = await updateDoctor(obj);
+      console.log("hi", res.status);
 
       if (res.status === 200) {
         toast({
-          title: "Patient Updated Successfully",
-          description: "Your details updated successfully",
+          title: "Profile updated successfully!",
+          description: "Your profile has been updated.",
         });
       } else {
         toast({
@@ -128,41 +171,25 @@ export default function EditProfileCard() {
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error(
+        "There has been a problem with your fetch operation:",
+        error
+      );
       toast({
-        title: "Patient update failed",
+        title: "Profile update failed",
         description: "Please try again",
         variant: "destructive",
       });
     }
-  };
+  }
 
- type DoctorType = {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  dateOfBirth?: string;
-  gender: string;
-  imgUrl: string;
-  isEmailVerified: boolean;
-  mobile?: number;
-  slmcNumber: string; 
-  nicNumber?: string;
-  currentHospital?: string;  
-  currentUniversity?: string;
-  PersonalClinic?: string;
-  clinicName?: string;
-  clinicAddress?: string;
-};
 
-const [doctor, setDoctor] = useState<DoctorType | null>(null);
 
   return (
     <div>
       <Form {...form}>
         <form
-          onSubmit={handleEditProfile}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-3 px-2 mb-2 "
         >
           {ProfileInfo.map((profile) => (
@@ -178,7 +205,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Input
                             placeholder="Enter first name"
-                            defaultValue={profile.fName}
+                            defaultValue={doctor?.firstName}
                             {...field}
                           />
                         </FormControl>
@@ -199,7 +226,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Input
                             placeholder="Enter last name"
-                            defaultValue={profile.lName}
+                            defaultValue={doctor?.lastName}
                             {...field}
                           />
                         </FormControl>
@@ -222,7 +249,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Input
                             placeholder="Enter email address"
-                            defaultValue={profile.email}
+                            defaultValue={doctor?.email}
                             {...field}
                           />
                         </FormControl>
@@ -254,7 +281,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Input
                             placeholder="Enter your contact number"
-                            defaultValue={profile.contactNumber}
+                            defaultValue={doctor?.mobile?.toString()}
                             {...field}
                           />
                         </FormControl>
@@ -277,7 +304,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Input
                             placeholder="Enter speciality"
-                            defaultValue={profile.designation}
+                            defaultValue={doctor?.speciality}
                             {...field}
                           />
                         </FormControl>
@@ -293,44 +320,48 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                     Date of Birth
                   </div>
                   <FormField
-                  control={form.control}
-                  name="dateOfBirth"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-full border-ugray-100 pl-3 h-12 text-left font-normal",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="end">
-                          <Calendar
-                            mode="single"
-                            selected={new Date(field.value)}
-                            onSelect={field.onChange}
-                            disabled={(date) =>
-                              date > new Date() || date < new Date("1900-01-01")
-                            }
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormItem>
-                  )}
-                />
+                    control={form.control}
+                    name="dateOfBirth"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-full border-ugray-100 pl-3 h-12 text-left font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value ? new Date(field.value) : new Date()}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date > new Date() ||
+                                date < new Date("1900-01-01")
+                              }
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage
+                          className={`${formBaseStyles.errorMessages}`}
+                        />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div className="snap-end w-full">
                   <div className="text-sm pb-2 text-ugray-400">Gender</div>
@@ -342,7 +373,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Select>
                             <SelectTrigger className="w-full">
-                              <SelectValue placeholder={profile.gender} />
+                              <SelectValue placeholder={doctor?.gender} />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="male">Male</SelectItem>
@@ -370,7 +401,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Input
                             placeholder="Enter SLMC number"
-                            defaultValue={profile.slmcNumber}
+                            defaultValue={doctor?.slmcNumber}
                             {...field}
                           />
                         </FormControl>
@@ -391,7 +422,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Input
                             placeholder="Enter NIC number"
-                            defaultValue={profile.nicNumber}
+                            defaultValue={doctor?.nicNumber}
                             {...field}
                           />
                         </FormControl>
@@ -416,7 +447,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Input
                             placeholder="Enter current hospital"
-                            defaultValue={profile.currentHospital}
+                            defaultValue={doctor?.currentHospital}
                             {...field}
                           />
                         </FormControl>
@@ -439,7 +470,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Input
                             placeholder="Enter current university"
-                            defaultValue={profile.currentUniversity}
+                            defaultValue={doctor?.currentUniversity}
                             {...field}
                           />
                         </FormControl>
@@ -465,7 +496,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                           <Select>
                             <SelectTrigger className="w-full">
                               <SelectValue
-                                placeholder={profile.PersonalClinic}
+                                placeholder={doctor?.PersonalClinic}
                               />
                             </SelectTrigger>
                             <SelectContent>
@@ -491,7 +522,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Input
                             placeholder="Enter clinic name"
-                            defaultValue={profile.clinicName}
+                            defaultValue={doctor?.clinicName}
                             {...field}
                           />
                         </FormControl>
@@ -514,7 +545,7 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
                         <FormControl>
                           <Input
                             placeholder="Enter clinic address"
-                            defaultValue={profile.clinicAddress}
+                            defaultValue={doctor?.clinicAddress}
                             {...field}
                           />
                         </FormControl>
@@ -528,7 +559,11 @@ const [doctor, setDoctor] = useState<DoctorType | null>(null);
               </div>
               <div className="flex gap-4">
                 <div>
-                  <Button type="submit" size="lg" className="text-ugray-0 bg-ublue-200">
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="text-ugray-0 bg-ublue-200"
+                  >
                     Save Changes
                   </Button>
                 </div>
