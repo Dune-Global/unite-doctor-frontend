@@ -138,13 +138,13 @@ export default function SignIn() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "Wasath",
-      lastName: "Theekshana",
-      email: "wasath.vt@gmail.com",
-      slmcNumber: "SLMC200002",
-      mobile: "0766692190",
-      password: "Lithara@2002",
-      nicNumber: "200233801945",
+      firstName: "",
+      lastName: "",
+      email: "",
+      slmcNumber: "",
+      mobile: "",
+      password: "",
+      nicNumber: "",
     },
   });
 
