@@ -88,14 +88,6 @@ export default function AvailabilityCard() {
     setShowPassword(!showPassword);
   };
 
-  const handleEyeClick2 = () => {
-    setShowNewPassword(!showNewPassword);
-  };
-
-  const handleEyeClick3 = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
-
   return (
     <div>
       <Form {...form}>
@@ -116,6 +108,7 @@ export default function AvailabilityCard() {
                     <FormItem className="relative">
                       <FormControl>
                         <Input
+                          type={showPassword ? "text" : "password"}
                           placeholder="Enter current password"
                           {...field}
                         />
@@ -156,12 +149,16 @@ export default function AvailabilityCard() {
                   render={({ field }) => (
                     <FormItem className="relative">
                       <FormControl>
-                        <Input placeholder="Enter new password" {...field} />
+                        <Input
+                          type={showNewPassword ? "text" : "password"}
+                          placeholder="Enter new password"
+                          {...field}
+                        />
                       </FormControl>
                       <button
                         className="absolute right-2 top-[0.65rem] text-xl"
                         type="button"
-                        onClick={handleEyeClick2}
+                        onClick={handleEyeClick}
                       >
                         {showNewPassword ? (
                           <EyeOff
@@ -194,12 +191,16 @@ export default function AvailabilityCard() {
                   render={({ field }) => (
                     <FormItem className="relative">
                       <FormControl>
-                        <Input placeholder="Re-enter new password" {...field} />
+                        <Input
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="Re-enter new password"
+                          {...field}
+                        />
                       </FormControl>
                       <button
                         className="absolute right-2 top-[0.65rem] text-xl"
                         type="button"
-                        onClick={handleEyeClick3}
+                        onClick={handleEyeClick}
                       >
                         {showConfirmPassword ? (
                           <EyeOff
