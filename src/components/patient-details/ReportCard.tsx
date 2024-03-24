@@ -1,38 +1,68 @@
-"use client";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import "react-medium-image-zoom/dist/styles.css";
+import { viewReportActionHandler } from "@/actionLayer/patients/patientsAction";
+import { Button } from "@/components/common/Button";
+import ReportView from "./ReportVIew";
+import React, { useState } from "react";
 
-import React from "react";
+export default function ReportCard({
+  reportId = "",
+  reportName = "Report Name",
+  date = "01/01/2021",
+}: {
+  reportId?: string;
+  reportName?: string;
+  date?: string;
+}) {
+  const style = {
+    tableHeading: "w-4/5 text-ugray-900/70 font-medium",
+  };
 
-interface Report {
-  id: string;
-  name: string;
-  date: string;
-}
+  const formatedDate = date ? new Date(date).toLocaleDateString("en-US") : "";
+  const [reportUrl, setReportUrl] = useState("");
 
-interface ReportCardProps {
-  reports: Report[];
-}
+  const getImage = async () => {
+    const res = await viewReportActionHandler(reportId);
+    setReportUrl(res.data.report.reportUrl);
+  };
 
-const ReportCard: React.FC<ReportCardProps> = ({ reports }) => {
   return (
-    <div className="max-w-[450px]">
-      {/* static */}
-      <div className="flex py-4 px-4 justify-between  items-center bg-ugray-100 font-medium text-ugray-400 rounded-lg">
-        <span>Report Name</span>
-        <span className="mr-14">Date</span>
-      </div>
-
-      {/* dynamic */}
-      {reports.map((report) => (
-        <div
-          key={report.id}
-          className="flex py-4 px-4 my-2 justify-between items-center bg-ugray-0 font-medium text-ugray-400 rounded-lg"
-        >
-          <span>{report.name}</span>
-          <span>{report.date}</span>
+    <Dialog>
+      <DialogTrigger asChild className="cursor-pointer" onClick={getImage}>
+        <div className="bg-ugray-0  rounded-lg p-4 flex flex-row justify-between">
+          <div className={`${style.tableHeading}`}>
+            <h1>{reportName}</h1>
+          </div>
+          <div className={`${style.tableHeading} !w-1/4 text-right`}>
+            <h1>{formatedDate}</h1>
+          </div>
         </div>
-      ))}
-    </div>
-  );
-};
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>{reportName}</DialogTitle>
+          <DialogDescription>{formatedDate}</DialogDescription>
+        </DialogHeader>
 
-export default ReportCard;
+        <ReportView reportUrl={reportUrl} />
+
+        <DialogClose asChild>
+          <div className="max-w-5">
+            <Button>Close</Button>
+          </div>
+        </DialogClose>
+
+        <DialogFooter className="sm:justify-start"></DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
