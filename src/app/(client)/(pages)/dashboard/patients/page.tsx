@@ -40,6 +40,7 @@ export default function Patient() {
         });
 
         const patientTableObjects = transformedData.map(item => ({
+          sessionId: item.sessionId,
           patientName: `${item.patient.firstName} ${item.patient.lastName}`,
           email: item.patient.email,
           gender: item.patient.gender,

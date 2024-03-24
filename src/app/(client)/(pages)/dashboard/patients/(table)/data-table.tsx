@@ -28,6 +28,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import { useRouter } from "next/navigation"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
@@ -45,6 +47,8 @@ export function DataTable<TData, TValue>({
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
+    const router = useRouter()
+
     const table = useReactTable({
         data,
         columns,
@@ -61,6 +65,12 @@ export function DataTable<TData, TValue>({
             columnVisibility,
         },
     })
+
+    const handleRowClick = (row: any) => {
+        const id = row.sessionId
+
+        router.push(`/dashboard/patients/${id}`)
+    }
 
     return (
         <>
@@ -128,7 +138,8 @@ export function DataTable<TData, TValue>({
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
-                                    className="bg-ugray-0 border-ugray-50 border-y-8"
+                                    className="bg-ugray-0 border-ugray-50 border-y-8 cursor-pointer"
+                                    onClick={() => handleRowClick(row.original)}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

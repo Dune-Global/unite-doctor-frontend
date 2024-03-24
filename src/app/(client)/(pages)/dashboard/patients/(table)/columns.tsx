@@ -1,8 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreVertical } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
+import { ArrowUpDown } from "lucide-react"
 import { PatientInfo } from "@/types/patients"
 
 export const columns: ColumnDef<PatientInfo>[] = [
@@ -77,27 +76,6 @@ export const columns: ColumnDef<PatientInfo>[] = [
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </button>
                 </div>
-            )
-        },
-    },
-    {
-        id: "actions",
-        cell: ({ row }) => {
-            const rowData = row.original
-
-            return (
-                <button onClick={() => {
-                    toast({
-                        title: "This row contains",
-                        description: (
-                            <pre className="mt-2 w-[340px] rounded-md bg-ublue-900 p-4">
-                                <code className="text-ugray-0">{JSON.stringify(rowData, null, 2)}</code>
-                            </pre>
-                        ),
-                    })
-                }} className="flex justify-center items-center">
-                    <MoreVertical size={18} />
-                </button>
             )
         },
     },
