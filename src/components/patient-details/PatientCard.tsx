@@ -16,7 +16,6 @@ interface PatientCardProps {
   weight: string;
   height: string;
   bloodType: string;
-  bloodPressure: string;
   allergies: string;
   hereditaryDiseases: string;
 }
@@ -31,7 +30,6 @@ const PatientCard: React.FC<PatientCardProps> = ({
   weight,
   height,
   bloodType,
-  bloodPressure,
   allergies,
   hereditaryDiseases,
 }) => {
@@ -100,10 +98,6 @@ const PatientCard: React.FC<PatientCardProps> = ({
         <p className="text-sm flex justify-between">
           <span className="text-ugray-200">Blood Type:</span>
           <span>{bloodType}</span>
-        </p>
-        <p className="text-sm flex justify-between">
-          <span className="text-ugray-200">Blood Pressure:</span>
-          <span>{bloodPressure}</span>
         </p>
         <p className="text-sm flex justify-between">
           <span className="text-ugray-200">Allergies:</span>
