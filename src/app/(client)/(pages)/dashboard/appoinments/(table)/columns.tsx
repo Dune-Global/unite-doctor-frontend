@@ -26,7 +26,7 @@ const StatusCell = ({ row }: any) => {
                     <StatusLabel status={status} />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="flex flex-col gap-4 py-4 items-center">
+            <DropdownMenuContent className="flex flex-col gap-4 py-4 items-center border">
                 <DropdownMenuItem className="cursor-pointer" onClick={() => { setStatus("Completed") }} >
                     <StatusLabel status="Completed" />
                 </DropdownMenuItem>
