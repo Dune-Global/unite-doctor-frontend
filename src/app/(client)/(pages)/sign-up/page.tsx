@@ -211,7 +211,6 @@ export default function SignIn() {
               className="mb-2"
             ></Image>{" "}
           </div>
-
           <div className="flex flex-col gap-1  items-center text-center">
             <h2 className="font-semibold text-4xl mb-2">
               Let&apos;s get started
