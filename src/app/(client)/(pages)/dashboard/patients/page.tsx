@@ -45,7 +45,7 @@ export default function Patient() {
           email: item.patient.email,
           gender: item.patient.gender,
           age: calculateAge(item.patient.dateOfBirth),
-          allergies: item.patient.allergies ?? "N/A",
+          allergies: item.patient.allergies ?? "None",
           imgUrl: item.patient.imgUrl
         }));
 
