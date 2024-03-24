@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BACKEND_BASE_URL, REFRESH_URL } from "@/api/_url/url";
+import { BACKEND_BASE_URL, REFRESH_URL } from "@/api/_url/auth/url";
 const CustomAxios = axios.create({});
 CustomAxios.interceptors.request.use(
   (req) => {
@@ -19,7 +19,7 @@ CustomAxios.interceptors.response.use(
     const status = err.response ? err.response.status : null;
     if (status === 401) {
       return axios({
-        method: "POST",
+        method: "GET",
         baseURL: BACKEND_BASE_URL,
         url: REFRESH_URL,
         headers: {
@@ -27,10 +27,6 @@ CustomAxios.interceptors.response.use(
         },
       })
         .then((response) => {
-          localStorage.setItem(
-            "REFRESHTOKEN",
-            `Bearer ${response.data?.refreshToken}`
-          );
           sessionStorage.setItem(
             "ACCESSTOKEN",
             `Bearer ${response.data?.accessToken}`
@@ -45,11 +41,12 @@ CustomAxios.interceptors.response.use(
           console.log(error);
         });
     } else if (status === 403) {
-      sessionStorage.clear();
-      localStorage.clear();
-      window.location.replace("/auth");
+      // sessionStorage.clear();
+      // localStorage.clear();
+      window.location.replace("/sign-in");
     }
     return Promise.resolve(err);
   }
 );
 export default CustomAxios;
+
