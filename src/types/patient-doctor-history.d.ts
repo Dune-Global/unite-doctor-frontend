@@ -1,7 +1,16 @@
 export type PatientDoctorHistory = {
+  sessionId: string;
+  doctorId: string;
+  doctorDetails: DoctorDetails;
+};
+
+export type DoctorDetails = {
   id: string;
   doctorName: string;
-  specialty: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  contactNumber: string;
+  speciality: string;
+  contactNUmber: string;
+  imgUrl: string;
 };

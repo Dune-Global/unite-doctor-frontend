@@ -1,5 +1,11 @@
 import { BACKEND_BASE_URL, CONNECTED_PATIENTS_URL } from "../_url/auth/url";
-import {GET_PATIENT_BY_ID,GET_REPORTS_BY_PATIENT_ID,VIEW_REPORT} from "@/api/_url/patient/url";
+import {
+  GET_DOCTOR_PATIENT_DETAILS_URL,
+  GET_PATIENT_BY_ID,
+  GET_REPORTS_BY_PATIENT_ID,
+  GET_SHARED_SESSIONS_WITH_DOCTORS_URL,
+  VIEW_REPORT,
+} from "@/api/_url/patient/url";
 import CustomAxios from "@/utils/axiosInstance";
 
 export const getConnectedPatients = async () => {
@@ -14,6 +20,46 @@ export const getConnectedPatients = async () => {
     return error.response;
   }
 };
+
+/**
+ * Get Doctor Patient Details
+ */
+
+export const getDoctorPatientDetails = async (patientSessionId: string) => {
+  console.log(
+    "**************Get Doctor Patient Details request API***************"
+  );
+  return await CustomAxios({
+    method: "GET",
+    baseURL: BACKEND_BASE_URL,
+    url: GET_DOCTOR_PATIENT_DETAILS_URL.replace(
+      ":patientSessionId",
+      patientSessionId
+    ),
+  });
+};
+
+/*
+ *  Get shared sessions with doctors
+ */
+
+export const getSharedSessionsWithDoctorsByPatientId = async (id: string) => {
+  console.log(
+    "**************Get Shared Sessions with Doctors request API***************"
+  );
+  try {
+    const response = await CustomAxios({
+      method: "GET",
+      baseURL: BACKEND_BASE_URL,
+      url: `${GET_SHARED_SESSIONS_WITH_DOCTORS_URL}${id}`,
+    });
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+};
+
+
 
 export const getPatientById = async (id: string) => {
   try {

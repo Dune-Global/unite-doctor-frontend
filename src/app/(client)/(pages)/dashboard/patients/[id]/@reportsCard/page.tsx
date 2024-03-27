@@ -4,6 +4,8 @@ import ReportCard from "@/components/patient-details/ReportCard";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getReportsByPatientIdActionHandler } from "@/actionLayer/patients/patientsAction";
+import { IDoctorPatientDetails } from "@/types/doctor-patient-details";
+import { getDoctorPatientDetails } from "@/api/patients/patientsAPI";
 
 export default function Page() {
   interface Params {
@@ -13,15 +15,57 @@ export default function Page() {
   const params = useParams();
 
   const [reportsList, setReportsList] = useState([]);
+  const [doctorPatientDetails, setDoctorPatientDetails] =
+    useState<IDoctorPatientDetails | null>(null);
+
+  // useEffect(() => {
+  //   if (typeof params.id === "string") {
+  //     const res = getReportsByPatientIdActionHandler(params.id).then(
+  //       (res: any) => {
+  //         setReportsList(res.data.reports);
+  //         console.log(reportsList);
+  //       }
+  //     );
+  //   }
+  // }, []);
 
   useEffect(() => {
-    if (typeof params.id === "string") {
-      const res = getReportsByPatientIdActionHandler(params.id).then(
-        (res: any) => {
+    const getDoctorPatientDetailsBySessionIdActionHandler = (
+      patientSessionId: string
+    ) => {
+      getDoctorPatientDetails(patientSessionId)
+        .then((res) => {
+          console.log("\n\n\nDoctor patient details res", res.data);
+          setDoctorPatientDetails(res.data);
+          console.log("\n\n\nDoctor patient details", doctorPatientDetails);
+          if (res.data) {
+            getReportDetailsActionHandler(res.data.patient);
+          }
+          // setIsDoctorPatientLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching doctor patient details", error);
+          // setIsDoctorPatientLoading(false);
+        });
+    };
+
+    const getReportDetailsActionHandler = (patientId: string) => {
+      getReportsByPatientIdActionHandler(patientId)
+        .then((res) => {
           setReportsList(res.data.reports);
-          console.log(reportsList);
-        }
-      );
+          console.log("\n\n\nReports details", reportsList);
+          // setIsDoctorDetailsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching report details", error);
+          // setIsDoctorDetailsLoading(false);
+        });
+    };
+
+    if (Array.isArray(params.id)) {
+      getDoctorPatientDetailsBySessionIdActionHandler(params.id[0]);
+    } else {
+      getDoctorPatientDetailsBySessionIdActionHandler(params.id);
     }
   }, []);
 

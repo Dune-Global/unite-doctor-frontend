@@ -13,23 +13,23 @@ export const columns: ColumnDef<PatientDoctorHistory>[] = [
         <div className="flex flex-col justify-center lg:flex-row lg:justify-start gap-2 items-center">
           <div>
             <img
-              src={`https://ui-avatars.com/api/?name=${row.original.doctorName}`}
+              src={`https://ui-avatars.com/api/?name=${row.original.doctorDetails.doctorName}`}
               alt="patient"
               className="w-8 h-8 rounded-full"
             />
           </div>
-          <div>{row.original.doctorName}</div>
+          <div>{row.original.doctorDetails.doctorName}</div>
         </div>
       );
     },
   },
 
   {
-    accessorKey: "specialty",
+    accessorKey: "speciality",
     header: ({ column }) => {
       return (
         <div className="flex items-center">
-          <div>Specialty</div>
+          <div>Speciality</div>
           <button
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             className="flex items-start"
@@ -38,6 +38,9 @@ export const columns: ColumnDef<PatientDoctorHistory>[] = [
           </button>
         </div>
       );
+    },
+    cell: ({ row }) => {
+      return <div>{row.original.doctorDetails.speciality}</div>;
     },
   },
   {
@@ -55,9 +58,12 @@ export const columns: ColumnDef<PatientDoctorHistory>[] = [
         </div>
       );
     },
+    cell: ({ row }) => {
+      return <div>{row.original.doctorDetails.email}</div>;
+    },
   },
   {
-    accessorKey: "contactNumber",
+    accessorKey: "contactNUmber",
     header: ({ column }) => {
       return (
         <div className="flex items-center">
@@ -70,6 +76,9 @@ export const columns: ColumnDef<PatientDoctorHistory>[] = [
           </button>
         </div>
       );
+    },
+    cell: ({ row }) => {
+      return <div>{row.original.doctorDetails.contactNUmber}</div>;
     },
   },
 ];

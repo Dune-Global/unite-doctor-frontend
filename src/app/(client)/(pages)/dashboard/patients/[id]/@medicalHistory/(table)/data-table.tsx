@@ -30,8 +30,11 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UniteModal } from "@/components/common/UniteModal";
+import { getDoctorPatientDetails } from "@/api/patients/patientsAPI";
+import { IDoctorPatientDetails } from "@/types/doctor-patient-details";
+import HistoryAccordion from "@/components/patient-details/HistoryAccordion";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -47,6 +50,8 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<any>(null);
+  const [doctorPatientDetails, setDoctorPatientDetails] =
+    useState<IDoctorPatientDetails | null>(null);
 
   const table = useReactTable({
     data,
@@ -66,9 +71,47 @@ export function DataTable<TData, TValue>({
   });
 
   const handleRowClick = (rowData: any) => {
+    console.log("Row data", rowData);
     setSelectedRow(rowData);
+
     setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    const getDoctorPatientDetailsBySessionIdActionHandler = (
+      patientSessionId: string
+    ) => {
+      getDoctorPatientDetails(patientSessionId)
+        .then((res) => {
+          console.log("\n\n\nDoctor patient details res", res.data);
+          setDoctorPatientDetails(res.data);
+          console.log("\n\n\nDoctor patient details", doctorPatientDetails);
+          // if (res.data) {
+          // getDoctorDetailsActionHandler(res.data.doctor);
+          // }
+          // setIsDoctorPatientLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching doctor patient details", error);
+          // setIsDoctorPatientLoading(false);
+        });
+    };
+
+    // const getDoctorDetailsActionHandler = (doctorId: string) => {
+    //   getDoctorById(doctorId)
+    //     .then((res) => {
+    //       setDoctorDetails(res.data);
+    //       console.log("\n\n\nDoctor details", doctorDetails);
+    //       // setIsDoctorDetailsLoading(false);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error fetching doctor details", error);
+    //       // setIsDoctorDetailsLoading(false);
+    //     });
+    // };
+
+    getDoctorPatientDetailsBySessionIdActionHandler(selectedRow?.sessionId);
+  }, [selectedRow, isModalOpen]);
 
   return (
     <>
@@ -164,9 +207,32 @@ export function DataTable<TData, TValue>({
       </div>
 
       <UniteModal
-        title={selectedRow.doctorName}
+        // title={selectedRow?.doctorName}
+        title={selectedRow?.doctorDetails.doctorName}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        content={
+          <div className="my-16">
+            {doctorPatientDetails?.prescription &&
+            doctorPatientDetails.prescription.length > 0 ? (
+              doctorPatientDetails.prescription.map(
+                (prescriptionItem, index) => (
+                  <HistoryAccordion
+                    key={prescriptionItem._id}
+                    details={prescriptionItem}
+                    isLastItem={
+                      index === doctorPatientDetails.prescription.length - 1
+                    }
+                  />
+                )
+              )
+            ) : (
+              <p className="text-ugray-200 text-center ">
+                No history available
+              </p>
+            )}
+          </div>
+        }
       />
 
       <div className="flex items-center justify-end space-x-2 py-4">

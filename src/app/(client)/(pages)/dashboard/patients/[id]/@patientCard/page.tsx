@@ -3,6 +3,13 @@ import { getPatientByIdActionHandler } from "@/actionLayer/patients/patientsActi
 import PatientCard from "@/components/patient-details/PatientCard";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { IDoctorPatientDetails } from "@/types/doctor-patient-details";
+import { getDoctorPatientDetails } from "@/api/patients/patientsAPI";
+import { useDispatch } from "react-redux";
+import {
+  setPatientId,
+  setSessionId,
+} from "@/store/reducers/patient-detail-reducer";
 
 export default function Page() {
   interface Patient {
@@ -30,12 +37,58 @@ export default function Page() {
 
   const params = useParams();
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [doctorPatientDetails, setDoctorPatientDetails] =
+    useState<IDoctorPatientDetails | null>(null);
+
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   if (typeof params.id === "string") {
+  //     getPatientByIdActionHandler(params.id).then((res: any) => {
+  //       setPatient(res.data);
+  //     });
+  //   }
+  // }, []);
 
   useEffect(() => {
-    if (typeof params.id === "string") {
-      getPatientByIdActionHandler(params.id).then((res: any) => {
-        setPatient(res.data);
-      });
+    const getDoctorPatientDetailsBySessionIdActionHandler = (
+      patientSessionId: string
+    ) => {
+      dispatch(setSessionId(patientSessionId));
+      getDoctorPatientDetails(patientSessionId)
+        .then((res) => {
+          console.log("\n\n\nDoctor patient details res", res.data);
+          setDoctorPatientDetails(res.data);
+          console.log("\n\n\nDoctor patient details", doctorPatientDetails);
+          if (res.data) {
+            getPatientDetailsActionHandler(res.data.patient);
+            dispatch(setPatientId(res.data.patient));
+          }
+          // setIsDoctorPatientLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching doctor patient details", error);
+          // setIsDoctorPatientLoading(false);
+        });
+    };
+
+    const getPatientDetailsActionHandler = (patientId: string) => {
+      getPatientByIdActionHandler(patientId)
+        .then((res) => {
+          setPatient(res.data);
+          console.log("\n\n\nPatient details", patient);
+          // setIsDoctorDetailsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching patient details", error);
+          // setIsDoctorDetailsLoading(false);
+        });
+    };
+
+    if (Array.isArray(params.id)) {
+      getDoctorPatientDetailsBySessionIdActionHandler(params.id[0]);
+    } else {
+      getDoctorPatientDetailsBySessionIdActionHandler(params.id);
     }
   }, []);
 

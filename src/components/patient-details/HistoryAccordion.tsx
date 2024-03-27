@@ -6,23 +6,41 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ChevronDown } from "lucide-react";
-import React from "react";
+import { ChevronDown, Divide } from "lucide-react";
+import React, { useState } from "react";
 import { Button } from "../common/Button";
-import { IAccordionData } from "@/types/accordion-data";
+import { Prescription, Stage } from "@/types/doctor-patient-details";
 import Progress from "./PatientProgress";
+import { UniteModal } from "../common/UniteModal";
+import PrescriptionView from "./PrescriptionView";
 
-const HistoryAccordion: React.FC<IAccordionData> = ({
-  diseaseDescription,
-  diseaseName,
-  date,
-  symptoms,
-  status,
-  isLastItem = false, // Default to false if not provided
+interface HistoryAccordionProps {
+  details: Prescription;
+  isLastItem?: boolean;
+}
+
+const STAGE_MAP: Record<Stage, number> = {
+  "Medicine Started": 1,
+  "Maintenance Stage": 2,
+  "Recovery Stage": 3,
+  "Final Stage": 4,
+};
+
+const HistoryAccordion: React.FC<HistoryAccordionProps> = ({
+  details,
+  isLastItem = false,
 }) => {
-  return (
-    // <div className="border-l-2 border-dashed border-ugray-200 relative pb-10 pl-4">
+  console.log("\n\n\nHistoryAccordion props:", details);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const currentStage = STAGE_MAP[details.stage] || 1;
+
+  const handlePrescriptionClick = () => {
+    setIsModalOpen(true);
+  };
+
+  return (
     <div
       className={` relative pl-4 ${
         !isLastItem && "border-l-2 border-dashed border-ugray-200  pb-10 "
@@ -33,7 +51,15 @@ const HistoryAccordion: React.FC<IAccordionData> = ({
           !isLastItem ? "-left-2" : " -left-[6px] "
         } `}
       />
-      <div className="mb-3 pl-4 ">{date}</div>
+      <div className="mb-3 pl-4 ">
+        {details.sessionDate
+          ? new Date(details.sessionDate).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })
+          : "N/A"}
+      </div>
       <Accordion type="multiple" className="flex flex-col gap-4 mx-4">
         <AccordionItem
           value="item-1"
@@ -42,13 +68,13 @@ const HistoryAccordion: React.FC<IAccordionData> = ({
           <AccordionTrigger className="flex">
             <div className="flex flex-col items-start gap-3 justify-between w-full">
               <span className="text-ugray-900 text-left text-lg font-semibold">
-                {diseaseName}
+                {details.diseases}
               </span>
               <span className="text-ugray-200 font-normal sm:text-left text-justify text-sm sm:text-base">
-                {diseaseDescription}
+                {details.sessionDescription}
               </span>
               <div className="md:mb-14 mt-6 max-w-[960px] w-full md:px-10 xl:px-16">
-                <Progress currentStep={2} />
+                <Progress currentStep={currentStage} />
               </div>
             </div>
             <ChevronDown className="h-6 w-6 shrink-0 text-ugray-400 transition-transform duration-200" />
@@ -58,16 +84,32 @@ const HistoryAccordion: React.FC<IAccordionData> = ({
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
               <div className="flex flex-col py-3 sm:p-3 gap-2">
                 <span className="text-ugray-200">Symptoms</span>
-                <span className="text-justify sm:text-left">{symptoms}</span>
+                <span className="text-justify sm:text-left">
+                  {details.symptoms}
+                </span>
               </div>
               <div className="flex flex-col py-3 sm:p-3 gap-2">
                 <span className="text-ugray-200">Status</span>
-                <span>{status}</span>
+                <span>{details.stage}</span>
               </div>
               <div className="mt-4 sm:ml-0 sm:mt-0">
-                <Button variant="default" size="sm">
+                <Button
+                  onClick={handlePrescriptionClick}
+                  variant="default"
+                  size="sm"
+                >
                   View Prescription
                 </Button>
+                <UniteModal
+                  onClose={() => setIsModalOpen(false)}
+                  title="Prescription Details"
+                  isOpen={isModalOpen}
+                  content={
+                    <div className="my-32 lg:my-52">
+                      <PrescriptionView prescriptionDetails={details} />
+                    </div>
+                  }
+                />
               </div>
             </div>
           </AccordionContent>
@@ -78,4 +120,5 @@ const HistoryAccordion: React.FC<IAccordionData> = ({
 };
 
 export default HistoryAccordion;
+
 
