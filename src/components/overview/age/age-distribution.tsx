@@ -48,6 +48,7 @@ export default function AgeDistribution() {
     });
   }, []);
 
+
   return (
     <div className="app bg-ugray-0 rounded-lg mt-6">
       <div className="row">

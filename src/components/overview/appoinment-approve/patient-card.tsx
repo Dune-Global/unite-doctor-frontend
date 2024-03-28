@@ -1,28 +1,107 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Check, ShieldCloseIcon, X } from "lucide-react";
-import Link from "next/link";
+import { Check, X } from "lucide-react";
+import { useState } from "react";
+import { updateDashboardAppointmentActionHandler } from "@/actionLayer/appointments/appointmentsAction";
+import { toast } from "@/components/ui/use-toast";
 
 export default function PatientCard({
   name,
   appoinmentNo,
   imageUrl,
   status,
+  id,
 }: {
   name: string;
   appoinmentNo: string;
   imageUrl: string;
   status?: string;
+  id?: string;
 }) {
+  const [isDonePressed, setIsDonePressed] = useState(false);
+  const [isCancelPressed, setIsCancelPressed] = useState(false);
+
   const firstLetter = name.charAt(0).toUpperCase();
-  const handleCancel = () => {
-    alert("Cancel");
+
+  const handleCancel = async () => {
+    try {
+      setIsCancelPressed(true);
+
+      const res = await updateDashboardAppointmentActionHandler("Cancelled by doctor", id!);
+      console.log("response from updateDashboardAppointmentActionHandler", res)
+
+      if (res.status === 200) {
+        toast({
+          variant: "default",
+          title: "Success!",
+          description: "Status changed successfully",
+        });
+      }
+      if (res.status === 400) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "Please try again later.",
+        });
+      }
+
+      if (res.status === 401) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "Please try again later.",
+        });
+      }
+
+      window.location.reload()
+
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Please try again later."
+      });
+      console.log(error)
+    }
   };
 
-  const handleDone = () => {
-    alert("Done");
+  const handleDone = async () => {
+    try {
+      setIsDonePressed(true);
+
+      const res = await updateDashboardAppointmentActionHandler("Done", id!);
+      console.log("response from updateDashboardAppointmentActionHandler", res)
+
+      if (res.status === 200) {
+        toast({
+          variant: "default",
+          title: "Success!",
+          description: "Status changed successfully",
+        });
+      }
+      if (res.status === 400) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "Please try again later.",
+        });
+      }
+
+      if (res.status === 401) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "Please try again later.",
+        });
+      }
+
+      window.location.reload()
+    } catch (error) {
+      console.log(error)
+    }
   };
+
   return (
     <div className="flex flex-row justify-between w-full">
       <div className="flex flex-row gap-3 items-center w-1/2">
@@ -38,11 +117,11 @@ export default function PatientCard({
         </div>
       </div>
       <div className="w-1/2 flex justify-end items-center">
-        {status === "done" ? (
+        {status === "done" || isDonePressed ? (
           <span className="text-xs text-uindigo-600 bg-uindigo-200 px-4 py-2 rounded-md ">
             Done
           </span>
-        ) : status === "cancelled" ? (
+        ) : status === "cancelled" || isCancelPressed ? (
           <span className="text-xs text-ured-600 bg-[#FDE9E9] px-4 py-2 rounded-md">
             Cancelled
           </span>

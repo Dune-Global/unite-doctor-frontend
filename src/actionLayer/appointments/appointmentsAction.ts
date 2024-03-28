@@ -1,5 +1,6 @@
 import {
   getAllAppointments,
+  updateDashBoardAppointmentStatus,
   updatePatientAppointmentStatus,
 } from "@/api/appointments/appointmentsAPI";
 import { addPrescription } from "@/api/appointments/prescriptionAPI";
@@ -21,4 +22,11 @@ export const updatePatientAppointmentStatusActionHandler = async (
   appointmentId: string
 ) => {
   return await updatePatientAppointmentStatus(data, appointmentId);
+};
+
+export const updateDashboardAppointmentActionHandler = async (
+  status: string,
+  appointmentId: string
+) => {
+  return await updateDashBoardAppointmentStatus(status, appointmentId);
 };

@@ -6,5 +6,10 @@ export const VERIFY_EMAIL_URL = "/doctor/verify-email";
 export const GET_DOCTOR_URL = "/doctor/find-one/";
 
 export const ADD_AVAILABILITY_URL = "/appointment/create-availability";
-export const UPDATE_DOCTOR_SCHEDULES_URL = "/appointment/update-availability/:availabilityId";
-export const UPDATE_SCHEDULE_STATUS_URL = "/appointment/update-availability-status/:scheduleId";
+export const UPDATE_DOCTOR_SCHEDULES_URL =
+  "/appointment/update-availability/:availabilityId";
+export const UPDATE_SCHEDULE_STATUS_URL =
+  "/appointment/update-availability-status/:scheduleId";
+
+export const GET_DOCTORS_SCHEDULES_URL =
+  "/appointment/get-availability/:doctorId";

@@ -1,27 +1,38 @@
 "use client";
 
-import { ProfileInfo } from "@/data/mock/profile-info";
+import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React from "react";
 import AvailabilityCard from "@/components/profile/AvailabilityCard";
 import EditProfileCard from "@/components/profile/EditProfileCard";
 import ChangePasswordCard from "@/components/profile/ChangePasswordCard";
 import { columns } from "./(table)/columns";
 import { DataTable } from "./(table)/data-table";
-import { useEffect, useState } from "react";
 import { AvailableAppointmentsList } from "@/types/available-appointments";
-import { Appointments } from "@/data/mock/profile-info";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { getAvailableAppointmentsSettingsActionHandler } from "@/actionLayer/settings/availableAppointmentsAction";
+import { transformApiResponse } from "@/helpers/settings/convertAvailablities";
 
 export default function Settings() {
   const [data, setData] = useState<AvailableAppointmentsList[]>([]);
 
-  useEffect(() => {
-    const appointmentsActionHandler = async () => {
-      const data = await Appointments();
-      setData(data);
-    };
+  const doctorId = useSelector(
+    (state: RootState) => state.auth.doctorId
+  )
 
-    appointmentsActionHandler();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getAvailableAppointmentsSettingsActionHandler(doctorId)
+        const values: AvailableAppointmentsList[] = transformApiResponse(res.data)
+
+        setData(values)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchData();
   }, []);
 
   return (
@@ -53,7 +64,7 @@ export default function Settings() {
               </div>
               <div className="py-12">
                 <div className="text-2xl font-medium pb-4">
-                    Appointment Schedule
+                  Appointment Schedule
                 </div>
                 <div className="pb-10">
                   <DataTable columns={columns} data={data} />

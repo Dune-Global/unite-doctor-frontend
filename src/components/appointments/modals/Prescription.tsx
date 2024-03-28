@@ -71,12 +71,11 @@ const formSchema = z.object({
     }).max(3, {
         message: "The age should contain atmost 3 characters "
     }),
-    gender: z.string().min(4).max(6),
+    gender: z.string().min(4).max(100),
     allergies: z.string().min(2, {
         message: "The allergies should contain atleast 2 characters"
     }).max(150, {
         message: "The allergies should contain atmost 150 characters"
-
     }),
     hereditaryDiseases: z.string().min(2, {
         message: "The hereditary diseases should contain atleast 2 characters"
@@ -518,10 +517,9 @@ export default function Prescription({
                                                             mode="single"
                                                             selected={field.value}
                                                             onSelect={field.onChange}
-                                                            disabled={(date) =>
-                                                                date > new Date() ||
-                                                                date < new Date("1900-01-01")
-                                                            }
+                                                            // disabled={(date) =>
+                                                            //     date > new Date()
+                                                            // }
                                                             initialFocus
                                                         />
                                                     </PopoverContent>
@@ -539,7 +537,7 @@ export default function Prescription({
                                         name="weight"
                                         render={({ field }) => (
                                             <FormItem className='w-72'>
-                                                <FormLabel>Weight</FormLabel>
+                                                <FormLabel>Weight (Kg)</FormLabel>
                                                 <FormControl>
                                                     <Input {...field} />
                                                 </FormControl>
@@ -553,7 +551,7 @@ export default function Prescription({
                                         name="height"
                                         render={({ field }) => (
                                             <FormItem className='w-72'>
-                                                <FormLabel>Height</FormLabel>
+                                                <FormLabel>Height (cm)</FormLabel>
                                                 <FormControl>
                                                     <Input {...field} />
                                                 </FormControl>
@@ -622,10 +620,10 @@ export default function Prescription({
                                                                         mode="single"
                                                                         selected={field.value}
                                                                         onSelect={field.onChange}
-                                                                        disabled={(date) =>
-                                                                            date > new Date() ||
-                                                                            date < new Date("1900-01-01")
-                                                                        }
+                                                                        // disabled={(date) =>
+                                                                        //     date > new Date() ||
+                                                                        //     date < new Date("1900-01-01")
+                                                                        // }
                                                                         initialFocus
                                                                     />
                                                                 </PopoverContent>

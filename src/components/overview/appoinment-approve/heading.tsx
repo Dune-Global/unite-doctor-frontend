@@ -5,7 +5,7 @@ export default function Heading() {
   return (
     <div className="flex flex-row justify-between">
       <h1 className="font-semibold text-xl">Appointments</h1>
-      <Link href="/appoinments" className="flex flex-row font-semibold items-center">
+      <Link href="/dashboard/appoinments" className="flex flex-row font-semibold items-center">
         View all{" "}
         <span className="ml-3">
           <ChevronRight size={20} />

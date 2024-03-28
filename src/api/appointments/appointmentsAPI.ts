@@ -36,3 +36,22 @@ export const updatePatientAppointmentStatus = async (
     return error.response;
   }
 };
+
+export const updateDashBoardAppointmentStatus = async (
+  status: string,
+  id: string
+) => {
+  try {
+    const response = await CustomAxios({
+      method: "PATCH",
+      baseURL: BACKEND_BASE_URL,
+      url: UPDATE_APPOINTMENT_STATUS_URL.replace(":appointmentId", id),
+      data: { status: status },
+    });
+    console.log("response from updateDashBoardAppointmentStatus", response);
+    return response;
+  } catch (error: any) {
+    console.log(error.response);
+    return error.response;
+  }
+};
